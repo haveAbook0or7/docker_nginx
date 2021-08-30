@@ -15,12 +15,12 @@
         <title>ツイステカード編成ツール</title>
         <meta charset="UTF-8">
         <meta name = "authr" content="有本 和奏" charset="utf-8">
-        <link href="../css/Hobby_1/Hobby_1_1_home.css" rel="stylesheet">
+        <link href="../css/Hobby_1_1_home.css" rel="stylesheet">
         <!-- <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
         <script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.22/vue.min.js'></script> -->
         <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
         <script src="https://unpkg.com/vue"></script>
-<script src="https://unpkg.com/http-vue-loader"></script>
+        <script src="https://unpkg.com/http-vue-loader"></script>
     </head>
     <body>
         <header>
@@ -165,8 +165,8 @@
         <footer>
             
         </footer>
-        <script type="text/javascript" src="../js/Hobby_1/Hobby_1_1_home.js"></script>
-        <script type="text/javascript" src="../js/Hobby_1/sort.js"></script>
+        <script type="text/javascript" src="../js/Hobby_1_1_home.js"></script>
+        <script type="text/javascript" src="../js/sort.js"></script>
         <!-- <script src="../lib/vue.js"></script>  -->
         <!-- <script src="../js/Hobby_1/selectLv_vue.js"></script> -->
 
