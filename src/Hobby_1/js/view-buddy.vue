@@ -3,15 +3,15 @@
         <tr>
             <td>
                 <img :id="this.id_name+'_buddy1flg'" class="imgflg" :src="this.imgflg[0]" width="35" height="35">
-                <img :id="this.id_name+'_buddy1'" class="img" :src="'../img/Hobby_1/Another/'+this.img[0]" width="35" height="35">
+                <img :id="this.id_name+'_buddy1'" class="img" :src="'../img/Another/'+this.img[0]" width="35" height="35">
             </td>
             <td>
                 <img :id="this.id_name+'_buddy2flg'" class="imgflg" :src="this.imgflg[1]" width="35" height="35">
-                <img :id="this.id_name+'_buddy2'" class="img" :src="'../img/Hobby_1/Another/'+this.img[1]" width="35" height="35">
+                <img :id="this.id_name+'_buddy2'" class="img" :src="'../img/Another/'+this.img[1]" width="35" height="35">
             </td>
             <td>
                 <img :id="this.id_name+'_buddy3flg'" class="imgflg" :src="this.imgflg[2]" width="35" height="35">
-                <img :id="this.id_name+'_buddy3'" class="img" :src="'../img/Hobby_1/Another/'+this.img[2]" width="35" height="35">
+                <img :id="this.id_name+'_buddy3'" class="img" :src="'../img/Another/'+this.img[2]" width="35" height="35">
             </td>
         </tr>
         <tr>
@@ -36,7 +36,8 @@
 <script>
 module.exports = {
 	components: {
-		'select-own': httpVueLoader('http://haveabook.php.xdomain.jp/editing/js/Hobby_1/select-own.vue'),
+		// 'select-own': httpVueLoader('http://haveabook.php.xdomain.jp/editing/js/Hobby_1/select-own.vue'),
+        'select-own': httpVueLoader('http://localhost:8080/Hobby_1/js/select-own.vue'),
     },
 	props: {
 		id_name: {default:"myselectimg"},
@@ -48,7 +49,7 @@ module.exports = {
                 Am: "A(中)", As: "A(小)"
 			},
 
-            imgflg: ["../img/Hobby_1/off.png", "../img/Hobby_1/off.png", "../img/Hobby_1/off.png"],
+            imgflg: ["../img/off.png", "../img/off.png", "../img/off.png"],
             img: ["none.jpg", "none.jpg", "none.jpg"],
             Btype1: ["***", "***", "***"],
             Btype2: ["***", "***", "***"],

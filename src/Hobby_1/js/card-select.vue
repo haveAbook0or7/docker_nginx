@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="card" v-for="data in cardData" :key="data.id_name">
-			<img :id="data.id_name" :src="'../img/Hobby_1/'+data.cardImg" width="70.5" height="74.7" @click="clickOpenModal(data.id_name)">
+			<img :id="data.id_name" :src="'../img/'+data.cardImg" width="70.5" height="74.7" @click="clickOpenModal(data.id_name)">
 			<view-hpatk :id_name="data.id_name" ref="hpatk"></view-hpatk>
 			<view-buddy :id_name="data.id_name" ref="buddy"></view-buddy>
 			<view-damage :id_name="data.id_name" ref="damage1"></view-damage>
@@ -14,10 +14,14 @@
 <script>
 module.exports = {
 	components: {
-		'view-damage': httpVueLoader('http://haveabook.php.xdomain.jp/editing/js/Hobby_1/view-damage.vue'),
-		'view-buddy': httpVueLoader('http://haveabook.php.xdomain.jp/editing/js/Hobby_1/view-buddy.vue'),
-		'view-hpatk': httpVueLoader('http://haveabook.php.xdomain.jp/editing/js/Hobby_1/view-hpatk.vue'),
-		'choice-modal-card': httpVueLoader('http://haveabook.php.xdomain.jp/editing/js/Hobby_1/choice-modal-card.vue'),
+		// 'view-damage': httpVueLoader('http://haveabook.php.xdomain.jp/editing/js/Hobby_1/view-damage.vue'),
+		// 'view-buddy': httpVueLoader('http://haveabook.php.xdomain.jp/editing/js/Hobby_1/view-buddy.vue'),
+		// 'view-hpatk': httpVueLoader('http://haveabook.php.xdomain.jp/editing/js/Hobby_1/view-hpatk.vue'),
+		// 'choice-modal-card': httpVueLoader('http://haveabook.php.xdomain.jp/editing/js/Hobby_1/choice-modal-card.vue'),
+		'view-damage': httpVueLoader('http://localhost:8080/Hobby_1/js/view-damage.vue'),
+		'view-buddy': httpVueLoader('http://localhost:8080/Hobby_1/js/view-buddy.vue'),
+		'view-hpatk': httpVueLoader('http://localhost:8080/Hobby_1/js/view-hpatk.vue'),
+		'choice-modal-card': httpVueLoader('http://localhost:8080/Hobby_1/js/choice-modal-card.vue'),
     },
 	props: {
 		// id_name: {default:"mycard"},

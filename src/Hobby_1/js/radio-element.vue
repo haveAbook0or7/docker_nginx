@@ -3,12 +3,12 @@
 		<span v-for="item in items" :key="item.key">
 			<input type="radio" :id="id+'_'+item.value" :name="name" :value="item.value">
 			<label :for="id+'_'+item.value">
-				<img :src="'../img/Hobby_1/Element/'+item.key" width="30" height="30">
+				<img :src="'../img/Element/'+item.key" width="30" height="30">
 			</label>
 		</span>
 	</div>
 </template>
- 
+
 <script>
 module.exports = {
 	props: {
@@ -23,10 +23,10 @@ module.exports = {
 }
 // export default { Node.jsじゃないから、これだとダメだった。 }
 </script>
- 
+
 <style scoped>
     input[type=radio] {
-    	display:none; 
+		display:none; 
     }
     label {
 		display: inline-block;

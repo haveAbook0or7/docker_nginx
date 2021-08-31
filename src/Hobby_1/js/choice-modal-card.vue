@@ -2,9 +2,9 @@
 	<div id="overlay" :class="this.modalClass" @click="closeModal()">
         <div id="modal" :class="this.modalClass" @click="stop()">
             <!-- <span id="sortBtn" onclick="clickOpenSortModal()">ソート</span>
-            <img id="ud" src="../img/Hobby_1/desc.jpg" alt="desc" width="20" height="20" onclick="UD(this)"> -->
+            <img id="ud" src="../img/desc.jpg" alt="desc" width="20" height="20" onclick="UD(this)"> -->
             <img v-for="card in data" 
-			:src="'../img/Hobby_1/'+Dormitory[Math.floor(card.chno/10)]+'/'+card.img" 
+			:src="'../img/'+Dormitory[Math.floor(card.chno/10)]+'/'+card.img" 
 			:key="card.cdno" 
 			@click="choiceCard(card)" 
 			alt="" width="70.5" height="74.7">
@@ -15,7 +15,8 @@
 <script>
 module.exports = {
 	mounted() {
-		axios.get("http://haveabook.php.xdomain.jp/editing/Hobby_1/Hobby_1_1_DB.php")
+		// axios.get("http://haveabook.php.xdomain.jp/editing/Hobby_1/Hobby_1_1_DB.php")
+		axios.get("http://localhost:8080/Hobby_1/php/Hobby_1_1_DB.php")
 		.then(response => {
 			this.message = response.data.message;
 			this.data = response.data.data;
