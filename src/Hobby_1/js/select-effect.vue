@@ -21,13 +21,15 @@
 		</span>
 	</div>
 </template>
- 
+
 <script>
 module.exports = {
 	components: {
-		'select-own': httpVueLoader('http://haveabook.php.xdomain.jp/editing/js/Hobby_1/select-own.vue'),
-		'img-select': httpVueLoader('http://haveabook.php.xdomain.jp/editing/js/Hobby_1/img-select.vue'),
-  	},
+		// 'select-own': httpVueLoader('http://haveabook.php.xdomain.jp/editing/js/Hobby_1/select-own.vue'),
+		// 'img-select': httpVueLoader('http://haveabook.php.xdomain.jp/editing/js/Hobby_1/img-select.vue'),
+		'select-own': httpVueLoader('http://localhost:8080/Hobby_1/js/select-own.vue'),
+		'img-select': httpVueLoader('http://localhost:8080/Hobby_1/js/img-select.vue'),
+	},
 	props: {
 		id_name: {default:()=>[]},
 	},
@@ -77,7 +79,7 @@ module.exports = {
 }
 // export default { Node.jsじゃないから、これだとダメだった。 }
 </script>
- 
+
 <style scoped>
 	.duoimg{
 		position: relative;

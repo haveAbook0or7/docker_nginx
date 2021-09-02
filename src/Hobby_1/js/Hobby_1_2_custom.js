@@ -1,10 +1,14 @@
 new Vue({
 	el: "#con",
 	components: {
-		'select-own': httpVueLoader('http://haveabook.php.xdomain.jp/editing/js/Hobby_1/select-own.vue'),
-		'choice-modal-img': httpVueLoader('http://haveabook.php.xdomain.jp/editing/js/Hobby_1/choice-modal-img.vue'),
-		'img-select': httpVueLoader('http://haveabook.php.xdomain.jp/editing/js/Hobby_1/img-select.vue'),
-      	'input-file-own': httpVueLoader('http://haveabook.php.xdomain.jp/editing/js/Hobby_1/input-file-own.vue'),
+		// 'select-own': httpVueLoader('http://haveabook.php.xdomain.jp/editing/js/Hobby_1/select-own.vue'),
+		// 'choice-modal-img': httpVueLoader('http://haveabook.php.xdomain.jp/editing/js/Hobby_1/choice-modal-img.vue'),
+		// 'img-select': httpVueLoader('http://haveabook.php.xdomain.jp/editing/js/Hobby_1/img-select.vue'),
+        // 'input-file-own': httpVueLoader('http://haveabook.php.xdomain.jp/editing/js/Hobby_1/input-file-own.vue'),
+        'select-own': httpVueLoader('http://localhost:8080/Hobby_1/js/select-own.vue'),
+        'choice-modal-img': httpVueLoader('http://localhost:8080/Hobby_1/js/choice-modal-img.vue'),
+        'img-select': httpVueLoader('http://localhost:8080/Hobby_1/js/img-select.vue'),
+        'input-file-own': httpVueLoader('http://localhost:8080/Hobby_1/js/input-file-own.vue'),
 	}
 });
 function stop(){

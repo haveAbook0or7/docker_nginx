@@ -1,13 +1,13 @@
 <template>
 	<div>
 		<img v-for="imgSRC in imgBuddy" 
-			:src="'../img/Hobby_1/Another/'+imgSRC" 
+			:src="'../img/Another/'+imgSRC" 
 			:key="imgSRC.key" 
 			@click="sendIcon(imgSRC)" 
 			alt="" width="30" height="30">
 	</div>
 </template>
- 
+
 <script>
 module.exports = {
 	props: {
@@ -36,7 +36,7 @@ module.exports = {
 }
 // export default { Node.jsじゃないから、これだとダメだった。 }
 </script>
- 
+
 <style scoped>
 	div{
 		width: 180px;

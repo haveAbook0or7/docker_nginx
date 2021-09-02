@@ -7,15 +7,16 @@
 			@catch-icon="getIcon"></choice-modal-img>
 	</div>
 </template>
- 
+
 <script>
 module.exports = {
 	components: {
-		'choice-modal-img': httpVueLoader('http://haveabook.php.xdomain.jp/editing/js/Hobby_1/choice-modal-img.vue'),
-  	},
+		// 'choice-modal-img': httpVueLoader('http://haveabook.php.xdomain.jp/editing/js/Hobby_1/choice-modal-img.vue'),
+		'choice-modal-img': httpVueLoader('http://localhost:8080/Hobby_1/js/choice-modal-img.vue'),
+	},
 	props: {
 		id_name: {default:"myselectimg"},
-		defaImg: {default:"../img/Hobby_1/none.jpg"}
+		defaImg: {default:"../img/none.jpg"}
 	},
 	data: function () {
 		return {
@@ -26,11 +27,11 @@ module.exports = {
 	},
 	methods: {
 		initialize(){
-			this.preview = "../img/Hobby_1/none.jpg";
+			this.preview = "../img/none.jpg";
 			this.buddy = "";
 		},
 		getIcon(value) {
-			this.preview = '../img/Hobby_1/Another/'+value;
+			this.preview = '../img/Another/'+value;
 			this.buddy = value.substr(0, 2);
 		},
 		childShow(flg){
@@ -41,7 +42,7 @@ module.exports = {
 }
 // export default { Node.jsじゃないから、これだとダメだった。 }
 </script>
- 
+
 <style scoped>
 	img{
 		border: 1px solid black;

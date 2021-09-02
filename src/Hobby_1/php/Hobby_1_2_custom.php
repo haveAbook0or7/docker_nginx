@@ -14,7 +14,11 @@
     <head>
         <title>ツイステカード編成ツール</title>
         <meta charset="UTF-8"><meta name = "authr" content="有本 和奏">
-        <link href="../css/Hobby_1/Hobby_1_2_custom.css" rel="stylesheet" type="text/css">
+        <link href="../css/Hobby_1_2_custom.css" rel="stylesheet" type="text/css">
+        <script src="../lib/vue.js"></script> 
+        <script src="https://unpkg.com/http-vue-loader"></script>
+        <script src="../js/sort.js"></script>
+        <script src="../js/Hobby_1_2_custom.js"></script>
     </head>
     <body>
         <header>
@@ -33,7 +37,7 @@
                     </h3>
                     <h3 id="sortBtns">
                         <span id="sortBtn" onclick="clickOpenSortModal()">ソート</span><!-- TODO -->
-                        <img id="ud" src="../img/Hobby_1/desc.jpg" alt="desc" width="20" height="20" onclick="UD(this)">
+                        <img id="ud" src="../img/desc.jpg" alt="desc" width="20" height="20" onclick="UD(this)">
                     </h3>
                 </div>
                 <div class="contents">
@@ -74,7 +78,7 @@
        
         <script src="../lib/vue.js"></script> 
         <script src="https://unpkg.com/http-vue-loader"></script>
-        <script src="../js/Hobby_1/sort.js"></script>
-        <script src="../js/Hobby_1/Hobby_1_2_custom.js"></script>
+        <script src="../js/sort.js"></script>
+        <script src="../js/Hobby_1_2_custom.js"></script>
     </body>
 </html>

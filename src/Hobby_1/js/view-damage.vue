@@ -46,7 +46,8 @@
 <script>
 module.exports = {
 	components: {
-		'select-own': httpVueLoader('http://haveabook.php.xdomain.jp/editing/js/Hobby_1/select-own.vue'),
+		// 'select-own': httpVueLoader('http://haveabook.php.xdomain.jp/editing/js/Hobby_1/select-own.vue'),
+		'select-own': httpVueLoader('http://localhost:8080/Hobby_1/js/select-own.vue'),
 	},
 	props: {
 		id_name: {default:"myselectimg"},
@@ -95,7 +96,7 @@ module.exports = {
 			this.bufSub_2 = this.effect1[sV.ef1_2] + this.effect2[sV.ef2_2] +this.effect3[sV.ef3_2];
 		},
 		getIcon(value) {
-			this.preview = '../img/Hobby_1/Another/'+value;
+			this.preview = '../img/Another/'+value;
 			this.buddy = value.substr(0, 2);
 		},
 		childShow(flg){

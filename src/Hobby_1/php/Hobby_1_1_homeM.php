@@ -1,14 +1,13 @@
 <?php
 //データベース定義
-        // define('HOST', 'mysql1.php.xdomain.ne.jp');
-        // define('USR', 'haveabook_user1');
-        // define('PASS', 'waka7ari');
-        // define('DB', 'haveabook_db');
-        define('HOST', 'db');
-        define('USR', 'db_user');
-        define('PASS', 'pass');
-        define('DB', 'db_hobby');
-
+// define('HOST', 'mysql1.php.xdomain.ne.jp');
+// define('USR', 'haveabook_user1');
+// define('PASS', 'waka7ari');
+// define('DB', 'haveabook_db');
+define('HOST', 'db');
+define('USR', 'db_user');
+define('PASS', 'pass');
+define('DB', 'db_hobby');
 
 class Hobby_1_1_homeM{
     private $cdno = array();    private $chno = array();

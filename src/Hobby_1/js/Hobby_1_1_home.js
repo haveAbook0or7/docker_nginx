@@ -8,14 +8,14 @@ new Vue({
 		// 'img-select': httpVueLoader('http://haveabook.php.xdomain.jp/editing/js/Hobby_1/img-select.vue'),
         // 'input-file-own': httpVueLoader('http://haveabook.php.xdomain.jp/editing/js/Hobby_1/input-file-own.vue'),
 		// 'radio-element': httpVueLoader('http://haveabook.php.xdomain.jp/editing/js/Hobby_1/radio-element.vue'),
-        'select-lv': httpVueLoader('http://localhost:8080/js/select-own.vue'),
-        'select-own': httpVueLoader('http://localhost:8080/js/select-own.vue'),
-		'select-effect': httpVueLoader('http://localhost:8080/js/select-effect.vue'),
-		'select-effect2': httpVueLoader('http://localhost:8080/js/select-effect2.vue'),
-		'choice-modal-img': httpVueLoader('http://localhost:8080/js/choice-modal-img.vue'),
-		'img-select': httpVueLoader('http://localhost:8080/js/img-select.vue'),
-        'input-file-own': httpVueLoader('http://localhost:8080/js/input-file-own.vue'),
-		'radio-element': httpVueLoader('http://localhost:8080/js/radio-element.vue'),
+        'select-lv': httpVueLoader('http://localhost:8080/Hobby_1/js/select-own.vue'),
+        'select-own': httpVueLoader('http://localhost:8080/Hobby_1/js/select-own.vue'),
+		'select-effect': httpVueLoader('http://localhost:8080/Hobby_1/js/select-effect.vue'),
+		'select-effect2': httpVueLoader('http://localhost:8080/Hobby_1/js/select-effect2.vue'),
+		'choice-modal-img': httpVueLoader('http://localhost:8080/Hobby_1/js/choice-modal-img.vue'),
+		'img-select': httpVueLoader('http://localhost:8080/Hobby_1/js/img-select.vue'),
+        'input-file-own': httpVueLoader('http://localhost:8080/Hobby_1/js/input-file-own.vue'),
+		'radio-element': httpVueLoader('http://localhost:8080/Hobby_1/js/radio-element.vue'),
 	}
 });
 

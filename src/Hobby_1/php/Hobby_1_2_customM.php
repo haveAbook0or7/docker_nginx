@@ -1,9 +1,13 @@
 <?php
 //データベース定義
-define('HOST', 'mysql1.php.xdomain.ne.jp');
-define('USR', 'haveabook_user1');
-define('PASS', 'waka7ari');
-define('DB', 'haveabook_db');
+// define('HOST', 'mysql1.php.xdomain.ne.jp');
+// define('USR', 'haveabook_user1');
+// define('PASS', 'waka7ari');
+// define('DB', 'haveabook_db');
+define('HOST', 'db');
+define('USR', 'db_user');
+define('PASS', 'pass');
+define('DB', 'db_hobby');
 
 class Hobby_1_2_customM{
     private $cardData = array(
@@ -223,8 +227,8 @@ class Hobby_1_2_customM{
         for($i = 0; $i < count($this->cardData['cdno']); $i++){
             print '<div class="mcards">';
             /** カードの写真 */
-            print     '<img src="../img/Hobby_1/'.$Dormitory[(int)$this->cardData['chno'][$i]/10].'/'.$this->cardData['img'][$i].'" alt="'.$this->cardData['chno'][$i].'" width="70.5" height="74.7" id="mcard'.$i.'">';
-//            print     '<img src="../img/Hobby_1/'.$Dormitory[(int)($this->chno[$i]/10)].'/'.(int)($this->chno[$i]/10).'.jpg" alt="'.$this->chno[$i].'" width="75" height="75" id="mcard'.$i.'">';
+            print     '<img src="../img/'.$Dormitory[(int)$this->cardData['chno'][$i]/10].'/'.$this->cardData['img'][$i].'" alt="'.$this->cardData['chno'][$i].'" width="70.5" height="74.7" id="mcard'.$i.'">';
+//            print     '<img src="../img/'.$Dormitory[(int)($this->chno[$i]/10)].'/'.(int)($this->chno[$i]/10).'.jpg" alt="'.$this->chno[$i].'" width="75" height="75" id="mcard'.$i.'">';
 //            print     '<br><input type="text" readonly="readonly" id="mcard'.$i.'_lbl" value="'.$this->img[$i].'">';
             /** 隠しデータ(カードNo,キャラクターNo) */
             print     '<input type="hidden" name="mcard'.$i.'_cdno" id="mcard'.$i.'_cdno" value="'.$this->cardData['cdno'][$i].'">';
@@ -261,7 +265,7 @@ class Hobby_1_2_customM{
         print '<table border="0" id="THpAtk">'
             . '<tr>'
                 . '<td>'
-                . '<img id="mcard'.$i.'_m1" src="../img/Hobby_1/Element/'.$Element[substr($this->cardData['m1'][$i],0,1)].'" alt="" width="20" height="20">'
+                . '<img id="mcard'.$i.'_m1" src="../img/Element/'.$Element[substr($this->cardData['m1'][$i],0,1)].'" alt="" width="20" height="20">'
                 . '</td>'
                 . '<td>Lv</td>'
                 . '<td>'
@@ -272,7 +276,7 @@ class Hobby_1_2_customM{
             . '</tr>'
             . '<tr>'
                 . '<td>'
-                . '<img id="mcard'.$i.'_m2" src="../img/Hobby_1/Element/'.$Element[substr($this->cardData['m2'][$i],0,1)].'" alt="" width="20" height="20">'
+                . '<img id="mcard'.$i.'_m2" src="../img/Element/'.$Element[substr($this->cardData['m2'][$i],0,1)].'" alt="" width="20" height="20">'
                 . '</td>'
                 . '<td>Lv</td>'
                 . '<td>'
@@ -286,9 +290,9 @@ class Hobby_1_2_customM{
     function statusBuddy($i){
         print '<table border="0">
                 <tr>
-                    <td><img id="mcard'.$i.'_b1" src="../img/Hobby_1/Another/'.$this->cardData['b1'][$i].'.jpg" alt="" width="30" height="30"></td>
-                    <td><img id="mcard'.$i.'_b2" '.$this->hide($this->cardData['b2'][$i]).' src="../img/Hobby_1/Another/'.$this->cardData['b2'][$i].'.jpg" alt="" width="30" height="30"></td>
-                    <td><img id="mcard'.$i.'_b3" '.$this->hide($this->cardData['b3'][$i]).' src="../img/Hobby_1/Another/'.$this->cardData['b3'][$i].'.jpg" alt="" width="30" height="30"></td>
+                    <td><img id="mcard'.$i.'_b1" src="../img/Another/'.$this->cardData['b1'][$i].'.jpg" alt="" width="30" height="30"></td>
+                    <td><img id="mcard'.$i.'_b2" '.$this->hide($this->cardData['b2'][$i]).' src="../img/Another/'.$this->cardData['b2'][$i].'.jpg" alt="" width="30" height="30"></td>
+                    <td><img id="mcard'.$i.'_b3" '.$this->hide($this->cardData['b3'][$i]).' src="../img/Another/'.$this->cardData['b3'][$i].'.jpg" alt="" width="30" height="30"></td>
                 </tr>
                 <tr>
                     <td>
