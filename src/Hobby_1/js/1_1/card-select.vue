@@ -18,10 +18,10 @@ module.exports = {
 		// 'view-buddy': httpVueLoader('http://haveabook.php.xdomain.jp/editing/js/Hobby_1/view-buddy.vue'),
 		// 'view-hpatk': httpVueLoader('http://haveabook.php.xdomain.jp/editing/js/Hobby_1/view-hpatk.vue'),
 		// 'choice-modal-card': httpVueLoader('http://haveabook.php.xdomain.jp/editing/js/Hobby_1/choice-modal-card.vue'),
-		'view-damage': httpVueLoader('http://localhost:8080/Hobby_1/js/view-damage.vue'),
-		'view-buddy': httpVueLoader('http://localhost:8080/Hobby_1/js/view-buddy.vue'),
-		'view-hpatk': httpVueLoader('http://localhost:8080/Hobby_1/js/view-hpatk.vue'),
-		'choice-modal-card': httpVueLoader('http://localhost:8080/Hobby_1/js/choice-modal-card.vue'),
+		'view-damage': httpVueLoader('http://localhost:8080/Hobby_1/js/1_1/view-damage.vue'),
+		'view-buddy': httpVueLoader('http://localhost:8080/Hobby_1/js/1_1/view-buddy.vue'),
+		'view-hpatk': httpVueLoader('http://localhost:8080/Hobby_1/js/1_1/view-hpatk.vue'),
+		'choice-modal-card': httpVueLoader('http://localhost:8080/Hobby_1/js/1_1/choice-modal-card.vue'),
     },
 	props: {
 		// id_name: {default:"mycard"},
@@ -29,6 +29,7 @@ module.exports = {
 	data: function () {
 		return {
 			Dormitory: ["","Heartslabyul","Savanaclaw","Octavinelle","Scarabia","Pomefiore","Ignihyde","Diasomnia","Ramshackle"],
+			chnos: [0, 0, 0, 0, 0],
 			cardData: {
 				card1: {id_name: "card1", cardImg: "none.jpg", values: {}},
 				card2: {id_name: "card2", cardImg: "none.jpg", values: {}},
@@ -44,15 +45,21 @@ module.exports = {
 		},
 		getCard(value, card){
 			this.cardData[card].values = value;
+			this.chnos[card.slice(-1)-1] = value.chno;
 			this.applyData(card);
+			console.log("values:");
+			console.log(this.chnos);
+			console.log(this.cardData[card].values);
 		},
 		applyData(card){
 			this.cardData[card].cardImg = this.Dormitory[Math.floor(this.cardData[card].values.chno/10)]+'/'+this.cardData[card].values.img;
-			this.$refs.hpatk[card[4]-1].applyHPATK(this.cardData[card].values.hp, this.cardData[card].values.atk);
-			this.$refs.buddy[card[4]-1].applyBuddy([
-				{B: this.cardData[card].values.b1, Btype: this.cardData[card].values.b1type, lv: this.cardData[card].values.b1lv},
-				{B: this.cardData[card].values.b2, Btype: this.cardData[card].values.b2type, lv: this.cardData[card].values.b2lv},
-				{B: this.cardData[card].values.b3, Btype: this.cardData[card].values.b3type, lv: this.cardData[card].values.b3lv},]);
+			this.$refs.hpatk[card[4]-1].applyHPATK(this.cardData[card].values);
+			for(var i = 0; i < 5; i++){
+				this.$refs.hpatk[i].changeBuddy(this.chnos);
+			}
+			console.log("refs:");
+			console.log(this.$refs);
+			this.$refs.buddy[card[4]-1].applyBuddy(this.cardData[card].values);
 			this.$refs.damage1[card[4]-1].applyMbuf(this.cardData[card].values.m1buf_5, this.cardData[card].values.m2buf_5);
 		}
 	},

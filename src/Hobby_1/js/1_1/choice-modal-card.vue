@@ -34,7 +34,6 @@ module.exports = {
 			Dormitory: ["","Heartslabyul","Savanaclaw","Octavinelle","Scarabia","Pomefiore","Ignihyde","Diasomnia","Ramshackle"],
 			data: [],
 			message: [],
-			
 		}
 	},
 	methods: {
@@ -54,7 +53,6 @@ module.exports = {
 			this.closeModal();
 		}
 	},
-	
 }
 // export default { Node.jsじゃないから、これだとダメだった。 }
 </script>

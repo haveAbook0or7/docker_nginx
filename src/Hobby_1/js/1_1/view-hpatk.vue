@@ -2,8 +2,8 @@
 	<table border="0" class="THpAtk">
         <tr>
             <td colspan="3" style="text-align: center;">
-                <span class="button" :value="this.id_name" @click="clickMAX(this.id_name,'max')">MAX</span>
-                <span class="button" :value="this.id_name" @click="clickMAX(this.id_name, 'middle')">無凸MAX</span>
+                <span class="button" :value="this.id_name" @click="clickMAX('max')">MAX</span>
+                <span class="button" :value="this.id_name" @click="clickMAX('middle')">無凸MAX</span>
             </td>
         </tr>
         <tr>
@@ -35,34 +35,63 @@ module.exports = {
     },
 	props: {
 		id_name: {default:"myselectimg"},
-        initialHP: {default: 0},
-        initialATK: {default: 0},
+        // initialHP: {default: 0},
+        // initialATK: {default: 0},
 	},
 	data: function () {
 		return {
 			BuddyLv: {
-                As : [0.11, 0.12, 0.13, 0.14, 0.15, 0.16, 0.17, 0.18, 0.19, 0.2] ,
-                Am : [0.215, 0.23, 0.245, 0.26, 0.275, 0.29, 0.305, 0.32, 0.335, 0.35] ,
-                Hs : [0.11, 0.12, 0.13, 0.14, 0.15, 0.16, 0.17, 0.18, 0.19, 0.2] ,
+                As : [0.11, 0.12, 0.13, 0.14, 0.15, 0.16, 0.17, 0.18, 0.19, 0.2],
+                Am : [0.215, 0.23, 0.245, 0.26, 0.275, 0.29, 0.305, 0.32, 0.335, 0.35],
+                Hs : [0.11, 0.12, 0.13, 0.14, 0.15, 0.16, 0.17, 0.18, 0.19, 0.2],
                 Hm : [0.21, 0.22, 0.23, 0.24, 0.25, 0.26, 0.27, 0.28, 0.29, 0.3]
             },
-
-            hp: this.initialHP,
-            atk: this.initialATK,
-            hpbuf: this.initialHP,
-            atkbuf: this.initialATK,
+            values: {},
+            chnos: [],
+            hp: 0,
+            atk: 0,
+            hpbuf: 0,
+            atkbuf: 0,
 		}
 	},
 	methods: {
-        changeBufStatues(){
-
+        applyHPATK(values){
+            this.values = values;
+            this.hp = values.hp;
+            this.atk = values.atk;
         },
-        applyHPATK(hp, atk){
-            this.hp = hp;
-            this.atk = atk;
+        clickMAX(which){
+            switch(which){
+                case "max":
+                    this.hp = this.values.hpmax;
+                    this.atk = this.values.atkmax;
+                    break;
+                case "middle":
+                    this.hp = this.values.hpmiddle;
+                    this.atk = this.values.atkmiddle;
+                    break;
+            }
+            this.changeBuddy(this.chnos);
         },
-        clickMAX(card, which){
-
+        changeBuddy(chnos){
+            this.chnos = chnos;
+            mag = {A: 0, H: 0};
+            flg = {1: false, 2: false, 3: false};
+            for(var i = 0; i < 5; i++){
+            for(var j = 1; j <= 3; j++){
+                if(this.values["b"+j] == chnos[i] && !flg[j]){
+                    var Btype = this.values["b"+j+"type"];
+                    var Blv = this.values["b"+j+"lv"];
+                    mag[Btype[0]] += this.BuddyLv[Btype[0]+Btype[1]][Blv - 1];
+                    if(Btype.length == 4){
+                        mag[Btype[2]] += this.BuddyLv[Btype[2]+Btype[3]][Blv - 1];
+                    }
+                    flg[j] = true;
+                }
+            }
+            }
+            this.hpbuf = this.hp * (mag["H"] + 1);
+            this.atkbuf = this.atk * (mag["A"] + 1);
         }
 	},
 	
