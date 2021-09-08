@@ -34,7 +34,7 @@ $sql = "SELECT  d1.cdno, d1.chno, d1.cimg, d2.lv, d2.hp, d2.atk,
 
 //ステートメントン実行準備
 $stmt = mysqli_prepare($conn, $sql);
-        
+
 //SQLステートメントの実行
 mysqli_stmt_execute($stmt); 
 mysqli_stmt_store_result($stmt);
@@ -100,7 +100,6 @@ if($num > 0){
 mysqli_stmt_free_result($stmt);
 mysqli_stmt_close($stmt);
 mysqli_close($conn);
-
 
 // 配列をjson形式にデコードして出力, 第二引数は、整形するためのオプション
 print json_encode($arr, JSON_PRETTY_PRINT);
