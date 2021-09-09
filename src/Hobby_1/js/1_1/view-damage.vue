@@ -7,7 +7,7 @@
         </tr>
         <tr>
             <td class="col1">
-				{{this.M}}<input :id="this.id_name+'_d'" class="text" type="text" value="" readonly="readonly">
+				{{this.M}}<input :id="this.id_name+'_d'" class="text" type="text" :value="this.basicDamage" readonly="readonly">
 			</td>
             <td class="col1">
 				Lv<select-own :id="this.id_name+'_lv'" :op="'opLv'"></select-own>
@@ -15,10 +15,10 @@
         </tr>
         <tr>
             <td class="col1">
-				有利<input :id="this.id_name+'_ADd1'" class="text" type="text" value="" readonly>
+				有利<input :id="this.id_name+'_ADd1'" class="text" type="text" :value="this.advanDamage" readonly>
             </td>
 			<td class="col1">
-				不利<input :id="this.id_name+'_DISd1'" class="text" type="text" value="" readonly>
+				不利<input :id="this.id_name+'_DISd1'" class="text" type="text" :value="this.disadDamage" readonly>
             </td>
         </tr>
         <tr>
@@ -62,7 +62,11 @@ module.exports = {
 			},
 			effect2: {n: "", s: "極小", S: "小", M: "中", L: "大"},
 			effect3: {n: "", 1: "1T", 2: "2T", 3: "3T"},
-
+			values: {},
+            chnos: [],
+			basicDamage: 0,
+			advanDamage: 0,
+			disadDamage: 0,
 			bufMain_1: "**********",
 			bufMain_2: "**********",
 			bufSub_1: "**********",
@@ -95,13 +99,6 @@ module.exports = {
 			this.bufSub_1 = this.effect1[sV.ef1_1] + this.effect2[sV.ef2_1] +this.effect3[sV.ef3_1];
 			this.bufSub_2 = this.effect1[sV.ef1_2] + this.effect2[sV.ef2_2] +this.effect3[sV.ef3_2];
 		},
-		getIcon(value) {
-			this.preview = '../img/Another/'+value;
-			this.buddy = value.substr(0, 2);
-		},
-		childShow(flg){
-			this.class = flg ? "show" : "hide";
-		}
 	},
 	
 }

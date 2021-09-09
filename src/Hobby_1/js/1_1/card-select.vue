@@ -3,7 +3,7 @@
 		<div class="card" v-for="data in cardData" :key="data.id_name">
 			<img :id="data.id_name" :src="'../img/'+data.cardImg" width="70.5" height="74.7" @click="clickOpenModal(data.id_name)">
 			<view-hpatk :id_name="data.id_name" ref="hpatk"></view-hpatk>
-			<view-buddy :id_name="data.id_name" ref="buddy"></view-buddy>
+			<view-buddy :id_name="data.id_name" ref="buddy" @change="changeBuddyLv"></view-buddy>
 			<view-damage :id_name="data.id_name" ref="damage1"></view-damage>
 			<view-damage :id_name="data.id_name" ref="damage2"></view-damage>
 		</div>
@@ -60,7 +60,15 @@ module.exports = {
 			console.log("refs:");
 			console.log(this.$refs);
 			this.$refs.buddy[card[4]-1].applyBuddy(this.cardData[card].values);
+			for(var i = 0; i < 5; i++){
+				this.$refs.buddy[i].changeBuddy(this.chnos);
+			}
+			
 			this.$refs.damage1[card[4]-1].applyMbuf(this.cardData[card].values.m1buf_5, this.cardData[card].values.m2buf_5);
+		},
+		changeBuddyLv(cid, bid, value){
+			this.cardData["card"+cid].values["b"+bid+"lv"] = value;
+			this.applyData("card"+cid);
 		}
 	},
 	

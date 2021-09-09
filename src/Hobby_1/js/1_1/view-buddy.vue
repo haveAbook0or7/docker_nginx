@@ -2,15 +2,15 @@
 	<table border="0" class="TBuddy">
         <tr>
             <td>
-                <img :id="this.id_name+'_buddy1flg'" class="imgflg" :src="this.imgflg[1]" width="35" height="35">
+                <img :id="this.id_name+'_buddy1flg'" class="imgflg" :src="'../img/'+this.imgflg[1]" width="35" height="35">
                 <img :id="this.id_name+'_buddy1'" class="img" :src="'../img/Another/'+this.img[1]" width="35" height="35">
             </td>
             <td>
-                <img :id="this.id_name+'_buddy2flg'" class="imgflg" :src="this.imgflg[2]" width="35" height="35">
+                <img :id="this.id_name+'_buddy2flg'" class="imgflg" :src="'../img/'+this.imgflg[2]" width="35" height="35">
                 <img :id="this.id_name+'_buddy2'" class="img" :src="'../img/Another/'+this.img[2]" width="35" height="35">
             </td>
             <td>
-                <img :id="this.id_name+'_buddy3flg'" class="imgflg" :src="this.imgflg[3]" width="35" height="35">
+                <img :id="this.id_name+'_buddy3flg'" class="imgflg" :src="'../img/'+this.imgflg[3]" width="35" height="35">
                 <img :id="this.id_name+'_buddy3'" class="img" :src="'../img/Another/'+this.img[3]" width="35" height="35">
             </td>
         </tr>
@@ -50,7 +50,7 @@ module.exports = {
 			},
             values: {},
             chnos: [],
-            imgflg: {1: "../img/off.png", 2: "../img/off.png", 3: "../img/off.png"},
+            imgflg: {1: "off.png", 2: "off.png", 3: "off.png"},
             img: {1: "none.jpg", 2: "none.jpg", 3: "none.jpg"},
             Btype1: {1: "***", 2: "***", 3: "***"},
             Btype2: {1: "***", 2: "***", 3: "***"},
@@ -58,11 +58,11 @@ module.exports = {
 	},
 	methods: {
 		applyBuddy(values){
+            this.values = values;
             for(var i = 1; i <= 3; i++){
                 this.img[i] = values["b"+i]+".jpg";
                 //dataのオブジェクトを含む更新をする場合はこうしないと反映されない
                 var Btype = values["b"+i+"type"];
-                console.log(Btype);
                 this.$set(this.Btype1, i, this.buddytype[Btype[0]+Btype[1]]);
                 this.Btype2[i] = "***";
                 if(Btype.length == 4){
@@ -71,8 +71,20 @@ module.exports = {
                 this.$refs["b"+i+"lv"].chengeValue(values["b"+i+"lv"]);
             }
 		},
-        changeBuddyLv(value){
-            console.log(value);
+        changeBuddy(chnos){
+            this.chnos = chnos;
+            this.imgflg = {1: "off.png", 2: "off.png", 3: "off.png"};
+            flg = {1: false, 2: false, 3: false};
+            for(var i = 0; i < 5; i++){
+            for(var j = 1; j <= 3; j++){
+                if(this.values["b"+j] == chnos[i] && !flg[j]){
+                    this.imgflg[j] = "app.png";
+                }
+            }
+            }
+        },
+        changeBuddyLv(id, value){
+            this.$emit('change', id[4], id[7], value);
         }
 	},
 	
