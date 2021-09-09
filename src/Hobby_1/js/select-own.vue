@@ -46,10 +46,9 @@ module.exports = {
 			this.isDisabled = value;
 		},
 		updateValue(value){
-			this.$emit('up-value', value.target.value);
+			this.$emit('up-value', value.target.id, value.target.value);
 		},
 		chengeValue(value){
-			console.log("cv");
 			this.selected = value;
 		}
 	}
