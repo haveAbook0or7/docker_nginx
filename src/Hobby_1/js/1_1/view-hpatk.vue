@@ -92,6 +92,9 @@ module.exports = {
             }
             this.hpbuf = this.hp * (mag["H"] + 1);
             this.atkbuf = this.atk * (mag["A"] + 1);
+            console.log("cid:");
+            console.log(this.id_name);
+            this.$emit('change', this.id_name, this.hpbuf, this.atkbuf);
         }
 	},
 	

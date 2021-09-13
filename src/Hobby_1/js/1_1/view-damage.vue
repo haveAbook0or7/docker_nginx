@@ -90,14 +90,18 @@ module.exports = {
 			console.log({ef1_1: v1_1, ef2_1: v2_1, ef3_1: v3_1,  ef1_2: v1_2, ef2_2: v2_2, ef3_2: v3_2,});
 			return {ef1_1: v1_1, ef2_1: v2_1, ef3_1: v3_1,  ef1_2: v1_2, ef2_2: v2_2, ef3_2: v3_2,};
 		},
-		applyMbuf(main, sub){
-			mV = this.trimBuf(main);
-			sV = this.trimBuf(sub);
+		applyMbuf(values){
 
-			this.bufMain_1 = this.effect1[mV.ef1_1] + this.effect2[mV.ef2_1] +this.effect3[mV.ef3_1];
-			this.bufMain_2 = this.effect1[mV.ef1_2] + this.effect2[mV.ef2_2] +this.effect3[mV.ef3_2];
-			this.bufSub_1 = this.effect1[sV.ef1_1] + this.effect2[sV.ef2_1] +this.effect3[sV.ef3_1];
-			this.bufSub_2 = this.effect1[sV.ef1_2] + this.effect2[sV.ef2_2] +this.effect3[sV.ef3_2];
+			// if(!isFinite(main)){
+			// 	this.bufMain_1 = this.effect1[main[0]+main[1]] + this.effect2[main[2]] +this.effect3[main[3]];
+			// }
+			
+			// // this.bufMain_2 = this.effect1[main[0]+main[1]] + this.effect2[mV.ef2_2] +this.effect3[mV.ef3_2];
+			// if(!isFinite(sub)){
+			// 	this.bufSub_1 = this.effect1[sub[0]+sub[1]] + this.effect2[sub[2]] +this.effect3[sub[3]];
+			// }
+			
+			// this.bufSub_2 = this.effect1[sub[0]+sub[1]] + this.effect2[sV.ef2_2] +this.effect3[sV.ef3_2];
 		},
 	},
 	
