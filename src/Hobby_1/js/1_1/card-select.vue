@@ -4,8 +4,8 @@
 			<img :id="data.id_name" :src="'../img/'+data.cardImg" width="70.5" height="74.7" @click="clickOpenModal(data.id_name)">
 			<view-hpatk :id_name="data.id_name" ref="hpatk" @change="extractHPATK"></view-hpatk>
 			<view-buddy :id_name="data.id_name" ref="buddy" @change="changeBuddyLv"></view-buddy>
-			<view-damage :id_name="data.id_name" ref="damage1"></view-damage>
-			<view-damage :id_name="data.id_name" ref="damage2"></view-damage>
+			<view-damage :id_name="data.id_name" :m="'1'" ref="damage1"></view-damage>
+			<view-damage :id_name="data.id_name" :m="'2'" ref="damage2"></view-damage>
 		</div>
 		<choice-modal-card ref="modal" @choice-card="getCard"></choice-modal-card>
 	</div>
@@ -57,8 +57,8 @@ module.exports = {
 			for(var i = 0; i < 5; i++){
 				this.$refs.hpatk[i].changeBuddy(this.chnos);
 			}
-			console.log("refs:");
-			console.log(this.$refs);
+			// console.log("refs:");
+			// console.log(this.$refs);
 			this.$refs.buddy[card[4]-1].applyBuddy(this.cardData[card].values);
 			for(var i = 0; i < 5; i++){
 				this.$refs.buddy[i].changeBuddy(this.chnos);
@@ -71,12 +71,12 @@ module.exports = {
 			this.cardData["card"+cid].values["b"+bid+"lv"] = value;
 			this.applyData("card"+cid);
 		},
-		extractHPATK(cid, hp, atk){
-			// console.log(cid);
+		extractHPATK(cid, hpbuf, atkbuf){
 			// console.log(hp);
 			// console.log(atk);
 			// this.cardData["card"+cid].values["b"+bid+"lv"] = value;
 			// this.applyData("card"+cid);
+			this.$refs.damage1[cid[4]-1].changeBuf(hpbuf, atkbuf);
 		},
 	},
 	
