@@ -124,13 +124,12 @@ module.exports = {
 			}
 		},
 		changeBuf(hpbuf, atkbuf){
-			console.log(hpbuf);
-			console.log(atkbuf);
+			// console.log(hpbuf);
+			// console.log(atkbuf);
 			var calc = {d: 0, atkMag: atkbuf, dMag: 0, cor: 0, att: 0, ram: 0};
 			if(this.bufmain){
 				// ATKバフをatkMagに加算
 				console.log(this.bufmain);
-				console.log(this.main[0]+this.main[1]);
 				if(this.main[0]+this.main[1] == "au"){
 					console.log(this.main[0]+this.main[1]);
 					switch(this.main[2]){
@@ -180,6 +179,7 @@ module.exports = {
 					}            
 				}
 				// 属性ダメージUPをdMagに加算
+				console.log("calc");
 				console.log(calc);
 				// 想定ダメージをDに算出
 			}

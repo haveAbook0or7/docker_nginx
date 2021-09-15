@@ -46,6 +46,7 @@ module.exports = {
 		getCard(value, card){
 			this.cardData[card].values = value;
 			this.chnos[card.slice(-1)-1] = value.chno;
+			console.log(this.cardData[card].values);
 			this.applyData(card);
 			console.log("values:");
 			console.log(this.chnos);
@@ -59,13 +60,19 @@ module.exports = {
 			}
 			// console.log("refs:");
 			// console.log(this.$refs);
+			console.log(this.$refs);
 			this.$refs.buddy[card[4]-1].applyBuddy(this.cardData[card].values);
 			for(var i = 0; i < 5; i++){
 				this.$refs.buddy[i].changeBuddy(this.chnos);
 			}
-
 			this.$refs.damage1[card[4]-1].applyMbuf(this.cardData[card].values);
+			for(var i = 0; i < 5; i++){
+				this.$refs.damage1[i].changeBuf(this.cardData["card"+(i+1)].values.hpbuf, this.cardData["card"+(i+1)].values.atkbuf);
+			}
 			this.$refs.damage2[card[4]-1].applyMbuf(this.cardData[card].values);
+			for(var i = 0; i < 5; i++){
+				// this.$refs.damage2[i].changeBuf(this.cardData["card"+(i+1)].values.hpbuf, this.cardData["card"+(i+1)].values.atkbuf);
+			}
 		},
 		changeBuddyLv(cid, bid, value){
 			this.cardData["card"+cid].values["b"+bid+"lv"] = value;
@@ -76,7 +83,10 @@ module.exports = {
 			// console.log(atk);
 			// this.cardData["card"+cid].values["b"+bid+"lv"] = value;
 			// this.applyData("card"+cid);
-			this.$refs.damage1[cid[4]-1].changeBuf(hpbuf, atkbuf);
+			this.cardData[cid].values.hpbuf = hpbuf;
+			this.cardData[cid].values.atkbuf = atkbuf;
+			// console.log(this.cardData[cid].values);
+			// this.$refs.damage1[cid[4]-1].changeBuf(hpbuf, atkbuf);
 		},
 	},
 	
