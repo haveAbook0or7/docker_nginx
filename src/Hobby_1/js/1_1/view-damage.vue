@@ -2,43 +2,43 @@
 	<table border="0" :id="this.id_name+'_TMagic'">
         <tr>
             <td colspan="2">
-				<label><input :id="this.id_name+'_MtORf1'" type="checkbox" value="0" checked>使用する</label>
+				<label><input :id="this.id_name+'_MtORf'+this.m" type="checkbox" value="0" checked>使用する</label>
             </td>
         </tr>
         <tr>
             <td class="col1">
-				{{this.M}}<input :id="this.id_name+'_d'" class="text" type="text" :value="this.basicDamage" readonly="readonly">
+				M{{this.m}}<input :id="this.id_name+'_d'+this.m" class="text" type="text" :value="this.basicDamage" readonly="readonly">
 			</td>
             <td class="col1">
-				Lv<select-own :id="this.id_name+'_lv'" :op="'opLv'"></select-own>
+				Lv<select-own :id="this.id_name+'_mlv'+this.m" :op="'opLv'" ref="mlv"></select-own>
             </td>
         </tr>
         <tr>
             <td class="col1">
-				有利<input :id="this.id_name+'_ADd1'" class="text" type="text" :value="this.advanDamage" readonly>
+				有利<input :id="this.id_name+'_ADd'+this.m" class="text" type="text" :value="this.advanDamage" readonly>
             </td>
 			<td class="col1">
-				不利<input :id="this.id_name+'_DISd1'" class="text" type="text" :value="this.disadDamage" readonly>
+				不利<input :id="this.id_name+'_DISd'+this.m" class="text" type="text" :value="this.disadDamage" readonly>
             </td>
         </tr>
         <tr>
 			<td colspan="2" class="col2">
-				<input :id="this.id_name+'_buf1_1'" type="checkbox" value="0" checked>
-				<label :for="this.id_name+'_buf1_1'" >
+				<input :id="this.id_name+'_buf'+this.m+'_1'" type="checkbox" value="0" v-model="this.bufmain">
+				<label :for="this.id_name+'_buf'+this.m+'_1'" >
 					{{bufMain_1}}<br>{{bufMain_2}}
 				</label>
 			</td>
         </tr>
         <tr>
             <td colspan="2" class="col2">
-				<input :id="this.id_name+'_buf1_2'" type="checkbox" value="0">
-				<label :for="this.id_name+'_buf1_2'">
+				<input :id="this.id_name+'_buf'+this.m+'_2'" type="checkbox" value="0" v-model="this.bufsub">
+				<label :for="this.id_name+'_buf'+this.m+'_2'">
 					{{bufSub_1}}<br>{{bufSub_2}}
 				</label>
 			</td>
         </tr>
         <tr style="height: 20px;">
-			<td :id="this.id_name+'_bufA1'" colspan="2"></td>
+			<td :id="this.id_name+'_bufA'+this.m" colspan="2"></td>
         </tr>
     </table>
 </template>
@@ -51,19 +51,28 @@ module.exports = {
 	},
 	props: {
 		id_name: {default:"myselectimg"},
-		M: {default:"M1"}
+		m: {default:"1"}
 	},
 	data: function () {
 		return {
 			effect1: {
-				au: "ATK UP", du: "ﾀﾞﾒｰｼﾞ UP", ad: "ATK DOWN", dd: "ﾀﾞﾒｰｼﾞ DOWN", re: "HP回復", cr: "HP継続回復", td: "被ﾀﾞﾒ DOWN",
-				fu: "火ﾀﾞﾒ UP", tu: "木ﾀﾞﾒ UP", wu: "水ﾀﾞﾒ UP", nu: "無ﾀﾞﾒ UP", ev: "回避", cu: "呪い",
-				DU: "デュオ魔法", nN: "なし", n: "",
+				au: "ATK UP", du: "ﾀﾞﾒｰｼﾞ UP", ad: "ATK DOWN", dd: "ﾀﾞﾒｰｼﾞ DOWN", 
+				re: "HP回復", cr: "HP継続回復", td: "被ﾀﾞﾒ DOWN",
+				fu: "火ﾀﾞﾒ UP", tu: "木ﾀﾞﾒ UP", wu: "水ﾀﾞﾒ UP", nu: "無ﾀﾞﾒ UP", 
+				ev: "回避", cu: "呪い",
+				duo: "デュオ魔法", nN: "なし", n: "",
 			},
 			effect2: {n: "", s: "極小", S: "小", M: "中", L: "大"},
 			effect3: {n: "", 1: "1T", 2: "2T", 3: "3T"},
 			values: {},
             chnos: [],
+			bufmain: true,
+			bufsub: false,
+			mMlv: 0,
+			mSlv: 0,
+			main: "",
+			sub: "",
+			masic: "",
 			basicDamage: 0,
 			advanDamage: 0,
 			disadDamage: 0,
@@ -74,35 +83,109 @@ module.exports = {
 		}
 	},
 	methods: {
-		trimBuf(value){
-			console.log(value.length);
-			v1_1 = value[0]+value[1]; v2_1 = "n"; v3_1 = "n";
-			v1_2 = "n"; v2_2 = "n"; v3_2 = "n";
-			if(value == "nN"){
-			}else if(isFinite(value) && value != 0){
-				v1_1 = "DU";
+		applyMbuf(values){
+			this.values = values;
+			var lv = [0,1,1,1,1,5,5,5,5,5,10];
+			var msub = this.m == 1 ? 2 : 1 ;
+			// レベル抽出
+			this.mMlv = lv[values["m"+this.m+"lv"]];
+			this.mSlv = lv[values["m"+msub+"lv"]];
+			this.$refs["mlv"].chengeValue(this.mMlv);
+			// レベルに応じたバフ抽出
+			this.main = values["m"+this.m+"buf_"+this.mMlv];
+			this.sub = values["m"+msub+"buf_"+this.mSlv];
+			this.masic = values["m"+this.m+"_"+this.mMlv];
+			// この魔法のバフ
+			if(isFinite(this.main)){
+				// デュオ魔法
+				this.bufMain_1 = this.effect1.duo;
 			}else{
-				v2_1 = value[2]; v3_1 = value[3];
-				if(value.length == 8){
-					v1_2 = value[4]+value[5]; v2_2 = value[6]; v3_2 = value[7];
+				this.bufMain_1 = this.effect1[this.main[0]+this.main[1]] + this.effect2[this.main[2]] +this.effect3[this.main[3]];
+			}
+			this.bufMain_2 = "**********";
+			if(this.main.length == 8){
+				this.bufMain_2 = this.effect1[this.main[4]+this.main[5]] + this.effect2[this.main[6]] +this.effect3[this.main[7]];
+			}
+			// もうひとつの魔法のバフ
+			this.bufSub_1 = "**********";
+			this.bufSub_2 = "**********";
+			if(this.sub[0]+this.sub[1] == "au" || this.sub[0]+this.sub[1] == "du"){
+				if(isFinite(this.sub)){
+					// デュオ魔法
+					this.bufSub_1 = this.effect1.duo;
+				}else{
+					this.bufSub_1 = this.effect1[this.sub[0]+this.sub[1]] + this.effect2[this.sub[2]] +this.effect3[this.sub[3]];
 				}
 			}
-			console.log({ef1_1: v1_1, ef2_1: v2_1, ef3_1: v3_1,  ef1_2: v1_2, ef2_2: v2_2, ef3_2: v3_2,});
-			return {ef1_1: v1_1, ef2_1: v2_1, ef3_1: v3_1,  ef1_2: v1_2, ef2_2: v2_2, ef3_2: v3_2,};
+			if(this.sub[4]+this.sub[5] == "au" || this.sub[4]+this.sub[5] == "du"){
+				if(this.sub.length == 8){
+					this.bufSub_2 = this.effect1[this.sub[4]+this.sub[5]] + this.effect2[this.sub[6]] +this.effect3[this.sub[7]];
+				}
+			}
 		},
-		applyMbuf(values){
+		changeBuf(hpbuf, atkbuf){
+			console.log(hpbuf);
+			console.log(atkbuf);
+			var calc = {d: 0, atkMag: atkbuf, dMag: 0, cor: 0, att: 0, ram: 0};
+			if(this.bufmain){
+				// ATKバフをatkMagに加算
+				console.log(this.bufmain);
+				console.log(this.main[0]+this.main[1]);
+				if(this.main[0]+this.main[1] == "au"){
+					console.log(this.main[0]+this.main[1]);
+					switch(this.main[2]){
+						case "s" :
+							calc.atkMag = parseFloat(calc.atkMag,10) + this.values.atk * ((5 + 0.5 * this.mMlv) / 100);
+							break;
+						case "S" :
+							calc.atkMag = parseFloat(calc.atkMag,10) + this.values.atk * ((10 + 1 * this.mMlv) / 100);
+							break;
+						case "M" :
+							calc.atkMag = parseFloat(calc.atkMag,10) + this.values.atk * ((20 + 1.5 * this.mMlv) / 100);
+							break;
+						case "L" :
+							calc.atkMag = parseFloat(calc.atkMag,10) + this.values.atk * ((30 + 2 * this.mMlv) / 100);
+							break;
+					}          
+				}
+				// 攻撃倍率をdMagに加算
+				switch(this.masic[1]){
+					case "S" :
+						calc.dMag += (50 + 2.5 * this.mMlv) / 100;
+						break;
+					case "L" :
+						// calc.dMag += (62.5 + 3.75 * lv) / 100;
+						calc.dMag += (60 + 4 * this.mMlv) / 100; // 参考文献によって少し違う
+						break;
+				}
+				// 攻撃倍率に無属性補正をかける
+				if(this.masic[0] == 0){ // 無属性なら攻撃倍率を補正する
+					calc.dMag *= 1.1;
+				}
+				// ダメージバフをdMagに加算
+				if(this.main[0]+this.main[1] == "du"){ // ダメージUPか判断
+					switch(this.main[2]){
+						case "s" :
+							calc.dMag = parseFloat(calc.dMag,10) + ((1.25 + 0.125 * this.mMlv) / 100);
+							break;
+						case "S" :
+							calc.dMag = parseFloat(calc.dMag,10) + ((2.5 + 0.25 * this.mMlv) / 100);
+							break;
+						case "M" :
+							calc.dMag = parseFloat(calc.dMag,10) + ((5 + 0.375 * this.mMlv) / 100);
+							break;
+						case "L" :
+							calc.dMag = parseFloat(calc.dMag,10) + ((7.5 + 0.5 * this.mMlv) / 100);
+							break;
+					}            
+				}
+				// 属性ダメージUPをdMagに加算
+				console.log(calc);
+				// 想定ダメージをDに算出
+			}
+			
 
-			// if(!isFinite(main)){
-			// 	this.bufMain_1 = this.effect1[main[0]+main[1]] + this.effect2[main[2]] +this.effect3[main[3]];
-			// }
-			
-			// // this.bufMain_2 = this.effect1[main[0]+main[1]] + this.effect2[mV.ef2_2] +this.effect3[mV.ef3_2];
-			// if(!isFinite(sub)){
-			// 	this.bufSub_1 = this.effect1[sub[0]+sub[1]] + this.effect2[sub[2]] +this.effect3[sub[3]];
-			// }
-			
-			// this.bufSub_2 = this.effect1[sub[0]+sub[1]] + this.effect2[sV.ef2_2] +this.effect3[sV.ef3_2];
-		},
+		}
 	},
 	
 }
