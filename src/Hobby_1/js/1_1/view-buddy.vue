@@ -60,7 +60,7 @@ module.exports = {
 		applyBuddy(values){
             this.values = values;
             for(var i = 1; i <= 3; i++){
-                this.img[i] = values["b"+i]+".jpg";
+                this.img[i] = values["b"+i] == -1 ? "none.jpg" : values["b"+i]+".jpg";
                 //dataのオブジェクトを含む更新をする場合はこうしないと反映されない
                 var Btype = values["b"+i+"type"];
                 this.$set(this.Btype1, i, this.buddytype[Btype[0]+Btype[1]]);
@@ -69,6 +69,8 @@ module.exports = {
                     this.$set(this.Btype2, i, this.buddytype[Btype[2]+Btype[3]]);
                 }
                 this.$refs["b"+i+"lv"].chengeValue(values["b"+i+"lv"]);
+                // SRやRならバディLv操作できないようにする
+                this.$refs["b"+i+"lv"].chengeDisabled(values["b"+i] == -1 ? true : false);
             }
 		},
         changeBuddy(chnos){
