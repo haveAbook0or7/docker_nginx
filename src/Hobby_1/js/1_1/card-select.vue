@@ -67,12 +67,14 @@ module.exports = {
 			}
 			this.$refs.damage1[card[4]-1].applyMbuf(this.cardData[card].values);
 			this.$refs.damage2[card[4]-1].applyMbuf(this.cardData[card].values);
-			// TODO ここで初期化する
+			// ここで初期化する
+			for(var i = 0; i < 5; i++){
+				this.$refs.damage1[i].clearAttribute();
+				this.$refs.damage2[i].clearAttribute();
+			}
 			for(var i = 0; i < 5; i++){ // 順番ミスると認識されない
 				this.$refs.damage1[i].changeAttribute();
-			}
-			for(var i = 0; i < 5; i++){
-				// this.$refs.damage2[i].changeAttribute();
+				this.$refs.damage2[i].changeAttribute();
 			}
 			for(var i = 0; i < 5; i++){
 				this.$refs.damage1[i].changeBuf(this.cardData["card"+(i+1)].values.hpbuf, this.cardData["card"+(i+1)].values.atkbuf);

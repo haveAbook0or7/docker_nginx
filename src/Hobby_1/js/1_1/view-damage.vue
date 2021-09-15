@@ -148,6 +148,14 @@ module.exports = {
 			}
 			// this.changeAttribute();
 		},
+		clearAttribute(){
+			for(var i = 1; i <= 3; i++){
+				this["A_"+i] = "";
+				this["A_"+i+"Lv"] = 0;
+				this["bufA_"+i] = "**********";
+				this["bufA"+i] = false;
+			}
+		},
 		changeAttribute(){
 			// 属性ダメージUP
 			if( this.main[0]+this.main[1] == "fu" || 
@@ -162,14 +170,16 @@ module.exports = {
 			var att = {f: 1, t: 2, w: 3, n: 0};
 			// console.log("GETmagic "+this.id_name+" "+this.m+"::"+this.masic[0]+":"+att[attribute[0]]);
 			if(this.masic[0] == att[attribute[0]]){
-				console.log("GETif "+this.id_name+" "+this.m+"::yes");
-				// for(var i = 1; i <= 3; i++){
-				// 	if(this["A_"+i] == ""){
-				// 		this["A_"+i] = attribute;
-				// 		this["A_"+i+"lv"] = lv;
-				// 		break;
-				// 	}
-				// }
+				console.log("GETif "+this.id_name+" "+this.m+"::yes:");
+				for(var i = 1; i <= 3; i++){
+					if(this["A_"+i] == ""){
+						this["A_"+i] = attribute;
+						this["A_"+i+"Lv"] = lv;
+						this["bufA_"+i] = this.effect1[attribute[0]+attribute[1]] + this.effect2[attribute[2]] +this.effect3[attribute[3]];
+						// console.log("GETif "+this.id_name+" "+this.m+"::ys:"+this["A_"+i]+this["A_"+i+"Lv"]);
+						break;
+					}
+				}
 			}
 		},
 		changeBuf(hpbuf, atkbuf){
