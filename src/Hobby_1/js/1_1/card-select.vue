@@ -4,8 +4,8 @@
 			<img :id="data.id_name" :src="'../img/'+data.cardImg" width="70.5" height="74.7" @click="clickOpenModal(data.id_name)">
 			<view-hpatk :id_name="data.id_name" ref="hpatk" @change="extractHPATK"></view-hpatk>
 			<view-buddy :id_name="data.id_name" ref="buddy" @change="changeBuddyLv"></view-buddy>
-			<view-damage :id_name="data.id_name" :m="'1'" ref="damage1"></view-damage>
-			<view-damage :id_name="data.id_name" :m="'2'" ref="damage2"></view-damage>
+			<view-damage :id_name="data.id_name" :m="'1'" ref="damage1" @attribute="giveAttribute"></view-damage>
+			<view-damage :id_name="data.id_name" :m="'2'" ref="damage2" @attribute="giveAttribute"></view-damage>
 		</div>
 		<choice-modal-card ref="modal" @choice-card="getCard"></choice-modal-card>
 	</div>
@@ -46,10 +46,10 @@ module.exports = {
 		getCard(value, card){
 			this.cardData[card].values = value;
 			this.chnos[card.slice(-1)-1] = value.chno;
-			console.log(this.cardData[card].values);
+			// console.log(this.cardData[card].values);
 			this.applyData(card);
 			console.log("values:");
-			console.log(this.chnos);
+			// console.log(this.chnos);
 			console.log(this.cardData[card].values);
 		},
 		applyData(card){
@@ -60,34 +60,49 @@ module.exports = {
 			}
 			// console.log("refs:");
 			// console.log(this.$refs);
-			console.log(this.$refs);
+			// console.log(this.$refs);
 			this.$refs.buddy[card[4]-1].applyBuddy(this.cardData[card].values);
 			for(var i = 0; i < 5; i++){
 				this.$refs.buddy[i].changeBuddy(this.chnos);
 			}
 			this.$refs.damage1[card[4]-1].applyMbuf(this.cardData[card].values);
+			this.$refs.damage2[card[4]-1].applyMbuf(this.cardData[card].values);
+			// TODO ここで初期化する
+			for(var i = 0; i < 5; i++){ // 順番ミスると認識されない
+				this.$refs.damage1[i].changeAttribute();
+			}
+			for(var i = 0; i < 5; i++){
+				// this.$refs.damage2[i].changeAttribute();
+			}
 			for(var i = 0; i < 5; i++){
 				this.$refs.damage1[i].changeBuf(this.cardData["card"+(i+1)].values.hpbuf, this.cardData["card"+(i+1)].values.atkbuf);
 			}
-			this.$refs.damage2[card[4]-1].applyMbuf(this.cardData[card].values);
 			for(var i = 0; i < 5; i++){
 				// this.$refs.damage2[i].changeBuf(this.cardData["card"+(i+1)].values.hpbuf, this.cardData["card"+(i+1)].values.atkbuf);
 			}
+			
 		},
 		changeBuddyLv(cid, bid, value){
 			this.cardData["card"+cid].values["b"+bid+"lv"] = value;
 			this.applyData("card"+cid);
 		},
-		extractHPATK(cid, hpbuf, atkbuf){
+		extractHPATK(card, hpbuf, atkbuf){
 			// console.log(hp);
 			// console.log(atk);
 			// this.cardData["card"+cid].values["b"+bid+"lv"] = value;
 			// this.applyData("card"+cid);
-			this.cardData[cid].values.hpbuf = hpbuf;
-			this.cardData[cid].values.atkbuf = atkbuf;
+			this.cardData[card].values.hpbuf = hpbuf;
+			this.cardData[card].values.atkbuf = atkbuf;
 			// console.log(this.cardData[cid].values);
 			// this.$refs.damage1[cid[4]-1].changeBuf(hpbuf, atkbuf);
 		},
+		giveAttribute(card, m, attribute, lv){
+			console.log("att::"+card+":"+m+":"+attribute+":"+lv);
+			for(var i = 0; i < 5; i++){
+				this.$refs.damage1[i].getAttribute(attribute, lv);
+				this.$refs.damage2[i].getAttribute(attribute, lv);
+			}
+		}
 	},
 	
 }
