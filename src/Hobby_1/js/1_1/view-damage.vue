@@ -23,7 +23,7 @@
         </tr>
         <tr>
 			<td colspan="2" class="col2">
-				<input :id="this.id_name+'_buf'+this.m+'_1'" type="checkbox" value="0" v-model="this.bufmain">
+				<input :id="this.id_name+'_buf'+this.m+'_1'" type="checkbox" v-model="bufmain">
 				<label :for="this.id_name+'_buf'+this.m+'_1'" >
 					{{bufMain_1}}<br>{{bufMain_2}}
 				</label>
@@ -31,14 +31,23 @@
         </tr>
         <tr>
             <td colspan="2" class="col2">
-				<input :id="this.id_name+'_buf'+this.m+'_2'" type="checkbox" value="0" v-model="this.bufsub">
+				<input :id="this.id_name+'_buf'+this.m+'_2'" type="checkbox" v-model="bufsub">
 				<label :for="this.id_name+'_buf'+this.m+'_2'">
 					{{bufSub_1}}<br>{{bufSub_2}}
 				</label>
 			</td>
         </tr>
         <tr style="height: 20px;">
-			<td :id="this.id_name+'_bufA'+this.m" colspan="2"></td>
+			<td :id="this.id_name+'_bufA'+this.m" colspan="2">
+				<input :id="this.id_name+'_bufA'+this.m+'_1'" type="checkbox" v-model="bufA1">
+				<label :for="this.id_name+'_bufA'+this.m+'_1'">{{bufA_1}}</label>
+				<br>
+				<input :id="this.id_name+'_bufA'+this.m+'_2'" type="checkbox" v-model="bufA2">
+				<label :for="this.id_name+'_bufA'+this.m+'_2'">{{bufA_2}}</label>
+				<br>
+				<input :id="this.id_name+'_bufA'+this.m+'_3'" type="checkbox" v-model="bufA3">
+				<label :for="this.id_name+'_bufA'+this.m+'_3'">{{bufA_3}}</label>
+			</td>
         </tr>
     </table>
 </template>
@@ -68,11 +77,23 @@ module.exports = {
             chnos: [],
 			bufmain: true,
 			bufsub: false,
+			bufA1: false,
+			bufA2: false,
+			bufA3: false,
+
 			mMlv: 0,
 			mSlv: 0,
 			main: "",
 			sub: "",
+			A_1lv: 0,
+			A_2lv: 0,
+			A_3lv: 0,
+			A_1: "",
+			A_2: "",
+			A_3: "",
+
 			masic: "",
+
 			basicDamage: 0,
 			advanDamage: 0,
 			disadDamage: 0,
@@ -80,6 +101,9 @@ module.exports = {
 			bufMain_2: "**********",
 			bufSub_1: "**********",
 			bufSub_2: "**********",
+			bufA_1: "**********",
+			bufA_2: "**********",
+			bufA_3: "**********",
 		}
 	},
 	methods: {
@@ -121,6 +145,31 @@ module.exports = {
 				if(this.sub.length == 8){
 					this.bufSub_2 = this.effect1[this.sub[4]+this.sub[5]] + this.effect2[this.sub[6]] +this.effect3[this.sub[7]];
 				}
+			}
+			// this.changeAttribute();
+		},
+		changeAttribute(){
+			// 属性ダメージUP
+			if( this.main[0]+this.main[1] == "fu" || 
+				this.main[0]+this.main[1] == "tu" || 
+				this.main[0]+this.main[1] == "wu" || 
+				this.main[0]+this.main[1] == "nu"){
+					this.$emit('attribute', this.id_name, this.m, this.main, this.mMlv);
+			}
+		},
+		getAttribute(attribute, lv){
+			// console.log("GETatt "+this.id_name+" "+this.m+"::"+attribute+":"+lv);
+			var att = {f: 1, t: 2, w: 3, n: 0};
+			// console.log("GETmagic "+this.id_name+" "+this.m+"::"+this.masic[0]+":"+att[attribute[0]]);
+			if(this.masic[0] == att[attribute[0]]){
+				console.log("GETif "+this.id_name+" "+this.m+"::yes");
+				// for(var i = 1; i <= 3; i++){
+				// 	if(this["A_"+i] == ""){
+				// 		this["A_"+i] = attribute;
+				// 		this["A_"+i+"lv"] = lv;
+				// 		break;
+				// 	}
+				// }
 			}
 		},
 		changeBuf(hpbuf, atkbuf){
@@ -179,11 +228,11 @@ module.exports = {
 					}            
 				}
 				// 属性ダメージUPをdMagに加算
-				console.log("calc");
-				console.log(calc);
+				
 				// 想定ダメージをDに算出
 			}
-			
+			// console.log("calc");
+			// console.log(calc);
 
 		}
 	},
