@@ -2,8 +2,8 @@
 	<table border="0" class="THpAtk">
         <tr>
             <td colspan="3" style="text-align: center;">
-                <span class="button" :value="this.id_name" @click="clickMAX('max')">MAX</span>
-                <span class="button" :value="this.id_name" @click="clickMAX('middle')">無凸MAX</span>
+                <input type="button" class="button" value="MAX" @click="clickMAX('max')">
+                <input type="button" class="button" value="無凸MAX" @click="clickMAX('middle')">
             </td>
         </tr>
         <tr>
@@ -12,7 +12,7 @@
                 <input :id="this.id_name+'_hpbuf'" class="text" type="text" :value="this.hpbuf" readonly>
             </td>
             <td>
-                <input :id="this.id_name+'_hp'" class="textOn" type="text" :value="this.hp">
+                <input :id="this.id_name+'_hp'" class="textOn" type="text" :value="this.hp" @change="changeBasicValue">
             </td>
         </tr>
         <tr>
@@ -21,7 +21,7 @@
                 <input :id="this.id_name+'_atkbuf'" class="text" type="text" :value="this.atkbuf" readonly>
             </td>
             <td>
-                <input :id="this.id_name+'_atk'" class="textOn" type="text" :value="this.atk">
+                <input :id="this.id_name+'_atk'" class="textOn" type="text" :value="this.atk" @change="changeBasicValue">
             </td>
         </tr>
     </table>
@@ -35,8 +35,6 @@ module.exports = {
     },
 	props: {
 		id_name: {default:"myselectimg"},
-        // initialHP: {default: 0},
-        // initialATK: {default: 0},
 	},
 	data: function () {
 		return {
@@ -55,28 +53,20 @@ module.exports = {
 		}
 	},
 	methods: {
+        // 受け取ったデータを保存
         applyHPATK(values){
             this.values = values;
             this.hp = values.hp;
             this.atk = values.atk;
         },
-        clickMAX(which){
-            switch(which){
-                case "max":
-                    this.hp = this.values.hpmax;
-                    this.atk = this.values.atkmax;
-                    break;
-                case "middle":
-                    this.hp = this.values.hpmiddle;
-                    this.atk = this.values.atkmiddle;
-                    break;
-            }
-            this.changeBuddy(this.chnos);
-        },
+        // バディ補正ステータスを計算して表示して親に戻す
         changeBuddy(chnos){
+            // 現在セットしてるキャラクターIDを取得
             this.chnos = chnos;
+            // 計算用変数
             mag = {A: 0, H: 0};
             flg = {1: false, 2: false, 3: false};
+            // バディが成立していたら補正倍率を追加
             for(var i = 0; i < 5; i++){
             for(var j = 1; j <= 3; j++){
                 if(this.values["b"+j] == chnos[i] && !flg[j]){
@@ -90,14 +80,39 @@ module.exports = {
                 }
             }
             }
+            // 補正して表示
             this.hpbuf = this.hp * (mag["H"] + 1);
             this.atkbuf = this.atk * (mag["A"] + 1);
-            // console.log("cid:");
-            // console.log(this.id_name);
-            this.$emit('change', this.id_name, this.hpbuf, this.atkbuf);
+            // 親にも値を送る
+            this.$emit('extract', this.id_name, this.hpbuf, this.atkbuf);
+        },
+        // MAX,無凸MAXステータス取得時
+        clickMAX(which){
+            switch(which){
+                case "max":
+                    this.sendBasicValue(this.id_name, this.values.hpmax, this.values.atkmax);
+                    break;
+                case "middle":
+                    this.sendBasicValue(this.id_name, this.values.hpmiddle, this.values.atkmiddle);
+                    break;
+            }
+        },
+        // 手動で値をいじる時
+        changeBasicValue(event){
+            var sendHp = this.hp;
+            var sendAtk = this.atk;
+            if(event.target.id[6] == "h"){
+                sendHp = event.target.value;
+            }else{
+                sendAtk = event.target.value;
+            }
+            this.sendBasicValue(this.id_name, sendHp, sendAtk);
+        },
+        // 変更した値を親に送る用
+        sendBasicValue(card, hp, atk){
+            this.$emit('change-basic', card, hp, atk);
         }
 	},
-	
 }
 // export default { Node.jsじゃないから、これだとダメだった。 }
 </script>
@@ -123,8 +138,10 @@ module.exports = {
         border: 2px solid #e6b422; 
 	}
     .button{
+        width: 50px;
+        height: 18px;
         display: inline-block;
-        text-align: left;
+        text-align: center;
         background-color: #e6b422;
         font-size: 10px;
         color: rgb(255, 255, 255);

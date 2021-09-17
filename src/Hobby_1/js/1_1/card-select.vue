@@ -2,10 +2,10 @@
 	<div>
 		<div class="card" v-for="data in cardData" :key="data.id_name">
 			<img :id="data.id_name" :src="'../img/'+data.cardImg" width="70.5" height="74.7" @click="clickOpenModal(data.id_name)">
-			<view-hpatk :id_name="data.id_name" ref="hpatk" @change="extractHPATK"></view-hpatk>
+			<view-hpatk :id_name="data.id_name" ref="hpatk" @extract="extractHPATK" @change-basic="changeBasicValue"></view-hpatk>
 			<view-buddy :id_name="data.id_name" ref="buddy" @change="changeBuddyLv"></view-buddy>
-			<view-damage :id_name="data.id_name" :m="'1'" ref="damage1" @attribute="giveAttribute"></view-damage>
-			<view-damage :id_name="data.id_name" :m="'2'" ref="damage2" @attribute="giveAttribute"></view-damage>
+			<view-damage :id_name="data.id_name" :m="'1'" ref="damage1" @attribute="giveAttribute" @change-lv="changeMasicLv"></view-damage>
+			<view-damage :id_name="data.id_name" :m="'2'" ref="damage2" @attribute="giveAttribute" @change-lv="changeMasicLv"></view-damage>
 		</div>
 		<choice-modal-card ref="modal" @choice-card="getCard"></choice-modal-card>
 	</div>
@@ -43,68 +43,80 @@ module.exports = {
 		clickOpenModal(value){
             this.$refs.modal.openModal(value);
 		},
+		// モーダルからカードデータを受け取る
 		getCard(value, card){
+			// 当てはまるカードにデータ全部保存
 			this.cardData[card].values = value;
+			// いま選んでるキャラクターIDを保存
 			this.chnos[card.slice(-1)-1] = value.chno;
-			// console.log(this.cardData[card].values);
+			// データをそれぞれ処理して表示する
 			this.applyData(card);
 			console.log("values:");
 			// console.log(this.chnos);
 			console.log(this.cardData[card].values);
 		},
+		// それぞれの部品にデータを送る
 		applyData(card){
+			// 画像を表示
 			this.cardData[card].cardImg = this.Dormitory[Math.floor(this.cardData[card].values.chno/10)]+'/'+this.cardData[card].values.img;
+			// 基礎ステータス
 			this.$refs.hpatk[card[4]-1].applyHPATK(this.cardData[card].values);
 			for(var i = 0; i < 5; i++){
 				this.$refs.hpatk[i].changeBuddy(this.chnos);
 			}
-			// console.log("refs:");
-			// console.log(this.$refs);
-			// console.log(this.$refs);
+			// バディ
 			this.$refs.buddy[card[4]-1].applyBuddy(this.cardData[card].values);
 			for(var i = 0; i < 5; i++){
 				this.$refs.buddy[i].changeBuddy(this.chnos);
 			}
+			// ダメージ計算
 			this.$refs.damage1[card[4]-1].applyMbuf(this.cardData[card].values);
 			this.$refs.damage2[card[4]-1].applyMbuf(this.cardData[card].values);
-			// ここで初期化する
+			// ここで属性ダメージを初期化する
 			for(var i = 0; i < 5; i++){
 				this.$refs.damage1[i].clearAttribute();
 				this.$refs.damage2[i].clearAttribute();
 			}
+			// 属性ダメージUP持ちがいるか判定
 			for(var i = 0; i < 5; i++){ // 順番ミスると認識されない
 				this.$refs.damage1[i].changeAttribute();
 				this.$refs.damage2[i].changeAttribute();
 			}
+			// ダメージ計算
 			for(var i = 0; i < 5; i++){
-				this.$refs.damage1[i].changeBuf(this.cardData["card"+(i+1)].values.hpbuf, this.cardData["card"+(i+1)].values.atkbuf);
+				this.$refs.damage1[i].calcDamage(this.cardData["card"+(i+1)].values, this.chnos);
+				this.$refs.damage2[i].calcDamage(this.cardData["card"+(i+1)].values, this.chnos);
 			}
-			for(var i = 0; i < 5; i++){
-				// this.$refs.damage2[i].changeBuf(this.cardData["card"+(i+1)].values.hpbuf, this.cardData["card"+(i+1)].values.atkbuf);
-			}
-			
 		},
+		// バディ補正ステータスを追加する用
+		extractHPATK(card, hpbuf, atkbuf){
+			this.cardData[card].values.hpbuf = hpbuf;
+			this.cardData[card].values.atkbuf = atkbuf;
+		},
+		// 基礎ステータスいじった時(MAX,無凸MAX含む)
+		changeBasicValue(card, hp, atk){
+			this.cardData[card].values["hp"] = hp;
+			this.cardData[card].values["atk"] = atk;
+			this.applyData(card);
+		},
+		// バディLvをいじった時
 		changeBuddyLv(cid, bid, value){
 			this.cardData["card"+cid].values["b"+bid+"lv"] = value;
 			this.applyData("card"+cid);
 		},
-		extractHPATK(card, hpbuf, atkbuf){
-			// console.log(hp);
-			// console.log(atk);
-			// this.cardData["card"+cid].values["b"+bid+"lv"] = value;
-			// this.applyData("card"+cid);
-			this.cardData[card].values.hpbuf = hpbuf;
-			this.cardData[card].values.atkbuf = atkbuf;
-			// console.log(this.cardData[cid].values);
-			// this.$refs.damage1[cid[4]-1].changeBuf(hpbuf, atkbuf);
+		// 魔法Lvをいじった時
+		changeMasicLv(cid, mid, value){
+			this.cardData["card"+cid].values["m"+mid+"lv"] = value;
+			this.applyData("card"+cid);
 		},
+		// 属性ダメージUPのチェックボックス追加
 		giveAttribute(card, m, attribute, lv){
 			console.log("att::"+card+":"+m+":"+attribute+":"+lv);
 			for(var i = 0; i < 5; i++){
 				this.$refs.damage1[i].getAttribute(attribute, lv);
 				this.$refs.damage2[i].getAttribute(attribute, lv);
 			}
-		}
+		},
 	},
 	
 }
