@@ -2,8 +2,8 @@
 	<table border="0" class="THpAtk">
         <tr>
             <td colspan="3" style="text-align: center;">
-                <input type="button" class="button" value="MAX" @click="clickMAX('max')">
-                <input type="button" class="button" value="無凸MAX" @click="clickMAX('middle')">
+                <input type="button" value="MAX" @click="clickMAX('max')">
+                <input type="button" value="無凸MAX" @click="clickMAX('middle')">
             </td>
         </tr>
         <tr>
@@ -61,11 +61,11 @@ module.exports = {
         },
         // バディ補正ステータスを計算して表示して親に戻す
         changeBuddy(chnos){
-            // 現在セットしてるキャラクターIDを取得
+            // 現在セットしてるキャラクターIDを取得＆保存
             this.chnos = chnos;
             // 計算用変数
-            mag = {A: 0, H: 0};
-            flg = {1: false, 2: false, 3: false};
+            var mag = {A: 0, H: 0};
+            var flg = {1: false, 2: false, 3: false};
             // バディが成立していたら補正倍率を追加
             for(var i = 0; i < 5; i++){
             for(var j = 1; j <= 3; j++){
@@ -88,13 +88,15 @@ module.exports = {
         },
         // MAX,無凸MAXステータス取得時
         clickMAX(which){
-            switch(which){
-                case "max":
-                    this.sendBasicValue(this.id_name, this.values.hpmax, this.values.atkmax);
-                    break;
-                case "middle":
-                    this.sendBasicValue(this.id_name, this.values.hpmiddle, this.values.atkmiddle);
-                    break;
+            if(this.values.hpmax != undefined){
+                switch(which){
+                    case "max":
+                        this.sendBasicValue(this.id_name, this.values.hpmax, this.values.atkmax);
+                        break;
+                    case "middle":
+                        this.sendBasicValue(this.id_name, this.values.hpmiddle, this.values.atkmiddle);
+                        break;
+                }
             }
         },
         // 手動で値をいじる時
@@ -118,43 +120,42 @@ module.exports = {
 </script>
 
 <style scoped>
-	*{
-		margin: 0;
-		padding: 0;
-		border: 0;
+    *{
+		background: #2e2930;
 	}
-	table{
-		background: palevioletred;
-	}
-	.text{
-		height: 1.5em;
+    input[type=text]:read-only{
+		height: 18px;
 		width: 40px;
-		background: #b3ada0;
+		border: 1px solid #aaaaaa;
+		border-radius: 2px;
 	}
-    .textOn{
-		height: 1.5em;
-        width: 40px;
-        background: white;
-        border: 2px solid #e6b422; 
+    input[type=text]:read-write{
+		height: 18px;
+		width: 40px;
+		color: #2e2930;
+		background: #fbfaf5;
+		border: 1.5px solid #e6b422;
+		border-radius: 2px;
+        caret-color: #2e2930;
 	}
-    .button{
+    input[type=button]{
         width: 50px;
         height: 18px;
         display: inline-block;
         text-align: center;
         background-color: #e6b422;
         font-size: 10px;
-        color: rgb(255, 255, 255);
         text-decoration: none;
         font-weight: bold;
         padding: 1px 2px;
-        border: 0.5px dashed rgb(255, 255, 255);
+        border: 0.5px dashed #ffffff;
         margin: 0 2px;
         box-shadow: #e6b422 0px 0px 0px 3px;
+        z-index: 3;
     }
-    .button:hover {
+    input[type=button]:hover {
         background-color: slategray;
         box-shadow: slategray 0px 0px 0px 3px;
-        /* border-style: solid; */
+        z-index: 3;
     }
 </style>
