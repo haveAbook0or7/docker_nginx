@@ -2,7 +2,7 @@
 	<table border="0" :id="this.id_name+'_TMagic'" :style="elementColor">
         <tr>
             <td colspan="2">
-				<input :id="this.id_name+'_MtORf'+this.m" type="checkbox" value="0" checked>
+				<input :id="this.id_name+'_MtORf'+this.m" type="checkbox" v-model="isUse" @change="changeUse">
 				<label :for="this.id_name+'_MtORf'+this.m">使用する<span></span></label>
             </td>
         </tr>
@@ -74,6 +74,7 @@ module.exports = {
 			effect3: {n: "", 1: "1T", 2: "2T", 3: "3T"},
 			values: {},
             chnos: [],
+			isUse: true,
 			bufmain: true,
 			bufsub: false,
 			isDisabledS: false,
@@ -124,6 +125,7 @@ module.exports = {
 			this.values = values;
 			// 計算用変数
 			var lv = [0,1,1,1,1,5,5,5,5,5,10];
+			var colorList = ["#a58f86", "#ea5506", "#c3d825", "#0094c8"];
 			var msub = this.m == 1 ? 2 : 1 ; // もう一つの魔法
 			// レベル抽出
 			this.mMlv = lv[values["m"+this.m+"lv"]];
@@ -145,7 +147,6 @@ module.exports = {
 			if(this.main.length == 8){
 				this.bufMain_2 = this.effect1[this.main[4]+this.main[5]] + this.effect2[this.main[6]] +this.effect3[this.main[7]];
 			}
-			var colorList = ["#a58f86", "#ea5506", "#c3d825", "#0094c8"];
 			this.colors = colorList[this.masic[0]];
 			this.$refs["mlv"].chengeUnderC(this.colors);
 			// もうひとつの魔法のバフを表示
@@ -423,16 +424,17 @@ module.exports = {
                     }
                     break;
             }
-			if(calc.d != 0){
-				console.log("calc");
-				console.log(calc);
-			}
-			if(this.id_name == "card5" && this.m == 2){
-				console.log("***************************");
-			}
+			// if(calc.d != 0){
+			// 	console.log("calc");
+			// 	console.log(calc);
+			// }
+			// if(this.id_name == "card5" && this.m == 2){
+			// 	console.log("***************************");
+			// }
 			this.basicDamage = calc.d;
 			this.advanDamage = calc.d * 1.5;
 			this.disadDamage = calc.d * 0.5;
+			this.changeUse();
 		},
 		// バフをいじった時に再計算する
 		changeBuf(){
@@ -441,7 +443,65 @@ module.exports = {
 		// 魔法Lvの操作
 		changeMasicLv(id, value){
 			this.$emit('change-lv', id[4], id[9], value);
-		}
+		},
+		changeUse(){
+			var recovery = 0;
+			if(this.bufmain){
+				// 回復
+				if(this.main[0]+this.main[1] == "re"){
+					switch(this.main[2]){
+						case "s" :
+							recovery += parseInt(this.values.atk) * (0.5 + 0.01 * this.mMlv);
+							break;
+						case "S" :
+							recovery += parseInt(this.values.atk) * (0.9 + 0.02 * this.mMlv);
+							break;
+						case "M" :
+							recovery += parseInt(this.values.atk) * (1.3 + 0.04 * this.mMlv);
+							break;
+					}          
+				}
+				// 継続回復
+				if(this.main[0]+this.main[1] == "cr"){
+					switch(this.main[2]){
+						case "S" :
+							recovery += parseInt(parseInt(this.values.atk) * (0.1919 + 0.0096 * this.mMlv)) * this.main[3];
+							break;
+						case "M" :
+							recovery += parseInt(parseInt(this.values.atk) * (0.3837 + 0.0096 * this.mMlv)) * this.main[3];
+							break;
+					}          
+				}
+				if(this.main.length == 8){
+					// 回復
+					if(this.main[4]+this.main[5] == "re"){
+						switch(this.main[6]){
+							case "s" :
+								recovery += parseInt(this.values.atk) * (0.5 + 0.01 * this.mMlv);
+								break;
+							case "S" :
+								recovery += parseInt(this.values.atk) * (0.9 + 0.02 * this.mMlv);
+								break;
+							case "M" :
+								recovery += parseInt(this.values.atk) * (1.3 + 0.04 * this.mMlv);
+								break;
+						}          
+					}
+					// 継続回復
+					if(this.main[4]+this.main[5] == "cr"){
+						switch(this.main[6]){
+							case "S" :
+								recovery += parseInt(parseInt(this.values.atk) * (0.1919 + 0.0096 * this.mMlv)) * this.main[7];
+								break;
+							case "M" :
+								recovery += parseInt(parseInt(this.values.atk) * (0.3837 + 0.0096 * this.mMlv)) * this.main[7];
+								break;
+						}          
+					}
+				}
+			}
+			this.$emit('calc-damage', this.id_name, this.m, this.masic, this.basicDamage, recovery, this.isUse);
+		},
 	},
 }
 // export default { Node.jsじゃないから、これだとダメだった。 }

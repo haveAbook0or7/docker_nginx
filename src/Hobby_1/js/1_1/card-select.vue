@@ -1,13 +1,14 @@
 <template>
-	<div>
+	<div class="cards">
 		<div class="card" v-for="data in cardData" :key="data.id_name">
 			<img :id="data.id_name" :src="'../img/'+data.cardImg" width="70.5" height="74.7" @click="clickOpenModal(data.id_name)">
 			<view-hpatk :id_name="data.id_name" ref="hpatk" @extract="extractHPATK" @change-basic="changeBasicValue"></view-hpatk>
 			<view-buddy :id_name="data.id_name" ref="buddy" @change="changeBuddyLv"></view-buddy>
-			<view-damage :id_name="data.id_name" :m="'1'" ref="damage1" @attribute="giveAttribute" @change-lv="changeMasicLv"></view-damage>
-			<view-damage :id_name="data.id_name" :m="'2'" ref="damage2" @attribute="giveAttribute" @change-lv="changeMasicLv"></view-damage>
+			<view-damage :id_name="data.id_name" :m="'1'" ref="damage1" @attribute="giveAttribute" @change-lv="changeMasicLv" @calc-damage="changeTotalDamage"></view-damage>
+			<view-damage :id_name="data.id_name" :m="'2'" ref="damage2" @attribute="giveAttribute" @change-lv="changeMasicLv" @calc-damage="changeTotalDamage"></view-damage>
 		</div>
-		<choice-modal-card ref="modal" @choice-card="getCard"></choice-modal-card>
+		<view-total ref="total"></view-total>
+		<choice-modal-card ref="modal" :dd="this.datas" @choice-card="getCard"></choice-modal-card>
 	</div>
 </template>
 
@@ -18,6 +19,7 @@ module.exports = {
 		// 'view-buddy': httpVueLoader('http://haveabook.php.xdomain.jp/editing/js/Hobby_1/view-buddy.vue'),
 		// 'view-hpatk': httpVueLoader('http://haveabook.php.xdomain.jp/editing/js/Hobby_1/view-hpatk.vue'),
 		// 'choice-modal-card': httpVueLoader('http://haveabook.php.xdomain.jp/editing/js/Hobby_1/choice-modal-card.vue'),
+		'view-total': httpVueLoader('http://localhost:8080/Hobby_1/js/1_1/view-total.vue'),
 		'view-damage': httpVueLoader('http://localhost:8080/Hobby_1/js/1_1/view-damage.vue'),
 		'view-buddy': httpVueLoader('http://localhost:8080/Hobby_1/js/1_1/view-buddy.vue'),
 		'view-hpatk': httpVueLoader('http://localhost:8080/Hobby_1/js/1_1/view-hpatk.vue'),
@@ -101,8 +103,10 @@ module.exports = {
 		},
 		// バディLvをいじった時
 		changeBuddyLv(cid, bid, value){
+			this.$refs.modal.showData();
 			this.cardData["card"+cid].values["b"+bid+"lv"] = value;
 			this.applyData("card"+cid);
+			this.$refs.modal.showData();
 		},
 		// 魔法Lvをいじった時
 		changeMasicLv(cid, mid, value){
@@ -117,6 +121,9 @@ module.exports = {
 				this.$refs.damage2[i].getAttribute(attribute, lv);
 			}
 		},
+		changeTotalDamage(card, m, masic, basicDamage, recovery, use){
+			this.$refs.total.applyTotalDamage(card, m, masic, basicDamage, recovery, use, this.cardData[card].values.hpbuf);
+		}
 	},
 	
 }
@@ -135,6 +142,9 @@ module.exports = {
 		width: 140px;
 		display: inline-block;
 		text-align: center;
+	}
+	.cards{
+		display: flex;
 	}
 	table{
 		width: 100%;
