@@ -7,7 +7,7 @@
 			<view-damage :id_name="data.id_name" :m="'1'" ref="damage1" @attribute="giveAttribute" @change-lv="changeMasicLv" @calc-damage="changeTotalDamage"></view-damage>
 			<view-damage :id_name="data.id_name" :m="'2'" ref="damage2" @attribute="giveAttribute" @change-lv="changeMasicLv" @calc-damage="changeTotalDamage"></view-damage>
 		</div>
-		<view-total ref="total"></view-total>
+		<view-total class="total" ref="total"></view-total>
 		<choice-modal-card ref="modal" :dd="this.datas" @choice-card="getCard"></choice-modal-card>
 	</div>
 </template>
@@ -103,10 +103,8 @@ module.exports = {
 		},
 		// バディLvをいじった時
 		changeBuddyLv(cid, bid, value){
-			this.$refs.modal.showData();
 			this.cardData["card"+cid].values["b"+bid+"lv"] = value;
 			this.applyData("card"+cid);
-			this.$refs.modal.showData();
 		},
 		// 魔法Lvをいじった時
 		changeMasicLv(cid, mid, value){
@@ -145,6 +143,11 @@ module.exports = {
 	}
 	.cards{
 		display: flex;
+		background: #fbfaf5;
+		border: 5px double #e6b422;
+	}
+	.total{
+		border-left: 2px solid #e6b422;
 	}
 	table{
 		width: 100%;

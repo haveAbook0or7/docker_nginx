@@ -48,8 +48,10 @@ module.exports = {
 			event.stopPropagation();
 		},
 		choiceCard(value){
+			//データの中身を複製して渡すため、一度JSONにして戻すことで別のオブジェクトにしている
+			var copyData = JSON.parse(JSON.stringify(value));
 			/** クリックしたアイコンを親コンポーネントに送る */
-			this.$emit('choice-card', value, this.target);
+			this.$emit('choice-card', copyData, this.target);
 			this.closeModal();
 		}
 	},

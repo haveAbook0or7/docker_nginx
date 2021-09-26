@@ -12,20 +12,7 @@
 </head>
 
 <body>
-	<!-- <span></span> -->
-<!-- <section>
-  <a class="btn_07">BUTTON
-  </a>
-</section> -->
-<!-- <section> -->
-<!-- <input id="btn_07" class="btn_07" type="checkbox">
-<label for="btn_07" class="btn_07">checkbox</label> -->
-<!-- </section> -->
-
-<!-- <div>
-<a class="btn_07">BUTTON</a>
-</div> -->
-
+	
 <form id="con" method="post" action="Hobby_contents1.php" enctype="multipart/form-data">
     <card-select></card-select>
 </form>
