@@ -166,7 +166,5 @@ module.exports = {
 	input.fire{border-color: var(--fire);}
 	input.tree{border-color: var(--tree);}
 	input.water{border-color: var(--water);}
-	div{
-		height: 706px;
-	}
+	div{height: 706px;}
 </style>

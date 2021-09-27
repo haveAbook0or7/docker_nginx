@@ -8,7 +8,7 @@
 			<view-damage :id_name="data.id_name" :m="'2'" ref="damage2" @attribute="giveAttribute" @change-lv="changeMasicLv" @calc-damage="changeTotalDamage"></view-damage>
 		</div>
 		<view-total class="total" ref="total"></view-total>
-		<choice-modal-card ref="modal" :dd="this.datas" @choice-card="getCard"></choice-modal-card>
+		<choice-modal-card ref="modal" @choice-card="getCard"></choice-modal-card>
 	</div>
 </template>
 
@@ -142,7 +142,7 @@ module.exports = {
 		text-align: center;
 	}
 	.cards{
-		display: flex;
+		display: inline-flex;
 		background: #fbfaf5;
 		border: 5px double #e6b422;
 	}
