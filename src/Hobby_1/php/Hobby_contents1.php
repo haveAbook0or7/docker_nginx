@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Vue.jsテスト</title>
+<title>作業場</title>
 <script src="../lib/vue.js"></script> 
 <script src="https://unpkg.com/http-vue-loader"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
@@ -12,10 +12,11 @@
 </head>
 
 <body>
-	
-<form id="con" method="post" action="Hobby_contents1.php" enctype="multipart/form-data">
+<div id="con">
+<!-- <form id="con" method="post" action="Hobby_contents1.php" enctype="multipart/form-data"> -->
     <card-select></card-select>
-</form>
+<!-- </form> -->
+</div>
 <script>
 	new Vue({
 		el: "#con",

@@ -52,9 +52,6 @@
 
 <script>
 module.exports = {
-	props: {
-		id_name: {default:"myselectimg"},
-	},
 	data: function () {
 		return {
             damages: {

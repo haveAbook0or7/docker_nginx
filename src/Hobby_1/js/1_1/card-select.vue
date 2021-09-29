@@ -8,7 +8,7 @@
 			<view-damage :id_name="data.id_name" :m="'2'" ref="damage2" @attribute="giveAttribute" @change-lv="changeMasicLv" @calc-damage="changeTotalDamage"></view-damage>
 		</div>
 		<view-total class="total" ref="total"></view-total>
-		<choice-modal-card ref="modal" @choice-card="getCard"></choice-modal-card>
+		<choice-modal-card :mydbname="this.mydbname" ref="modal" @choice-card="getCard"></choice-modal-card>
 	</div>
 </template>
 
@@ -26,7 +26,7 @@ module.exports = {
 		'choice-modal-card': httpVueLoader('http://localhost:8080/Hobby_1/js/1_1/choice-modal-card.vue'),
     },
 	props: {
-		// id_name: {default:"mycard"},
+		mydbname: {default:"H1_2_DefaultDataMax"},
 	},
 	data: function () {
 		return {

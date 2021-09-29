@@ -20,11 +20,17 @@ module.exports = {
 	components: {
 		'sort-modal': httpVueLoader('http://localhost:8080/Hobby_1/js/sort-modal.vue'),
     },
+	props: {
+		mydbname: {default:"H1_2_DefaultDataMax"},
+	},
 	mounted() {
 		// axios.get("http://haveabook.php.xdomain.jp/editing/Hobby_1/Hobby_1_1_DB.php")
-		axios.get("http://localhost:8080/Hobby_1/php/Hobby_1_1_DB.php")
+		axios.post("http://localhost:8080/Hobby_1/php/Hobby_1_1_DB.php",{
+			myDB: this.mydbname
+		})
 		.then(response => {
 			this.message = response.data.message;
+			console.log(this.message);
 			this.data = response.data.data;
 		})
 	},
