@@ -33,6 +33,9 @@ module.exports = {
 			console.log(this.message);
 			this.data = response.data.data;
 		})
+		.catch(function (error) {
+			console.log(error);
+		});
 	},
 	computed: {
 		datas: {

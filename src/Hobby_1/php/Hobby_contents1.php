@@ -13,24 +13,23 @@
 
 <body>
 <div id="con">
-<!-- <form id="con" method="post" action="Hobby_contents1.php" enctype="multipart/form-data"> -->
-    <card-select></card-select>
-<!-- </form> -->
+    <!-- <card-select></card-select> -->
+	<!-- <custom-basic></custom-basic>
+	<custom-masic></custom-masic>
+	<custom-buddy></custom-buddy> -->
+	<card-custom></card-custom>
 </div>
 <script>
 	new Vue({
 		el: "#con",
 		components: {
-			'select-own': httpVueLoader('http://localhost:8080/Hobby_1/js/select-own.vue'),
-			'select-effect': httpVueLoader('http://localhost:8080/Hobby_1/js/select-effect.vue'),
-			'select-effect2': httpVueLoader('http://localhost:8080/Hobby_1/js/select-effect2.vue'),
-			'choice-modal-img': httpVueLoader('http://localhost:8080/Hobby_1/js/choice-modal-img.vue'),
-			'img-select': httpVueLoader('http://localhost:8080/Hobby_1/js/img-select.vue'),
-			'input-file-own': httpVueLoader('http://localhost:8080/Hobby_1/js/input-file-own.vue'),
-			'radio-element': httpVueLoader('http://localhost:8080/Hobby_1/js/radio-element.vue'),
 			// 'view-damage': httpVueLoader('http://localhost:8080/Hobby_1/js/view-damage.vue'),
 			// 'view-buddy': httpVueLoader('http://localhost:8080/Hobby_1/js/view-buddy.vue'),
 			// 'view-hpatk': httpVueLoader('http://localhost:8080/Hobby_1/js/view-hpatk.vue'),
+			'custom-masic': httpVueLoader('http://localhost:8080/Hobby_1/js/1_2/custom-masic.vue'),
+			'custom-buddy': httpVueLoader('http://localhost:8080/Hobby_1/js/1_2/custom-buddy.vue'),
+			'custom-basic': httpVueLoader('http://localhost:8080/Hobby_1/js/1_2/custom-basic.vue'),
+			'card-custom': httpVueLoader('http://localhost:8080/Hobby_1/js/1_2/card-custom.vue'),
 			'card-select': httpVueLoader('http://localhost:8080/Hobby_1/js/1_1/card-select.vue'),
 			'choice-modal-card': httpVueLoader('http://localhost:8080/Hobby_1/js/choice-modal-card.vue'),
 		},

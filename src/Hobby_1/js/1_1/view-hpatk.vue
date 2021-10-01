@@ -1,27 +1,27 @@
 <template>
 	<table border="0" class="THpAtk">
         <tr>
-            <td colspan="3" style="text-align: center;">
+            <td colspan="3">
                 <input type="button" value="MAX" @click="clickMAX('max')">
                 <input type="button" value="無凸MAX" @click="clickMAX('middle')">
             </td>
         </tr>
         <tr>
-            <td class="lbl">HP</td>
+            <td>HP</td>
             <td>
-                <input :id="this.id_name+'_hpbuf'" class="text" type="text" :value="this.hpbuf" readonly>
+                <input :id="this.id_name+'_hpbuf'" type="text" :value="this.hpbuf" readonly>
             </td>
             <td>
-                <input :id="this.id_name+'_hp'" class="textOn" type="text" :value="this.hp" @change="changeBasicValue">
+                <input :id="this.id_name+'_hp'" type="text" :value="this.hp" @change="changeBasicValue">
             </td>
         </tr>
         <tr>
-            <td class="lbl">ATK</td>
+            <td>ATK</td>
             <td>
-                <input :id="this.id_name+'_atkbuf'" class="text" type="text" :value="this.atkbuf" readonly>
+                <input :id="this.id_name+'_atkbuf'" type="text" :value="this.atkbuf" readonly>
             </td>
             <td>
-                <input :id="this.id_name+'_atk'" class="textOn" type="text" :value="this.atk" @change="changeBasicValue">
+                <input :id="this.id_name+'_atk'" type="text" :value="this.atk" @change="changeBasicValue">
             </td>
         </tr>
     </table>
