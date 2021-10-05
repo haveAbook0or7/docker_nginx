@@ -18,14 +18,14 @@
 <script>
 module.exports = {
 	components: {
-		'sort-modal': httpVueLoader('http://localhost:8080/Hobby_1/js/sort-modal.vue'),
+		'sort-modal': httpVueLoader('../sort-modal.vue'),
     },
 	props: {
 		mydbname: {default:"H1_2_DefaultDataMax"},
 	},
 	mounted() {
 		// axios.get("http://haveabook.php.xdomain.jp/editing/Hobby_1/Hobby_1_1_DB.php")
-		axios.post("http://localhost:8080/Hobby_1/php/Hobby_1_1_DB.php",{
+		axios.post("../php/Hobby_1_1_DB.php",{
 			myDB: this.mydbname
 		})
 		.then(response => {
