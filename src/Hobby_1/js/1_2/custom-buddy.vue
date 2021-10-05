@@ -1,5 +1,5 @@
 <template>
-	<table border="0" class="TBuddy">
+	<table border="0">
         <tr>
             <td>
                 <img :id="this.id_name+'_buddy1flg'" class="imgflg" :src="'../img/'+this.imgflg[1]" width="35" height="35">
@@ -13,11 +13,6 @@
                 <img :id="this.id_name+'_buddy3flg'" class="imgflg" :src="'../img/'+this.imgflg[3]" width="35" height="35">
                 <img :id="this.id_name+'_buddy3'" class="img" :src="'../img/Another/'+this.img[3]" width="35" height="35">
             </td>
-        </tr>
-        <tr>
-            <td :id="this.id_name+'_b1ty'">{{Btype1[1]}}<br>{{Btype2[1]}}</td>
-            <td :id="this.id_name+'_b2ty'">{{Btype1[2]}}<br>{{Btype2[2]}}</td>
-            <td :id="this.id_name+'_b3ty'">{{Btype1[3]}}<br>{{Btype2[3]}}</td>
         </tr>
         <tr>
             <td>
@@ -44,16 +39,10 @@ module.exports = {
 	},
 	data: function () {
 		return {
-			buddytype: {
-                Hm: "H(中)", Hs: "H(小)",
-                Am: "A(中)", As: "A(小)"
-			},
             values: {},
             chnos: [],
             imgflg: {1: "off.png", 2: "off.png", 3: "off.png"},
             img: {1: "none.jpg", 2: "none.jpg", 3: "none.jpg"},
-            Btype1: {1: "***", 2: "***", 3: "***"},
-            Btype2: {1: "***", 2: "***", 3: "***"},
 		}
 	},
 	methods: {
@@ -107,6 +96,7 @@ module.exports = {
 	*{
         background: #2e2930;
         font-size: 12px;
+		color: white;
 	}
     img{
         background: transparent;

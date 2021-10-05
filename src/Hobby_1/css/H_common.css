@@ -1,0 +1,47 @@
+*{
+    margin: 0px;
+    padding: 0px;
+    border: 0;
+}
+body{
+    background: #2e2930;
+    text-align: center;
+}
+header{
+    position: fixed;
+    width: 100%;
+    background-color: #fbfaf5;
+    color: #2e2930;
+    text-align: left;
+    z-index: 3;
+}
+h1{
+    position: relative;
+    border-right: 15px solid #2e2930; 
+    font: normal 35px '游ゴシック',serif;
+}
+main{
+    width: 902px;
+    display: inline-block;
+    text-align: left;
+}
+h2{
+    box-sizing: border-box;
+    position: relative;
+    width: 902px;
+    margin: 10px 0;
+    border-right: 15px solid #fbfaf5;
+    font: normal 30px "游ゴシック",serif;
+    background-color: #e6b422;
+    color: white;
+}
+h1>a, h2>span{
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    font: normal 25px "游ゴシック",serif;
+}
+#customlink, #addlink{
+    font-style: italic;
+    font-size: 20px;
+}

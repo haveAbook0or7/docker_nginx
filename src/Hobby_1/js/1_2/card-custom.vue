@@ -1,62 +1,49 @@
 <template>
-	<div class="cards">
-		<div class="card" v-for="data in cardData" :key="data.id_name">
-			<img :id="data.id_name" :src="'../img/'+data.cardImg" width="70.5" height="74.7" @click="clickOpenModal(data.id_name)">
-			<view-hpatk :id_name="data.id_name" ref="hpatk" @extract="extractHPATK" @change-basic="changeBasicValue"></view-hpatk>
-			<view-buddy :id_name="data.id_name" ref="buddy" @change="changeBuddyLv"></view-buddy>
-			<view-damage :id_name="data.id_name" :m="'1'" ref="damage1" @attribute="giveAttribute" @change-lv="changeMasicLv" @calc-damage="changeTotalDamage"></view-damage>
-			<view-damage :id_name="data.id_name" :m="'2'" ref="damage2" @attribute="giveAttribute" @change-lv="changeMasicLv" @calc-damage="changeTotalDamage"></view-damage>
+	<!-- <div class="cards"> -->
+		<!-- <div class="card" v-for="data in cardData" :key="data.id_name"> -->
+		<div class="card">
+			<!-- <img :id="data.id_name" :src="'../img/'+data.cardImg" width="70.5" height="74.7" @click="clickOpenModal(data.id_name)"> -->
+			<img src="../img/Heartslabyul/Riddle_D.jpg" width="70.5" height="74.7">
+			<custom-basic></custom-basic>
+			<custom-masic></custom-masic>
+			<custom-buddy></custom-buddy>
 		</div>
-		<view-total class="total" ref="total"></view-total>
-		<choice-modal-card :mydbname="this.mydbname" ref="modal" @choice-card="getCard"></choice-modal-card>
-	</div>
+	<!-- </div> -->
 </template>
 
 <script>
 module.exports = {
 	components: {
-		// 'view-damage': httpVueLoader('http://haveabook.php.xdomain.jp/editing/js/Hobby_1/view-damage.vue'),
-		// 'view-buddy': httpVueLoader('http://haveabook.php.xdomain.jp/editing/js/Hobby_1/view-buddy.vue'),
-		// 'view-hpatk': httpVueLoader('http://haveabook.php.xdomain.jp/editing/js/Hobby_1/view-hpatk.vue'),
-		// 'choice-modal-card': httpVueLoader('http://haveabook.php.xdomain.jp/editing/js/Hobby_1/choice-modal-card.vue'),
-		'view-total': httpVueLoader('http://localhost:8080/Hobby_1/js/1_1/view-total.vue'),
-		'view-damage': httpVueLoader('http://localhost:8080/Hobby_1/js/1_1/view-damage.vue'),
-		'view-buddy': httpVueLoader('http://localhost:8080/Hobby_1/js/1_1/view-buddy.vue'),
-		'view-hpatk': httpVueLoader('http://localhost:8080/Hobby_1/js/1_1/view-hpatk.vue'),
-		'choice-modal-card': httpVueLoader('http://localhost:8080/Hobby_1/js/1_1/choice-modal-card.vue'),
+		'custom-masic': httpVueLoader('http://localhost:8080/Hobby_1/js/1_2/custom-masic.vue'),
+		'custom-buddy': httpVueLoader('http://localhost:8080/Hobby_1/js/1_2/custom-buddy.vue'),
+		'custom-basic': httpVueLoader('http://localhost:8080/Hobby_1/js/1_2/custom-basic.vue'),
     },
 	props: {
-		mydbname: {default:"H1_2_DefaultDataMax"},
+		// mydbname: {default:"H1_2_DefaultDataMax"},
+		mydbname: {default:"H1_3_UserData1"},
+	},
+	mounted() {
+		// axios.get("http://haveabook.php.xdomain.jp/editing/Hobby_1/Hobby_1_1_DB.php")
+		axios.post("http://localhost:8080/Hobby_1/php/Hobby_1_1_DB.php",{
+			myDB: this.mydbname
+		})
+		.then(response => {
+			this.message = response.data.message;
+			console.log(this.message);
+			this.datas = response.data.data;
+		})
+		.catch(function (error) {
+			console.log(error);
+		});
 	},
 	data: function () {
 		return {
 			Dormitory: ["","Heartslabyul","Savanaclaw","Octavinelle","Scarabia","Pomefiore","Ignihyde","Diasomnia","Ramshackle"],
-			chnos: [0, 0, 0, 0, 0],
-			cardData: {
-				card1: {id_name: "card1", cardImg: "none.jpg", values: {}},
-				card2: {id_name: "card2", cardImg: "none.jpg", values: {}},
-				card3: {id_name: "card3", cardImg: "none.jpg", values: {}},
-				card4: {id_name: "card4", cardImg: "none.jpg", values: {}},
-				card5: {id_name: "card5", cardImg: "none.jpg", values: {}}
-			}
+			datas: [],
+			message: "",
 		}
 	},
 	methods: {
-		clickOpenModal(value){
-            this.$refs.modal.openModal(value);
-		},
-		// モーダルからカードデータを受け取る
-		getCard(value, card){
-			// 当てはまるカードにデータ全部保存
-			this.cardData[card].values = value;
-			// いま選んでるキャラクターIDを保存
-			this.chnos[card.slice(-1)-1] = value.chno;
-			// データをそれぞれ処理して表示する
-			this.applyData(card);
-			console.log("values:");
-			// console.log(this.chnos);
-			console.log(this.cardData[card].values);
-		},
 		// それぞれの部品にデータを送る
 		applyData(card){
 			// 画像を表示
@@ -133,21 +120,20 @@ module.exports = {
 		margin: 0;
 		padding: 0;
 		border: 0;
+		background: #2e2930;
 		color: #ffffff;
 		font-size: 13px;
 	}
 	.card{
-		width: 140px;
+		width: 115px;
 		display: inline-block;
 		text-align: center;
+		border: 2px solid #e6b422;
 	}
 	.cards{
 		display: inline-flex;
 		background: #fbfaf5;
-		border: 5px double #e6b422;
-	}
-	.total{
-		border-left: 2px solid #e6b422;
+		/* border: 5px double #e6b422; */
 	}
 	table{
 		width: 100%;

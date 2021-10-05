@@ -1,4 +1,8 @@
 <?php
+// リクエストのbodyを取り出す。
+$JSON_string = file_get_contents('php://input');
+// JSON文字列を変換。arrayにするためにはtrueが必要です。
+$JSON_array = JSON_decode($JSON_string,true);
 //データベース定義
 // define('HOST', 'mysql1.php.xdomain.ne.jp');
 // define('USR', 'haveabook_user1');
@@ -9,15 +13,18 @@ define('USR', 'db_user');
 define('PASS', 'pass');
 define('DB', 'db_hobby');
 
+// 誰のデータか取得
+if($JSON_array != NULL){
+    $myTB = $JSON_array["myDB"];
+}else{
+    $myTB = "H1_2_DefaultDataMax";
+}
 //データベースサーバに接続
 if (!$conn = mysqli_connect(HOST, USR, PASS, DB)) {
     die('データベースに接続できません');
 }
-
 //クエリの文字コードを設定
 mysqli_set_charset($conn, 'utf8');
-$_SESSION['myTB'] = "H1_3_UserData1";
-$myTB = $_SESSION['myTB'];
 //SQL文の作成
 $sql = "SELECT  d1.cdno, d1.chno, d1.cimg, d2.lv, d2.hp, d2.atk, 
                 d1.m1_1, d1.m2_1, d1.m1buf_1, d1.m2buf_1, 
@@ -92,7 +99,7 @@ if($num > 0){
 
         $i++;
     }
-    $arr["message"] = "OK";
+    $arr["message"] = $JSON_array["myDB"];
 }else{
     $arr["message"] = "NO";
 }
