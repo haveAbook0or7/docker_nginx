@@ -54,7 +54,6 @@
 <script>
 module.exports = {
 	components: {
-		// 'select-own': httpVueLoader('http://haveabook.php.xdomain.jp/editing/js/Hobby_1/select-own.vue'),
 		'select-own': httpVueLoader('../select-own.vue'),
 	},
 	props: {

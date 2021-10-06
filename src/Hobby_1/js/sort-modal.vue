@@ -108,8 +108,7 @@ module.exports = {
 	}
 	#modalSort{
 		z-index:2;
-		width:30%;
-		height: 40%;
+		width: 245px;
 		padding: 1em;
 		background-color: #fff;
 		position: absolute;

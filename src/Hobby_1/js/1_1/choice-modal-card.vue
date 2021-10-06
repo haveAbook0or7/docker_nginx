@@ -24,7 +24,6 @@ module.exports = {
 		mydbname: {default:"H1_2_DefaultDataMax"},
 	},
 	mounted() {
-		// axios.get("http://haveabook.php.xdomain.jp/editing/Hobby_1/Hobby_1_1_DB.php")
 		axios.post("../php/Hobby_1_1_DB.php",{
 			myDB: this.mydbname
 		})

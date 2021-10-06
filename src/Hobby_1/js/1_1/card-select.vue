@@ -15,10 +15,6 @@
 <script>
 module.exports = {
 	components: {
-		// 'view-damage': httpVueLoader('http://haveabook.php.xdomain.jp/editing/js/Hobby_1/view-damage.vue'),
-		// 'view-buddy': httpVueLoader('http://haveabook.php.xdomain.jp/editing/js/Hobby_1/view-buddy.vue'),
-		// 'view-hpatk': httpVueLoader('http://haveabook.php.xdomain.jp/editing/js/Hobby_1/view-hpatk.vue'),
-		// 'choice-modal-card': httpVueLoader('http://haveabook.php.xdomain.jp/editing/js/Hobby_1/choice-modal-card.vue'),
 		'view-total': httpVueLoader('./view-total.vue'),
 		'view-damage': httpVueLoader('./view-damage.vue'),
 		'view-buddy': httpVueLoader('./view-buddy.vue'),
