@@ -1,6 +1,5 @@
 
-@import url("Hobby_1/css/H_header.css");
-@import url("Hobby_1/css/H_mainCommon.css");
+@import url("Hobby_1/css/H_common.css");
 
 a{
     position: relative;

@@ -48,7 +48,7 @@
             new Vue({
                 el: "#app",
                 components: {
-                    'card-select': httpVueLoader('http://localhost:8080/Hobby_1/js/1_1/card-select.vue'),
+                    'card-select': httpVueLoader('../js/1_1/card-select.vue'),
                 }
             });
         </script>

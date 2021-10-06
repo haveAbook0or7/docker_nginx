@@ -31,7 +31,7 @@
 module.exports = {
 	components: {
 		// 'select-own': httpVueLoader('http://haveabook.php.xdomain.jp/editing/js/Hobby_1/select-own.vue'),
-        'select-own': httpVueLoader('http://localhost:8080/Hobby_1/js/select-own.vue'),
+        'select-own': httpVueLoader('../select-own.vue'),
     },
 	props: {
 		id_name: {default:"myselectimg"},
