@@ -3,7 +3,7 @@
         <tr>
 			<td>Lv</td>
             <td>
-                <select-own :id="this.id_name+'_cardlv'" :op="'opCard'" ref="cardlv" @up-value="changeLv"></select-own>
+                <select-own :id="this.id_name+'_cardlv'" :op="'opCard'" :initial="this.cardLv" ref="cardlv" @up-value="changeLv"></select-own>
             </td>
         </tr>
         <tr>
@@ -24,26 +24,22 @@
 <script>
 module.exports = {
 	components: {
-		// 'select-own': httpVueLoader('http://haveabook.php.xdomain.jp/editing/js/Hobby_1/select-own.vue'),
-        'select-own': httpVueLoader('http://localhost:8080/Hobby_1/js/select-own.vue'),
+        'select-own': httpVueLoader('../select-own.vue'),
     },
 	props: {
 		id_name: {default:"myselectimg"},
+        init_lv: {default: 0},
+        init_hp: {default: 0},
+        init_atk: {default: 0},
 	},
 	data: function () {
 		return {
-			cardLv: 0,
-            hp: 0,
-            atk: 0,
+			cardLv: this.init_lv,
+            hp: this.init_hp,
+            atk: this.init_atk,
 		}
 	},
 	methods: {
-        // 受け取ったデータを保存
-        applyHPATK(values){
-            this.cardLv = values;
-            this.hp = values.hp;
-            this.atk = values.atk;
-        },
 		changeLv(value){
 
 		}

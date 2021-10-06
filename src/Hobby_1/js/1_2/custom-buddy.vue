@@ -16,13 +16,16 @@
         </tr>
         <tr>
             <td>
-                <select-own :id="this.id_name+'_b1lv'" :op="'opLv'" ref="b1lv" @up-value="changeBuddyLv"></select-own>
+                <select-own :id="this.id_name+'_b1lv'" :op="'opLv'" 
+                    :initial="this.buddyLv[1]" :disabled="this.disabled[1]" ref="b1lv" @up-value="changeBuddyLv"></select-own>
             </td>
             <td>
-                <select-own :id="this.id_name+'_b2lv'" :op="'opLv'" ref="b2lv" @up-value="changeBuddyLv"></select-own>
+                <select-own :id="this.id_name+'_b2lv'" :op="'opLv'" 
+                    :initial="this.buddyLv[2]" :disabled="this.disabled[2]" ref="b2lv" @up-value="changeBuddyLv"></select-own>
             </td>
             <td>
-                <select-own :id="this.id_name+'_b3lv'" :op="'opLv'" ref="b3lv" @up-value="changeBuddyLv"></select-own>
+                <select-own :id="this.id_name+'_b3lv'" :op="'opLv'" 
+                    :initial="this.buddyLv[3]" :disabled="this.disabled[3]" ref="b3lv" @up-value="changeBuddyLv"></select-own>
             </td>
         </tr>
     </table>
@@ -31,57 +34,51 @@
 <script>
 module.exports = {
 	components: {
-		// 'select-own': httpVueLoader('http://haveabook.php.xdomain.jp/editing/js/Hobby_1/select-own.vue'),
-        'select-own': httpVueLoader('http://localhost:8080/Hobby_1/js/select-own.vue'),
+        'select-own': httpVueLoader('../select-own.vue'),
     },
 	props: {
 		id_name: {default:"myselectimg"},
+        init_buddy1: {default: -1},
+        init_buddy2: {default: -1},
+        init_buddy3: {default: -1},
+        init_lv1: {default: 0},
+        init_lv2: {default: 0},
+        init_lv3: {default: 0},
+	},
+    computed: {
+		img: {
+			get(){
+				var applyimg = {1: "none.jpg", 2: "none.jpg", 3: "none.jpg"};
+                for(var i = 1; i <= 3; i++){
+                    // 画像のファイル名に変換
+                    applyimg[i] = this["init_buddy"+i] == -1 ? "none.jpg" : this["init_buddy"+i]+".jpg";
+                    // SRやRなら画像を暗く
+                    this.imgflg[i] = this["init_buddy"+i] == -1 ? "off.png" : "app.png";
+                }
+                return applyimg;
+			}
+		},
+        disabled: {
+            get(){
+				var applydisabled = {1: true, 2: true, 3: true};
+                for(var i = 1; i <= 3; i++){
+                    // SRやRならバディLv操作できないようにする
+                    applydisabled[i] = this["init_buddy"+i] == -1 ? true : false;
+                }
+                return applydisabled;
+			}
+        }
 	},
 	data: function () {
 		return {
             values: {},
             chnos: [],
             imgflg: {1: "off.png", 2: "off.png", 3: "off.png"},
-            img: {1: "none.jpg", 2: "none.jpg", 3: "none.jpg"},
+            buddyLv: {1: this.init_lv1, 2: this.init_lv2, 3: this.init_lv3},
 		}
 	},
 	methods: {
-        // 受け取ったデータを保存。表示できるやつは表示
-		applyBuddy(values){
-            this.values = values;
-            for(var i = 1; i <= 3; i++){
-                // アイコンを表示
-                this.img[i] = values["b"+i] == -1 ? "none.jpg" : values["b"+i]+".jpg";
-                // バフの種類を表示していく
-                var Btype = values["b"+i+"type"];
-                this.$set(this.Btype1, i, this.buddytype[Btype[0]+Btype[1]]); // dataのオブジェクトを含む更新をする場合はこうしないと反映されない
-                this.Btype2[i] = "***";
-                if(Btype.length == 4){
-                    this.$set(this.Btype2, i, this.buddytype[Btype[2]+Btype[3]]);
-                }
-                // バディレベルをセット
-                this.$refs["b"+i+"lv"].chengeValue(values["b"+i+"lv"]);
-                // SRやRならバディLv操作できないようにする
-                this.$refs["b"+i+"lv"].chengeDisabled(values["b"+i] == -1 ? true : false);
-            }
-		},
-        // 有効バディが変化するときの処理
-        changeBuddy(chnos){
-            // 現在セットしてるキャラクターIDを取得＆保存
-            this.chnos = chnos;
-            // 初期化
-            this.imgflg = {1: "off.png", 2: "off.png", 3: "off.png"};
-            // 計算用変数
-            var flg = {1: false, 2: false, 3: false};
-            // バディが成立していたらアイコンを点灯する
-            for(var i = 0; i < 5; i++){
-            for(var j = 1; j <= 3; j++){
-                if(this.values["b"+j] == chnos[i] && !flg[j]){
-                    this.imgflg[j] = "app.png";
-                }
-            }
-            }
-        },
+        
         // バディLvの操作
         changeBuddyLv(id, value){
             this.$emit('change', id[4], id[7], value);
