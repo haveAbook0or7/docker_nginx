@@ -53,6 +53,9 @@ module.exports = {
 	methods: {
 		changeData(){
             this.$emit('change', this.id_name);
+        },
+		getData(){
+            return {1: this.m1Lv, 2: this.m2Lv};
         }
 	},
 }

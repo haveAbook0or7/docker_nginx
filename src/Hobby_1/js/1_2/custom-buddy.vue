@@ -78,6 +78,9 @@ module.exports = {
 	methods: {
         changeData(){
             this.$emit('change', this.id_name);
+        },
+        getData(){
+            return this.buddyLv;
         }
 	},
 	

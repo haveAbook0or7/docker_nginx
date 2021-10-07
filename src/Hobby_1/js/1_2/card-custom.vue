@@ -1,9 +1,12 @@
 <template>
 	<div class="cards">
 		<sort-modal ref="modalSort" @sort="changeSort" @search="changeSearch"></sort-modal>
-		<input class="sort" type="button" value="ソート" @click="clickOpenSortModal()">
-        <img class="updown" :src="'../img/'+this.updownImg" width="20" height="20" @click="clickUpDown()">
-		<br><br>
+		<h2>
+			<button class="update">更新</button>
+			<input class="sort" type="button" value="ソート" @click="clickOpenSortModal()">
+			<img class="updown" :src="'../img/'+this.updownImg" width="20" height="20" @click="clickUpDown()">
+		</h2>
+		<br><br><br><br>
 		<div class="card" v-for="card in this.sortDatas" :key="card.cdno">
 			<img :src="'../img/'+Dormitory[Math.floor(card.chno/10)]+'/'+card.img" width="70.5" height="74.7">
 			<custom-basic 
@@ -184,7 +187,6 @@ module.exports = {
 		margin: 0;
 		padding: 0;
 		border: 0;
-		/* background: #2e2930; */
 		color: #ffffff;
 		font-size: 13px;
 	}
@@ -194,23 +196,36 @@ module.exports = {
 		display: inline-block;
 		text-align: center;
 		border: 2px solid #e6b422;
+		background: #2e2930;
 	}
 	.cards{
-		/* display: inline-block; */
 		background: #fbfaf5;
+		width: 905px;
 	}
 	table{
 		width: 100%;
 	}
-	.sort{
+	h2{
+		box-sizing: border-box;
+		position: fixed;
+		width: 905px;
+		height: 48px;
+		margin: 10px 0;
+		border-right: 15px solid #2e2930;;
+		font: normal 30px "游ゴシック",serif;
+		background-color: #e6b422;
+		color: white;
+		z-index: 5;
+	}
+	.sort, .update{
 		position: absolute;
-		top: 10px;
-		right: 35px;
+		bottom: 10px;
+		right: 32px;
 		width: 50px;
         height: 18px;
         display: inline-block;
         text-align: center;
-        background-color: #e6b422;
+        background-color: #2e2930;
         font-size: 10px;
         text-decoration: none;
         font-weight: bold;
@@ -218,15 +233,23 @@ module.exports = {
         border: 0.5px dashed #ffffff;
         margin: 0 2px;
 		color: #fff;
-        box-shadow: #e6b422 0px 0px 0px 3px;
+        box-shadow: #2e2930 0px 0px 0px 3px;
 	}
-	.sort:hover {
+	.sort:hover, .update:hover{
         background-color: slategray;
         box-shadow: slategray 0px 0px 0px 3px;
     }
 	.updown{
 		position: absolute;
-		top: 4px;
+		bottom: 9px;
 		right: 5px;
+		border: 1px solid gray;
+	}
+	.update{
+		width: 50px;
+        height: 24px;
+		font-size: 13px;
+		font-weight:normal;
+		left: 5px;
 	}
 </style>
