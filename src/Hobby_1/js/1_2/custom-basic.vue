@@ -3,19 +3,19 @@
         <tr>
 			<td>Lv</td>
             <td>
-                <select-own :id="this.id_name+'_cardlv'" :op="'opCard'" :initial="this.cardLv" ref="cardlv" @up-value="changeLv"></select-own>
+                <select-own :id="this.id_name+'_cardlv'" :op="'opCard'" :initial="this.cardLv" ref="cardlv" @up-value="changeData"></select-own>
             </td>
         </tr>
         <tr>
             <td>HP</td>
             <td>
-                <input :id="this.id_name+'_hp'" type="text" :value="this.hp">
+                <input :id="this.id_name+'_hp'" type="text" :value="this.hp" @change="changeData">
             </td>
         </tr>
         <tr>
             <td>ATK</td>
             <td>
-                <input :id="this.id_name+'_atk'" type="text" :value="this.atk">
+                <input :id="this.id_name+'_atk'" type="text" :value="this.atk" @change="changeData">
             </td>
         </tr>
     </table>
@@ -27,7 +27,7 @@ module.exports = {
         'select-own': httpVueLoader('../select-own.vue'),
     },
 	props: {
-		id_name: {default:"myselectimg"},
+		id_name: {default:"own"},
         init_lv: {default: 0},
         init_hp: {default: 0},
         init_atk: {default: 0},
@@ -40,9 +40,9 @@ module.exports = {
 		}
 	},
 	methods: {
-		changeLv(value){
-
-		}
+        changeData(){
+            this.$emit('change', this.id_name);
+        }
 	},
 }
 // export default { Node.jsじゃないから、これだとダメだった。 }

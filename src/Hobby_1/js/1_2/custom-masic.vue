@@ -5,7 +5,7 @@
 				<img :id="this.id_name+'_m1'" :src="'../img/Element/'+this.m1Img" width="25" height="25">
 			</td>
             <td>
-                Lv<select-own :id="this.id_name+'_m1lv'" :op="'opLv'" :initial="this.m1Lv" ref="m1lv" @up-value="changeLv"></select-own>
+                Lv<select-own :id="this.id_name+'_m1lv'" :op="'opLv'" :initial="this.m1Lv" ref="m1lv" @up-value="changeData"></select-own>
             </td>
         </tr>
 		<tr>
@@ -13,7 +13,7 @@
 				<img :id="this.id_name+'_m2'" :src="'../img/Element/'+this.m2Img" width="25" height="25">
 			</td>
             <td>
-                Lv<select-own :id="this.id_name+'_m2lv'" :op="'opLv'" :initial="this.m2Lv" ref="m2lv" @up-value="changeLv"></select-own>
+                Lv<select-own :id="this.id_name+'_m2lv'" :op="'opLv'" :initial="this.m2Lv" ref="m2lv" @up-value="changeData"></select-own>
             </td>
         </tr>
     </table>
@@ -25,7 +25,7 @@ module.exports = {
         'select-own': httpVueLoader('../select-own.vue'),
     },
 	props: {
-		id_name: {default:"myselectimg"},
+		id_name: {default:"own"},
 		init_masic1: {default: "1S1"},
 		init_masic2: {default: "1S1"},
 		init_lv1: {default: 0},
@@ -51,13 +51,9 @@ module.exports = {
 		}
 	},
 	methods: {
-        // 受け取ったデータを保存
-        applyHPATK(values){
-
-        },
-		changeLv(value){
-
-		}
+		changeData(){
+            this.$emit('change', this.id_name);
+        }
 	},
 }
 // export default { Node.jsじゃないから、これだとダメだった。 }

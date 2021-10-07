@@ -17,15 +17,15 @@
         <tr>
             <td>
                 <select-own :id="this.id_name+'_b1lv'" :op="'opLv'" 
-                    :initial="this.buddyLv[1]" :disabled="this.disabled[1]" ref="b1lv" @up-value="changeBuddyLv"></select-own>
+                    :initial="this.buddyLv[1]" :disabled="this.disabled[1]" ref="b1lv" @up-value="changeData"></select-own>
             </td>
             <td>
                 <select-own :id="this.id_name+'_b2lv'" :op="'opLv'" 
-                    :initial="this.buddyLv[2]" :disabled="this.disabled[2]" ref="b2lv" @up-value="changeBuddyLv"></select-own>
+                    :initial="this.buddyLv[2]" :disabled="this.disabled[2]" ref="b2lv" @up-value="changeData"></select-own>
             </td>
             <td>
                 <select-own :id="this.id_name+'_b3lv'" :op="'opLv'" 
-                    :initial="this.buddyLv[3]" :disabled="this.disabled[3]" ref="b3lv" @up-value="changeBuddyLv"></select-own>
+                    :initial="this.buddyLv[3]" :disabled="this.disabled[3]" ref="b3lv" @up-value="changeData"></select-own>
             </td>
         </tr>
     </table>
@@ -37,7 +37,7 @@ module.exports = {
         'select-own': httpVueLoader('../select-own.vue'),
     },
 	props: {
-		id_name: {default:"myselectimg"},
+		id_name: {default:"own"},
         init_buddy1: {default: -1},
         init_buddy2: {default: -1},
         init_buddy3: {default: -1},
@@ -71,17 +71,13 @@ module.exports = {
 	},
 	data: function () {
 		return {
-            values: {},
-            chnos: [],
             imgflg: {1: "off.png", 2: "off.png", 3: "off.png"},
             buddyLv: {1: this.init_lv1, 2: this.init_lv2, 3: this.init_lv3},
 		}
 	},
 	methods: {
-        
-        // バディLvの操作
-        changeBuddyLv(id, value){
-            this.$emit('change', id[4], id[7], value);
+        changeData(){
+            this.$emit('change', this.id_name);
         }
 	},
 	

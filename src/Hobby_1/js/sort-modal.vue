@@ -62,7 +62,7 @@ module.exports = {
 			this.modalClass = "";
 		},
 		closeModal(){
-			this.modalClass = "hidde";
+			this.modalClass = "hidden";
 		},
 		stop(){
 			event.stopPropagation();
@@ -91,12 +91,12 @@ module.exports = {
 		border: 0;
 		color: black;
 	}
-	.hidde{
+	.hidden{
 		display: none !important;
 	}
 	#overlaySort{
 		/*　要素を重ねた時の順番　*/
-		z-index:1;
+		z-index:3;
 		/*　画面全体を覆う設定　*/
 		position:fixed;
 		top:0;
@@ -107,7 +107,7 @@ module.exports = {
 		
 	}
 	#modalSort{
-		z-index:2;
+		z-index:4;
 		width: 245px;
 		padding: 1em;
 		background-color: #fff;
