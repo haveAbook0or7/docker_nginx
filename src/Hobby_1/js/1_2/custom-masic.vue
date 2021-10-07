@@ -5,7 +5,7 @@
 				<img :id="this.id_name+'_m1'" :src="'../img/Element/'+this.m1Img" width="25" height="25">
 			</td>
             <td>
-                Lv<select-own :id="this.id_name+'_m1lv'" :op="'opLv'" ref="m1lv" @up-value="changeLv"></select-own>
+                Lv<select-own :id="this.id_name+'_m1lv'" :op="'opLv'" :initial="this.m1Lv" ref="m1lv" @up-value="changeData"></select-own>
             </td>
         </tr>
 		<tr>
@@ -13,7 +13,7 @@
 				<img :id="this.id_name+'_m2'" :src="'../img/Element/'+this.m2Img" width="25" height="25">
 			</td>
             <td>
-                Lv<select-own :id="this.id_name+'_m2lv'" :op="'opLv'" ref="m2lv" @up-value="changeLv"></select-own>
+                Lv<select-own :id="this.id_name+'_m2lv'" :op="'opLv'" :initial="this.m2Lv" ref="m2lv" @up-value="changeData"></select-own>
             </td>
         </tr>
     </table>
@@ -22,28 +22,41 @@
 <script>
 module.exports = {
 	components: {
-		// 'select-own': httpVueLoader('http://haveabook.php.xdomain.jp/editing/js/Hobby_1/select-own.vue'),
-        'select-own': httpVueLoader('http://localhost:8080/Hobby_1/js/select-own.vue'),
+        'select-own': httpVueLoader('../select-own.vue'),
     },
 	props: {
-		id_name: {default:"myselectimg"},
+		id_name: {default:"own"},
+		init_masic1: {default: "1S1"},
+		init_masic2: {default: "1S1"},
+		init_lv1: {default: 0},
+		init_lv2: {default: 0},
+	},
+	computed: {
+		m1Img: {
+			get(){
+                return this.element[this.init_masic1[0]];
+			}
+		},
+        m2Img: {
+            get(){
+                return this.element[this.init_masic2[0]];
+			}
+        }
 	},
 	data: function () {
 		return {
-			m1Img: "Nomal.jpg",
-			m2Img: "Nomal.jpg",
-			m1Lv: 0,
-			m2Lv: 0,
+			element: ["Nomal.jpg", "Fire.jpg", "Tree.jpg", "Water.jpg"],
+			m1Lv: this.init_lv1,
+			m2Lv: this.init_lv2,
 		}
 	},
 	methods: {
-        // 受け取ったデータを保存
-        applyHPATK(values){
-
+		changeData(){
+            this.$emit('change', this.id_name);
         },
-		changeLv(value){
-
-		}
+		getData(){
+            return {1: this.m1Lv, 2: this.m2Lv};
+        }
 	},
 }
 // export default { Node.jsじゃないから、これだとダメだった。 }

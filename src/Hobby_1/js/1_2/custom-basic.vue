@@ -3,19 +3,19 @@
         <tr>
 			<td>Lv</td>
             <td>
-                <select-own :id="this.id_name+'_cardlv'" :op="'opCard'" ref="cardlv" @up-value="changeLv"></select-own>
+                <select-own :id="this.id_name+'_cardlv'" :op="'opCard'" :initial="this.cardLv" ref="cardlv" @up-value="changeData"></select-own>
             </td>
         </tr>
         <tr>
             <td>HP</td>
             <td>
-                <input :id="this.id_name+'_hp'" type="text" :value="this.hp">
+                <input :id="this.id_name+'_hp'" type="text" :value="this.hp" @change="changeData">
             </td>
         </tr>
         <tr>
             <td>ATK</td>
             <td>
-                <input :id="this.id_name+'_atk'" type="text" :value="this.atk">
+                <input :id="this.id_name+'_atk'" type="text" :value="this.atk" @change="changeData">
             </td>
         </tr>
     </table>
@@ -24,29 +24,28 @@
 <script>
 module.exports = {
 	components: {
-		// 'select-own': httpVueLoader('http://haveabook.php.xdomain.jp/editing/js/Hobby_1/select-own.vue'),
-        'select-own': httpVueLoader('http://localhost:8080/Hobby_1/js/select-own.vue'),
+        'select-own': httpVueLoader('../select-own.vue'),
     },
 	props: {
-		id_name: {default:"myselectimg"},
+		id_name: {default:"own"},
+        init_lv: {default: 0},
+        init_hp: {default: 0},
+        init_atk: {default: 0},
 	},
 	data: function () {
 		return {
-			cardLv: 0,
-            hp: 0,
-            atk: 0,
+			cardLv: this.init_lv,
+            hp: this.init_hp,
+            atk: this.init_atk,
 		}
 	},
 	methods: {
-        // 受け取ったデータを保存
-        applyHPATK(values){
-            this.cardLv = values;
-            this.hp = values.hp;
-            this.atk = values.atk;
+        changeData(){
+            this.$emit('change', this.id_name);
         },
-		changeLv(value){
-
-		}
+        getData(){
+            return {cardLv: this.cardLv, hp: this.hp, atk: this.atk};
+        }
 	},
 }
 // export default { Node.jsじゃないから、これだとダメだった。 }

@@ -1,30 +1,54 @@
 <template>
-	<!-- <div class="cards"> -->
-		<!-- <div class="card" v-for="data in cardData" :key="data.id_name"> -->
-		<div class="card">
-			<!-- <img :id="data.id_name" :src="'../img/'+data.cardImg" width="70.5" height="74.7" @click="clickOpenModal(data.id_name)"> -->
-			<img src="../img/Heartslabyul/Riddle_D.jpg" width="70.5" height="74.7">
-			<custom-basic></custom-basic>
-			<custom-masic></custom-masic>
-			<custom-buddy></custom-buddy>
+	<div class="cards">
+		<sort-modal ref="modalSort" @sort="changeSort" @search="changeSearch"></sort-modal>
+		<h2>
+			<button class="update">更新</button>
+			<input class="sort" type="button" value="ソート" @click="clickOpenSortModal()">
+			<img class="updown" :src="'../img/'+this.updownImg" width="20" height="20" @click="clickUpDown()">
+		</h2>
+		<br><br><br><br>
+		<div class="card" v-for="card in this.sortDatas" :key="card.cdno">
+			<img :src="'../img/'+Dormitory[Math.floor(card.chno/10)]+'/'+card.img" width="70.5" height="74.7">
+			<custom-basic 
+				:id_name="card.cdno" 
+				:init_lv="card.lv" 
+				:init_hp="card.hp" 
+				:init_atk="card.atk" 
+				@change="changeData"></custom-basic>
+			<custom-masic 
+				:id_name="card.cdno" 
+				:init_masic1="card.m1_1" 
+				:init_masic2="card.m2_1" 
+				:init_lv1="card.m1lv" 
+				:init_lv2="card.m2lv" 
+				@change="changeData"></custom-masic>
+			<custom-buddy 
+				:id_name="card.cdno" 
+				:init_buddy1="card.b1" 
+				:init_buddy2="card.b2" 
+				:init_buddy3="card.b3" 
+				:init_lv1="card.b1lv" 
+				:init_lv2="card.b2lv" 
+				:init_lv3="card.b3lv" 
+				@change="changeData"></custom-buddy>
 		</div>
-	<!-- </div> -->
+	</div>
 </template>
 
 <script>
 module.exports = {
 	components: {
-		'custom-masic': httpVueLoader('http://localhost:8080/Hobby_1/js/1_2/custom-masic.vue'),
-		'custom-buddy': httpVueLoader('http://localhost:8080/Hobby_1/js/1_2/custom-buddy.vue'),
-		'custom-basic': httpVueLoader('http://localhost:8080/Hobby_1/js/1_2/custom-basic.vue'),
+		'custom-masic': httpVueLoader('./custom-masic.vue'),
+		'custom-buddy': httpVueLoader('./custom-buddy.vue'),
+		'custom-basic': httpVueLoader('./custom-basic.vue'),
+		'sort-modal': httpVueLoader('../sort-modal.vue'),
     },
 	props: {
 		// mydbname: {default:"H1_2_DefaultDataMax"},
 		mydbname: {default:"H1_3_UserData1"},
 	},
 	mounted() {
-		// axios.get("http://haveabook.php.xdomain.jp/editing/Hobby_1/Hobby_1_1_DB.php")
-		axios.post("http://localhost:8080/Hobby_1/php/Hobby_1_1_DB.php",{
+		axios.post("../php/Hobby_1_1_DB.php",{
 			myDB: this.mydbname
 		})
 		.then(response => {
@@ -36,78 +60,121 @@ module.exports = {
 			console.log(error);
 		});
 	},
+	computed: {
+		cardDatas: {
+			get(){
+				// 元データから切り離す
+				var copyData = JSON.parse(JSON.stringify(this.datas));
+				// cdnoをキーにMap化する
+				var adjustData = {};
+				for(var i = 0; i < copyData.length; i++){
+					adjustData[copyData[i].cdno] = copyData[i];
+				}
+				console.log(adjustData);
+                return adjustData;
+			}
+		},
+		sortDatas: {
+			get(){
+				const keys = {default: "cdno", Lv: "lv", HP: "hp", ATK: "atk", chNo: "chno"};
+				// なんかよくわからんけど一回ローカル関数に移してからじゃないとソート関数内で認識できない
+				var key = keys[this.radioValue];
+				var ud = this.updown;
+				// 元データから切り離す
+				var copyData = JSON.parse(JSON.stringify(this.datas));
+				// ソート処理
+				var sortData = copyData.sort(function(a, b){
+					if(a[key] < b[key]) return -1 * ud;
+					if(a[key] > b[key]) return 1 * ud;
+					return 0;
+				});
+				// フィルター処理
+				var fill1 = {Heartslabyul: 1, Savanaclaw: 2, Octavinelle: 3, Scarabia: 4, Pomefiore: 5, Ignihyde: 6, Diasomnia: 7, Ramshackle: 8};
+				var fill2 = {natural: 0, fire: 1, tree: 2, water: 3};
+				var search = this.search;
+				var result = sortData.filter(function(value) {
+					var flg = true;
+					for(var k in fill1){
+						if(search[k]){
+							if(!(Math.floor(value["chno"] / 10) == fill1[k])){
+								flg = false;
+							}
+						}
+					}
+					for(var k in fill2){
+						if(search[k]){
+							if(!(value["m1_1"][0] == fill2[k] || value["m2_1"][0] == fill2[k])){
+								flg = false;
+							}
+						}
+					}
+					if(search.obtained){
+						if(value["lv"] == 0){
+							flg = false;
+						}
+					}
+					if(flg){
+						return value
+					}
+				});
+				console.log(result);
+				return result;
+			}
+		}
+	},
 	data: function () {
 		return {
 			Dormitory: ["","Heartslabyul","Savanaclaw","Octavinelle","Scarabia","Pomefiore","Ignihyde","Diasomnia","Ramshackle"],
 			datas: [],
 			message: "",
+
+			changeFlg: [],
+
+			updownImg: "desc.jpg",
+			updown: -1,
+			radioValue: "default",
+			search: {
+				Heartslabyul: true,
+				Savanaclaw: false,
+				Octavinelle: false,
+				Scarabia: false,
+				Pomefiore: false,
+				Ignihyde: false,
+				Diasomnia: false,
+				Ramshackle: false,
+
+				natural: false,
+				fire: false,
+				tree: false,
+				water: false,
+
+				obtained: false,
+			}
 		}
 	},
 	methods: {
-		// それぞれの部品にデータを送る
-		applyData(card){
-			// 画像を表示
-			this.cardData[card].cardImg = this.Dormitory[Math.floor(this.cardData[card].values.chno/10)]+'/'+this.cardData[card].values.img;
-			// 基礎ステータス
-			this.$refs.hpatk[card[4]-1].applyHPATK(this.cardData[card].values);
-			for(var i = 0; i < 5; i++){
-				this.$refs.hpatk[i].changeBuddy(this.chnos);
-			}
-			// バディ
-			this.$refs.buddy[card[4]-1].applyBuddy(this.cardData[card].values);
-			for(var i = 0; i < 5; i++){
-				this.$refs.buddy[i].changeBuddy(this.chnos);
-			}
-			// ダメージ計算
-			this.$refs.damage1[card[4]-1].applyMbuf(this.cardData[card].values);
-			this.$refs.damage2[card[4]-1].applyMbuf(this.cardData[card].values);
-			// ここで属性ダメージを初期化する
-			for(var i = 0; i < 5; i++){
-				this.$refs.damage1[i].clearAttribute();
-				this.$refs.damage2[i].clearAttribute();
-			}
-			// 属性ダメージUP持ちがいるか判定
-			for(var i = 0; i < 5; i++){ // 順番ミスると認識されない
-				this.$refs.damage1[i].changeAttribute();
-				this.$refs.damage2[i].changeAttribute();
-			}
-			// ダメージ計算
-			for(var i = 0; i < 5; i++){
-				this.$refs.damage1[i].calcDamage(this.cardData["card"+(i+1)].values, this.chnos);
-				this.$refs.damage2[i].calcDamage(this.cardData["card"+(i+1)].values, this.chnos);
-			}
+		clickOpenSortModal(){
+			this.$refs.modalSort.openModal();
 		},
-		// バディ補正ステータスを追加する用
-		extractHPATK(card, hpbuf, atkbuf){
-			this.cardData[card].values.hpbuf = hpbuf;
-			this.cardData[card].values.atkbuf = atkbuf;
+		changeSort(value){
+			this.radioValue = value;
 		},
-		// 基礎ステータスいじった時(MAX,無凸MAX含む)
-		changeBasicValue(card, hp, atk){
-			this.cardData[card].values["hp"] = hp;
-			this.cardData[card].values["atk"] = atk;
-			this.applyData(card);
+		changeSearch(value){
+			this.search = value;
 		},
-		// バディLvをいじった時
-		changeBuddyLv(cid, bid, value){
-			this.cardData["card"+cid].values["b"+bid+"lv"] = value;
-			this.applyData("card"+cid);
+		clickUpDown(){
+			this.updownImg = this.updown == 1 ? "desc.jpg" : "asc.jpg";
+			this.updown = this.updown == 1 ? -1 : 1;
 		},
-		// 魔法Lvをいじった時
-		changeMasicLv(cid, mid, value){
-			this.cardData["card"+cid].values["m"+mid+"lv"] = value;
-			this.applyData("card"+cid);
-		},
-		// 属性ダメージUPのチェックボックス追加
-		giveAttribute(card, m, attribute, lv){
-			console.log("att::"+card+":"+m+":"+attribute+":"+lv);
-			for(var i = 0; i < 5; i++){
-				this.$refs.damage1[i].getAttribute(attribute, lv);
-				this.$refs.damage2[i].getAttribute(attribute, lv);
+		changeData(cdno){
+			var flg = true;
+			this.changeFlg.forEach(function(value){
+				flg = value == cdno ? false : true;
+			});
+			if(flg){
+				this.changeFlg.push(cdno);
 			}
-		},
-		changeTotalDamage(card, m, masic, basicDamage, recovery, use){
-			this.$refs.total.applyTotalDamage(card, m, masic, basicDamage, recovery, use, this.cardData[card].values.hpbuf);
+			console.log(this.changeFlg);
 		}
 	},
 	
@@ -120,22 +187,69 @@ module.exports = {
 		margin: 0;
 		padding: 0;
 		border: 0;
-		background: #2e2930;
 		color: #ffffff;
 		font-size: 13px;
 	}
 	.card{
-		width: 115px;
+		width: 120px;
+		margin: 2.5px;
 		display: inline-block;
 		text-align: center;
 		border: 2px solid #e6b422;
+		background: #2e2930;
 	}
 	.cards{
-		display: inline-flex;
 		background: #fbfaf5;
-		/* border: 5px double #e6b422; */
+		width: 905px;
 	}
 	table{
 		width: 100%;
+	}
+	h2{
+		box-sizing: border-box;
+		position: fixed;
+		width: 905px;
+		height: 48px;
+		margin: 10px 0;
+		border-right: 15px solid #2e2930;;
+		font: normal 30px "游ゴシック",serif;
+		background-color: #e6b422;
+		color: white;
+		z-index: 5;
+	}
+	.sort, .update{
+		position: absolute;
+		bottom: 10px;
+		right: 32px;
+		width: 50px;
+        height: 18px;
+        display: inline-block;
+        text-align: center;
+        background-color: #2e2930;
+        font-size: 10px;
+        text-decoration: none;
+        font-weight: bold;
+        padding: 1px 2px;
+        border: 0.5px dashed #ffffff;
+        margin: 0 2px;
+		color: #fff;
+        box-shadow: #2e2930 0px 0px 0px 3px;
+	}
+	.sort:hover, .update:hover{
+        background-color: slategray;
+        box-shadow: slategray 0px 0px 0px 3px;
+    }
+	.updown{
+		position: absolute;
+		bottom: 9px;
+		right: 5px;
+		border: 1px solid gray;
+	}
+	.update{
+		width: 50px;
+        height: 24px;
+		font-size: 13px;
+		font-weight:normal;
+		left: 5px;
 	}
 </style>
