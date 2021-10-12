@@ -51,8 +51,16 @@ module.exports = {
 		}
 	},
 	methods: {
-		changeData(){
-            this.$emit('change', this.id_name);
+		changeData(id, value){
+			switch(id){
+                case this.id_name+'_m1lv':
+                    this.m1Lv = value;
+                    break;
+                case this.id_name+'_m2lv':
+                    this.m2Lv = value;
+                    break;
+            }
+            this.$emit('change', this.id_name, "masic", {1: parseInt(this.m1Lv), 2: parseInt(this.m2Lv)});
         },
 		getData(){
             return {1: this.m1Lv, 2: this.m2Lv};

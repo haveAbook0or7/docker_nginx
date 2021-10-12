@@ -3,19 +3,19 @@
         <tr>
 			<td>Lv</td>
             <td>
-                <select-own :id="this.id_name+'_cardlv'" :op="'opCard'" :initial="this.cardLv" ref="cardlv" @up-value="changeData"></select-own>
+                <select-own :id="this.id_name+'_cardlv'" :op="'opCard'" :initial="cardLv" ref="cardlv" @up-value="changeData"></select-own>
             </td>
         </tr>
         <tr>
             <td>HP</td>
             <td>
-                <input :id="this.id_name+'_hp'" type="text" :value="this.hp" @change="changeData">
+                <input :id="this.id_name+'_hp'" type="text" ref="uu" v-model="hp" @change="changeData">
             </td>
         </tr>
         <tr>
             <td>ATK</td>
             <td>
-                <input :id="this.id_name+'_atk'" type="text" :value="this.atk" @change="changeData">
+                <input :id="this.id_name+'_atk'" type="text" v-model="atk" @change="changeData">
             </td>
         </tr>
     </table>
@@ -40,8 +40,11 @@ module.exports = {
 		}
 	},
 	methods: {
-        changeData(){
-            this.$emit('change', this.id_name);
+        changeData(id, value){
+            if(id == this.id_name+'_cardlv'){
+                this.cardLv = value;
+            }
+            this.$emit('change', this.id_name, "basic",  {cardLv: parseInt(this.cardLv), hp: parseInt(this.hp), atk: parseInt(this.atk)});
         },
         getData(){
             return {cardLv: this.cardLv, hp: this.hp, atk: this.atk};

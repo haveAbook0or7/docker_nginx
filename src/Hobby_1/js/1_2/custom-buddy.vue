@@ -76,8 +76,19 @@ module.exports = {
 		}
 	},
 	methods: {
-        changeData(){
-            this.$emit('change', this.id_name);
+        changeData(id, value){
+            switch(id){
+                case this.id_name+'_b1lv':
+                    this.buddyLv[1] = value;
+                    break;
+                case this.id_name+'_b2lv':
+                    this.buddyLv[2] = value;
+                    break;
+                case this.id_name+'_b3lv':
+                    this.buddyLv[3] = value;
+                    break;
+            }
+            this.$emit('change', this.id_name, "buddy", {1: parseInt(this.buddyLv[1]), 2: parseInt(this.buddyLv[2]), 3: parseInt(this.buddyLv[3])});
         },
         getData(){
             return this.buddyLv;
