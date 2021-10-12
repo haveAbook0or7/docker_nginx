@@ -14,6 +14,7 @@
 				:init_lv="card.lv" 
 				:init_hp="card.hp" 
 				:init_atk="card.atk" 
+				:ref="'basic'+card.cdno" 
 				@change="changeData"></custom-basic>
 			<custom-masic 
 				:id_name="card.cdno" 
@@ -21,6 +22,7 @@
 				:init_masic2="card.m2_1" 
 				:init_lv1="card.m1lv" 
 				:init_lv2="card.m2lv" 
+				:ref="'masic'+card.cdno" 
 				@change="changeData"></custom-masic>
 			<custom-buddy 
 				:id_name="card.cdno" 
@@ -30,6 +32,7 @@
 				:init_lv1="card.b1lv" 
 				:init_lv2="card.b2lv" 
 				:init_lv3="card.b3lv" 
+				:ref="'buddy'+card.cdno" 
 				@change="changeData"></custom-buddy>
 		</div>
 	</div>
@@ -54,7 +57,9 @@ module.exports = {
 		.then(response => {
 			this.message = response.data.message;
 			console.log(this.message);
-			this.datas = response.data.data;
+			// 元データと一時保存用データ領域を作る
+			this.originDatas = JSON.parse(JSON.stringify(response.data.data));
+			this.datas = JSON.parse(JSON.stringify(response.data.data));
 		})
 		.catch(function (error) {
 			console.log(error);
@@ -64,13 +69,24 @@ module.exports = {
 		cardDatas: {
 			get(){
 				// 元データから切り離す
-				var copyData = JSON.parse(JSON.stringify(this.datas));
+				var copyData = JSON.parse(JSON.stringify(this.originDatas));
 				// cdnoをキーにMap化する
 				var adjustData = {};
 				for(var i = 0; i < copyData.length; i++){
 					adjustData[copyData[i].cdno] = copyData[i];
 				}
-				console.log(adjustData);
+                return adjustData;
+			}
+		},
+		changeDatas: {
+			get(){
+				// 元データから切り離してはいけない。
+				var copyData = this.datas;
+				// cdnoをキーにMap化する
+				var adjustData = {};
+				for(var i = 0; i < copyData.length; i++){
+					adjustData[copyData[i].cdno] = copyData[i];
+				}
                 return adjustData;
 			}
 		},
@@ -80,10 +96,8 @@ module.exports = {
 				// なんかよくわからんけど一回ローカル関数に移してからじゃないとソート関数内で認識できない
 				var key = keys[this.radioValue];
 				var ud = this.updown;
-				// 元データから切り離す
-				var copyData = JSON.parse(JSON.stringify(this.datas));
 				// ソート処理
-				var sortData = copyData.sort(function(a, b){
+				var sortData = this.datas.sort(function(a, b){
 					if(a[key] < b[key]) return -1 * ud;
 					if(a[key] > b[key]) return 1 * ud;
 					return 0;
@@ -117,7 +131,6 @@ module.exports = {
 						return value
 					}
 				});
-				console.log(result);
 				return result;
 			}
 		}
@@ -126,6 +139,7 @@ module.exports = {
 		return {
 			Dormitory: ["","Heartslabyul","Savanaclaw","Octavinelle","Scarabia","Pomefiore","Ignihyde","Diasomnia","Ramshackle"],
 			datas: [],
+			originDatas:[],
 			message: "",
 
 			changeFlg: [],
@@ -134,7 +148,7 @@ module.exports = {
 			updown: -1,
 			radioValue: "default",
 			search: {
-				Heartslabyul: true,
+				Heartslabyul: false,
 				Savanaclaw: false,
 				Octavinelle: false,
 				Scarabia: false,
@@ -166,7 +180,7 @@ module.exports = {
 			this.updownImg = this.updown == 1 ? "desc.jpg" : "asc.jpg";
 			this.updown = this.updown == 1 ? -1 : 1;
 		},
-		changeData(cdno){
+		changeData(cdno, lbl, value){
 			var flg = true;
 			this.changeFlg.forEach(function(value){
 				flg = value == cdno ? false : true;
@@ -175,7 +189,27 @@ module.exports = {
 				this.changeFlg.push(cdno);
 			}
 			console.log(this.changeFlg);
-		}
+			// 一時保存領域にデータを保存
+			switch(lbl){
+				case "basic":
+					this.changeDatas[cdno].lv = value.cardLv;
+					this.changeDatas[cdno].hp = value.hp;
+					this.changeDatas[cdno].atk = value.atk;
+					break;
+				case "masic":
+					this.changeDatas[cdno].m1lv = value[1];
+					this.changeDatas[cdno].m2lv = value[2];
+					break;
+				case "buddy":
+					this.changeDatas[cdno].b1lv = value[1];
+					this.changeDatas[cdno].b2lv = value[2];
+					this.changeDatas[cdno].b3lv = value[3];
+					break;
+			}
+			// console.log(this.changeDatas);
+			// console.log(this.cardDatas);
+		},
+
 	},
 	
 }
@@ -235,7 +269,7 @@ module.exports = {
 		color: #fff;
         box-shadow: #2e2930 0px 0px 0px 3px;
 	}
-	.sort:hover, .update:hover{
+	.sort:hover, .update:active{
         background-color: slategray;
         box-shadow: slategray 0px 0px 0px 3px;
     }
