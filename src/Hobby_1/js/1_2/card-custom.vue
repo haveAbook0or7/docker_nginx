@@ -209,7 +209,6 @@ module.exports = {
 			// console.log(this.changeDatas);
 			// console.log(this.cardDatas);
 		},
-
 	},
 	
 }
