@@ -3,19 +3,19 @@
         <tr>
 			<td>Lv</td>
             <td>
-                <select-own :id="this.id_name+'_cardlv'" :op="'opCard'" :initial="cardLv" ref="cardlv" @up-value="changeData"></select-own>
+                <select-own :id="this.id_name+'_cardlv'" :op="'opCard'" :initial="cardLv" :disabled="this.disabled" ref="cardlv" @up-value="changeData"></select-own>
             </td>
         </tr>
         <tr>
             <td>HP</td>
             <td>
-                <input :id="this.id_name+'_hp'" type="text" ref="uu" v-model="hp" @change="changeData">
+                <input :id="this.id_name+'_hp'" type="text" ref="uu" v-model="hp" :readonly="this.disabled" @change="changeData">
             </td>
         </tr>
         <tr>
             <td>ATK</td>
             <td>
-                <input :id="this.id_name+'_atk'" type="text" v-model="atk" @change="changeData">
+                <input :id="this.id_name+'_atk'" type="text" v-model="atk" :readonly="this.disabled" @change="changeData">
             </td>
         </tr>
     </table>
@@ -28,9 +28,18 @@ module.exports = {
     },
 	props: {
 		id_name: {default:"own"},
+        show_flg: {default: true},
         init_lv: {default: 0},
         init_hp: {default: 0},
         init_atk: {default: 0},
+	},
+    computed: {
+		disabled: {
+            get(){
+                // 閲覧モードなら操作できないようにする
+                return !this.show_flg;
+			}
+        }
 	},
 	data: function () {
 		return {
@@ -67,5 +76,11 @@ module.exports = {
 		border: 1.5px solid #e6b422;
 		border-radius: 2px;
         caret-color: #2e2930;
+	}
+    input[type=text]:read-only{
+		height: 18px;
+		width: 40px;
+		border: 1px solid #aaaaaa;
+		border-radius: 2px;
 	}
 </style>

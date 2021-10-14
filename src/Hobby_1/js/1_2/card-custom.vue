@@ -2,7 +2,7 @@
 	<div class="cards">
 		<sort-modal ref="modalSort" @sort="changeSort" @search="changeSearch"></sort-modal>
 		<h2>
-			<input class="update" type="button" value="更新" @click="clickDataSave()">
+			<input class="update" type="button" value="更新" @click="clickDataSave()" v-if="showFlg">
 			<span class="res">{{this.responseMsg}}</span>
 			<input class="sort" type="button" value="ソート" @click="clickOpenSortModal()">
 			<img class="updown" :src="'../img/'+this.updownImg" width="20" height="20" @click="clickUpDown()">
@@ -12,6 +12,7 @@
 			<img :src="'../img/'+Dormitory[Math.floor(card.chno/10)]+'/'+card.img" width="70.5" height="74.7">
 			<custom-basic 
 				:id_name="card.cdno" 
+				:show_flg="showFlg" 
 				:init_lv="card.lv" 
 				:init_hp="card.hp" 
 				:init_atk="card.atk" 
@@ -19,6 +20,7 @@
 				@change="changeData"></custom-basic>
 			<custom-masic 
 				:id_name="card.cdno" 
+				:show_flg="showFlg" 
 				:init_masic1="card.m1_1" 
 				:init_masic2="card.m2_1" 
 				:init_lv1="card.m1lv" 
@@ -27,6 +29,7 @@
 				@change="changeData"></custom-masic>
 			<custom-buddy 
 				:id_name="card.cdno" 
+				:show_flg="showFlg" 
 				:init_buddy1="card.b1" 
 				:init_buddy2="card.b2" 
 				:init_buddy3="card.b3" 
@@ -48,14 +51,18 @@ module.exports = {
 		'sort-modal': httpVueLoader('../sort-modal.vue'),
     },
 	props: {
-		// mydbname: {default:"H1_2_DefaultDataMax"},
-		mydbname: {default:"H1_3_UserData1"},
+		mydbname: {default:"H1_2_DefaultDataMax"},
 	},
 	mounted() {
 		// データをロード
 		this.loading();
 	},
 	computed: {
+		showFlg: {
+			get(){
+				return this.mydbname == "H1_2_DefaultDataMax" ? false : true;
+			}
+		},
 		// 比較用元データ
 		cardDatas: {
 			get(){
@@ -156,7 +163,7 @@ module.exports = {
 
 				obtained: false,
 			},
-			responseMsg: "レスポンスMsg"
+			responseMsg: "レスポンスMsg",
 		}
 	},
 	methods: {

@@ -38,6 +38,7 @@ module.exports = {
     },
 	props: {
 		id_name: {default:"own"},
+        show_flg: {default: true},
         init_buddy1: {default: -1},
         init_buddy2: {default: -1},
         init_buddy3: {default: -1},
@@ -63,7 +64,7 @@ module.exports = {
 				var applydisabled = {1: true, 2: true, 3: true};
                 for(var i = 1; i <= 3; i++){
                     // SRやRならバディLv操作できないようにする
-                    applydisabled[i] = this["init_buddy"+i] == -1 ? true : false;
+                    applydisabled[i] = this["init_buddy"+i] == -1 || !this.show_flg ? true : false;
                 }
                 return applydisabled;
 			}
