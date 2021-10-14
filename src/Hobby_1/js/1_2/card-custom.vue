@@ -2,7 +2,8 @@
 	<div class="cards">
 		<sort-modal ref="modalSort" @sort="changeSort" @search="changeSearch"></sort-modal>
 		<h2>
-			<button class="update">更新</button>
+			<input class="update" type="button" value="更新" @click="clickDataSave()">
+			<span class="res">{{this.responseMsg}}</span>
 			<input class="sort" type="button" value="ソート" @click="clickOpenSortModal()">
 			<img class="updown" :src="'../img/'+this.updownImg" width="20" height="20" @click="clickUpDown()">
 		</h2>
@@ -51,25 +52,14 @@ module.exports = {
 		mydbname: {default:"H1_3_UserData1"},
 	},
 	mounted() {
-		axios.post("../php/Hobby_1_1_DB.php",{
-			myDB: this.mydbname
-		})
-		.then(response => {
-			this.message = response.data.message;
-			console.log(this.message);
-			// 元データと一時保存用データ領域を作る
-			this.originDatas = JSON.parse(JSON.stringify(response.data.data));
-			this.datas = JSON.parse(JSON.stringify(response.data.data));
-		})
-		.catch(function (error) {
-			console.log(error);
-		});
+		// データをロード
+		this.loading();
 	},
 	computed: {
+		// 比較用元データ
 		cardDatas: {
 			get(){
-				// 元データから切り離す
-				var copyData = JSON.parse(JSON.stringify(this.originDatas));
+				var copyData = this.originDatas;
 				// cdnoをキーにMap化する
 				var adjustData = {};
 				for(var i = 0; i < copyData.length; i++){
@@ -78,10 +68,11 @@ module.exports = {
                 return adjustData;
 			}
 		},
-		changeDatas: {
+		// 一時保存処理用データ
+		tempDatas: {
 			get(){
 				// 元データから切り離してはいけない。
-				var copyData = this.datas;
+				var copyData = this.flexibleDatas;
 				// cdnoをキーにMap化する
 				var adjustData = {};
 				for(var i = 0; i < copyData.length; i++){
@@ -90,6 +81,7 @@ module.exports = {
                 return adjustData;
 			}
 		},
+		// 表示用整形データ
 		sortDatas: {
 			get(){
 				const keys = {default: "cdno", Lv: "lv", HP: "hp", ATK: "atk", chNo: "chno"};
@@ -97,7 +89,7 @@ module.exports = {
 				var key = keys[this.radioValue];
 				var ud = this.updown;
 				// ソート処理
-				var sortData = this.datas.sort(function(a, b){
+				var sortData = this.flexibleDatas.sort(function(a, b){
 					if(a[key] < b[key]) return -1 * ud;
 					if(a[key] > b[key]) return 1 * ud;
 					return 0;
@@ -138,7 +130,7 @@ module.exports = {
 	data: function () {
 		return {
 			Dormitory: ["","Heartslabyul","Savanaclaw","Octavinelle","Scarabia","Pomefiore","Ignihyde","Diasomnia","Ramshackle"],
-			datas: [],
+			flexibleDatas: [],
 			originDatas:[],
 			message: "",
 
@@ -163,10 +155,24 @@ module.exports = {
 				water: false,
 
 				obtained: false,
-			}
+			},
+			responseMsg: "レスポンスMsg"
 		}
 	},
 	methods: {
+		loading(){
+			axios.post("../php/Hobby_1_1_DB.php",{
+				myDB: this.mydbname
+			})
+			.then(response => {
+				this.message = response.data.message;
+				this.originDatas = JSON.parse(JSON.stringify(response.data.data));
+				this.flexibleDatas = JSON.parse(JSON.stringify(response.data.data));
+			})
+			.catch(function (error) {
+				console.log(error);
+			});
+		},
 		clickOpenSortModal(){
 			this.$refs.modalSort.openModal();
 		},
@@ -192,25 +198,51 @@ module.exports = {
 			// 一時保存領域にデータを保存
 			switch(lbl){
 				case "basic":
-					this.changeDatas[cdno].lv = value.cardLv;
-					this.changeDatas[cdno].hp = value.hp;
-					this.changeDatas[cdno].atk = value.atk;
+					this.tempDatas[cdno].lv = value.cardLv;
+					this.tempDatas[cdno].hp = value.hp;
+					this.tempDatas[cdno].atk = value.atk;
 					break;
 				case "masic":
-					this.changeDatas[cdno].m1lv = value[1];
-					this.changeDatas[cdno].m2lv = value[2];
+					this.tempDatas[cdno].m1lv = value[1];
+					this.tempDatas[cdno].m2lv = value[2];
 					break;
 				case "buddy":
-					this.changeDatas[cdno].b1lv = value[1];
-					this.changeDatas[cdno].b2lv = value[2];
-					this.changeDatas[cdno].b3lv = value[3];
+					this.tempDatas[cdno].b1lv = value[1];
+					this.tempDatas[cdno].b2lv = value[2];
+					this.tempDatas[cdno].b3lv = value[3];
 					break;
 			}
-			// console.log(this.changeDatas);
-			// console.log(this.cardDatas);
+			console.log(this.cardDatas);
+			console.log(this.tempDatas);
+		},
+		clickDataSave(){
+			console.log(this.changeFlg);
+			var sendDatas = [];
+			for(var k in this.changeFlg){
+				var index = this.changeFlg[k];
+				var origin = JSON.stringify(this.cardDatas[index]);
+				var compare = JSON.stringify(this.tempDatas[index]);
+				console.log(index);
+				console.log(origin != compare);
+				if(origin != compare){
+					sendDatas.push(this.tempDatas[index]);
+				}
+			}
+			console.log(JSON.parse(JSON.stringify(sendDatas)));
+			axios.post("../php/Hobby_1_2_DBUpdate.php",{
+				data: sendDatas
+			})
+			.then(response => {
+				this.responseMsg = response.data.msg;
+				// 各変数を再ロード
+				this.changeFlg = [];
+				this.loading();
+			})
+			.catch(function (error) {
+				console.log(error);
+			});
 		},
 	},
-	
 }
 // export default { Node.jsじゃないから、これだとダメだった。 }
 </script>
@@ -284,5 +316,12 @@ module.exports = {
 		font-size: 13px;
 		font-weight:normal;
 		left: 5px;
+	}
+	.res{
+		position: absolute;
+		left: 70px;
+		bottom: 6px;
+		font-size: 16px;
+		font-style: italic;
 	}
 </style>
