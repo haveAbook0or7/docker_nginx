@@ -17,7 +17,7 @@
 	<!-- <custom-basic></custom-basic>
 	<custom-masic></custom-masic>
 	<custom-buddy></custom-buddy> -->
-	<card-custom></card-custom>
+	<card-custom :mydbname="'H1_3_UserData1'"></card-custom>
 </div>
 <script>
 	new Vue({

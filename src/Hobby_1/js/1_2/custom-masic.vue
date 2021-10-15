@@ -5,7 +5,7 @@
 				<img :id="this.id_name+'_m1'" :src="'../img/Element/'+this.m1Img" width="25" height="25">
 			</td>
             <td>
-                Lv<select-own :id="this.id_name+'_m1lv'" :op="'opLv'" :initial="this.m1Lv" ref="m1lv" @up-value="changeData"></select-own>
+                Lv<select-own :id="this.id_name+'_m1lv'" :op="'opLv'" :initial="this.m1Lv" :disabled="this.disabled" ref="m1lv" @up-value="changeData"></select-own>
             </td>
         </tr>
 		<tr>
@@ -13,7 +13,7 @@
 				<img :id="this.id_name+'_m2'" :src="'../img/Element/'+this.m2Img" width="25" height="25">
 			</td>
             <td>
-                Lv<select-own :id="this.id_name+'_m2lv'" :op="'opLv'" :initial="this.m2Lv" ref="m2lv" @up-value="changeData"></select-own>
+                Lv<select-own :id="this.id_name+'_m2lv'" :op="'opLv'" :initial="this.m2Lv" :disabled="this.disabled" ref="m2lv" @up-value="changeData"></select-own>
             </td>
         </tr>
     </table>
@@ -26,6 +26,7 @@ module.exports = {
     },
 	props: {
 		id_name: {default:"own"},
+		show_flg: {default: true},
 		init_masic1: {default: "1S1"},
 		init_masic2: {default: "1S1"},
 		init_lv1: {default: 0},
@@ -40,6 +41,12 @@ module.exports = {
         m2Img: {
             get(){
                 return this.element[this.init_masic2[0]];
+			}
+        },
+		disabled: {
+            get(){
+				// 閲覧モードなら魔法Lv操作できないようにする
+                return !this.show_flg;
 			}
         }
 	},
