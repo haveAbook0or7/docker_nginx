@@ -1,5 +1,5 @@
 <template>
-	<div class="cards">
+	<div>
 		<sort-modal ref="modalSort" @sort="changeSort" @search="changeSearch"></sort-modal>
 		<h2>
 			<input class="update" type="button" value="更新" @click="clickDataSave()" v-if="showFlg">
@@ -7,37 +7,39 @@
 			<input class="sort" type="button" value="ソート" @click="clickOpenSortModal()">
 			<img class="updown" :src="'../img/'+this.updownImg" width="20" height="20" @click="clickUpDown()">
 		</h2>
-		<br><br><br><br>
-		<div class="card" v-for="card in this.sortDatas" :key="card.cdno">
-			<img :src="'../img/'+Dormitory[Math.floor(card.chno/10)]+'/'+card.img" width="70.5" height="74.7">
-			<custom-basic 
-				:id_name="card.cdno" 
-				:show_flg="showFlg" 
-				:init_lv="card.lv" 
-				:init_hp="card.hp" 
-				:init_atk="card.atk" 
-				:ref="'basic'+card.cdno" 
-				@change="changeData"></custom-basic>
-			<custom-masic 
-				:id_name="card.cdno" 
-				:show_flg="showFlg" 
-				:init_masic1="card.m1_1" 
-				:init_masic2="card.m2_1" 
-				:init_lv1="card.m1lv" 
-				:init_lv2="card.m2lv" 
-				:ref="'masic'+card.cdno" 
-				@change="changeData"></custom-masic>
-			<custom-buddy 
-				:id_name="card.cdno" 
-				:show_flg="showFlg" 
-				:init_buddy1="card.b1" 
-				:init_buddy2="card.b2" 
-				:init_buddy3="card.b3" 
-				:init_lv1="card.b1lv" 
-				:init_lv2="card.b2lv" 
-				:init_lv3="card.b3lv" 
-				:ref="'buddy'+card.cdno" 
-				@change="changeData"></custom-buddy>
+		<br><br><br>
+		<div class="cards">
+			<div class="card" v-for="card in this.sortDatas" :key="card.cdno">
+				<img :src="'../img/'+Dormitory[Math.floor(card.chno/10)]+'/'+card.img" width="70.5" height="74.7">
+				<custom-basic 
+					:id_name="card.cdno" 
+					:show_flg="showFlg" 
+					:init_lv="card.lv" 
+					:init_hp="card.hp" 
+					:init_atk="card.atk" 
+					:ref="'basic'+card.cdno" 
+					@change="changeData"></custom-basic>
+				<custom-masic 
+					:id_name="card.cdno" 
+					:show_flg="showFlg" 
+					:init_masic1="card.m1_1" 
+					:init_masic2="card.m2_1" 
+					:init_lv1="card.m1lv" 
+					:init_lv2="card.m2lv" 
+					:ref="'masic'+card.cdno" 
+					@change="changeData"></custom-masic>
+				<custom-buddy 
+					:id_name="card.cdno" 
+					:show_flg="showFlg" 
+					:init_buddy1="card.b1" 
+					:init_buddy2="card.b2" 
+					:init_buddy3="card.b3" 
+					:init_lv1="card.b1lv" 
+					:init_lv2="card.b2lv" 
+					:init_lv3="card.b3lv" 
+					:ref="'buddy'+card.cdno" 
+					@change="changeData"></custom-buddy>
+			</div>
 		</div>
 	</div>
 </template>
@@ -52,6 +54,7 @@ module.exports = {
     },
 	props: {
 		mydbname: {default:"H1_2_DefaultDataMax"},
+		init_msg: {default:"initMsg"},
 	},
 	mounted() {
 		// データをロード
@@ -163,7 +166,7 @@ module.exports = {
 
 				obtained: false,
 			},
-			responseMsg: "レスポンスMsg",
+			responseMsg: this.init_msg,
 		}
 	},
 	methods: {
@@ -262,6 +265,22 @@ module.exports = {
 		color: #ffffff;
 		font-size: 13px;
 	}
+	h2{
+		box-sizing: border-box;
+		position: fixed;
+		width: 905px;
+		height: 48px;
+		margin: 10px 0;
+		border-right: 15px solid #fbfaf5;
+		font: normal 30px "游ゴシック",serif;
+		background-color: #e6b422;
+		color: #fbfaf5;
+		z-index: 5;
+	}
+	.cards{
+		background: #fbfaf5;
+		width: 905px;
+	}
 	.card{
 		width: 120px;
 		margin: 2.5px;
@@ -270,24 +289,8 @@ module.exports = {
 		border: 2px solid #e6b422;
 		background: #2e2930;
 	}
-	.cards{
-		background: #fbfaf5;
-		width: 905px;
-	}
 	table{
 		width: 100%;
-	}
-	h2{
-		box-sizing: border-box;
-		position: fixed;
-		width: 905px;
-		height: 48px;
-		margin: 10px 0;
-		border-right: 15px solid #2e2930;;
-		font: normal 30px "游ゴシック",serif;
-		background-color: #e6b422;
-		color: white;
-		z-index: 5;
 	}
 	.sort, .update{
 		position: absolute;
