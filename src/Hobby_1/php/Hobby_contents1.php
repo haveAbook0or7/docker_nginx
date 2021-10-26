@@ -6,6 +6,7 @@
 <script src="../lib/vue.js"></script> 
 <script src="https://unpkg.com/http-vue-loader"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://unpkg.com/vue-router@2.0.0/dist/vue-router.js"></script>
 <style>
 
 </style>
@@ -13,17 +14,14 @@
 
 <body>
 <div id="con">
-    <!-- <card-select></card-select> -->
-	<!-- <custom-basic></custom-basic>
-	<custom-masic></custom-masic>
-	<custom-buddy></custom-buddy> -->
-	<card-custom :mydbname="'H1_3_UserData1'"></card-custom>
+
+	<login-form></login-form>
 </div>
 <script>
 	new Vue({
 		el: "#con",
 		components: {
-			'custom-masic': httpVueLoader('../js/1_2/custom-masic.vue'),
+			'login-form': httpVueLoader('../js/1_3/login-form.vue'),
 			'custom-buddy': httpVueLoader('../js/1_2/custom-buddy.vue'),
 			'custom-basic': httpVueLoader('../js/1_2/custom-basic.vue'),
 			'card-custom': httpVueLoader('../js/1_2/card-custom.vue'),
