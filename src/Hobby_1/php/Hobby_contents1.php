@@ -8,20 +8,18 @@
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script src="https://unpkg.com/vue-router@2.0.0/dist/vue-router.js"></script>
 <style>
-
 </style>
 </head>
 
 <body>
 <div id="con">
-
-	<login-form></login-form>
+<pre-register-form></pre-register-form>
 </div>
 <script>
 	new Vue({
 		el: "#con",
 		components: {
-			'login-form': httpVueLoader('../js/1_3/login-form.vue'),
+			'pre-register-form': httpVueLoader('../js/1_3/pre-register-form.vue'),
 			'custom-buddy': httpVueLoader('../js/1_2/custom-buddy.vue'),
 			'custom-basic': httpVueLoader('../js/1_2/custom-basic.vue'),
 			'card-custom': httpVueLoader('../js/1_2/card-custom.vue'),

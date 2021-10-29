@@ -7,6 +7,6 @@ ENV LANG ja_JP.UTF-8
 ENV LANGUAGE ja_JP:ja
 ENV LC_ALL ja_JP.UTF-8
 
-ENV TZ=UTC
+ENV TZ Asia/Tokyo
 
 COPY ./docker/mysql/my.cnf /etc/my.cnf
