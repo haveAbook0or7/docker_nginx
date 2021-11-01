@@ -1,8 +1,8 @@
 <?php
     session_start();
     function login(){
-        $_SESSION['userID'] = "wakana";
-        $_SESSION['myTB'] = "H1_3_UserData1";
+        // $_SESSION['userID'] = "wakana";
+        // $_SESSION['myTB'] = "H1_3_UserData1";
         if(isset($_GET['logout'])){
             $_SESSION['userID'] = "";
             $_SESSION['myTB'] = "H1_2_DefaultDataMax";
@@ -20,7 +20,7 @@
         }        
         $_SESSION['myTB'] = "H1_2_DefaultDataMax";
         return 'ゲスト <span><a href="Hobby_1_2_custom.php" id="customlink" target="_blank">カードステータス閲覧</a> 
-                <a href="Hobby_1_3_login.php" id="loglink"  target="_blank">ログイン</a></span>';
+                <a href="Hobby_1_3_login.php" id="loglink">ログイン</a></span>';
     }
     $log = login();
 ?>

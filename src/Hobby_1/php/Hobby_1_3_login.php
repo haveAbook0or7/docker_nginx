@@ -1,42 +1,30 @@
-<?php
-    session_start();
-    require_once('Hobby_1_3_loginM.php');
-    $M = new Hobby_1_3_loginM();
-    
-    $M->DataPOST();
-    
-?>
+<?php session_start();?>
 <!DOCTYPE html>
 <html>
     <head>
-        <title>ツイステカード編成ツール</title>
-        <meta charset="UTF-8">
-        <meta name = "authr" content="有本 和奏">
-        <link href="../css/Hobby_1/Hobby_1_3_login.css" rel="stylesheet" type="text/css">
+    <title>ツイステカード編成ツール</title>
+        <meta charset="UTF-8"><meta name = "authr" content="有本 和奏">
+        <link href="../css/H_common.css" rel="stylesheet">
+        <style>main{text-align: center;}</style>
+        <script src="../lib/vue.js"></script> 
+        <script src="https://unpkg.com/http-vue-loader"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     </head>
     <body>
         <header>
-            <div>
-                <h1>ツイステカード編成ツール<a href="../index.html" id="homelink">ホームへ戻る</a></h1>
-            </div>
+            <h1>ツイステカード編成ツール<a href="./Hobby_1_1_home.php" id="homelink">ホームへ戻る</a></h1>
         </header>
-        <main>
-            <br><br><br><br>
-            <form action="Hobby_1_3_login.php" method="post">
-                <div class="block">
-                    <div class="left">
-                        ID(英数字)<br><br>
-                        パスワード(英数字6～8桁)
-                    </div>
-                    <div class="right">
-                        <input type="text" id="ID" name="ID" ><br><br>
-                        <input type="password" id="pass" name="pass" >
-                    </div> 
-                    <button type="submit" name="submit" value="ログイン">ログイン</button>
-                </div>                
-            </form>            
+        <main id="app">
+            <br><br><br>
+            <login-form></login-form>
         </main>
-        <footer>
-        </footer>
+        <script>
+            new Vue({
+                el: "#app",
+                components: {
+                    'login-form': httpVueLoader('../js/1_3/login-form.vue'),
+                }
+            });
+        </script>
     </body>
 </html>
