@@ -22,7 +22,7 @@ module.exports = {
 	data: function () {
 		return {
 			emailaddress: "",
-            msg: "msg",
+            msg: "",
 			errMsg: "",
 			errFlg: true,
 			data: {}
@@ -32,16 +32,12 @@ module.exports = {
 		tempRegister(){
 			if(this.errFlg){
 				axios.post("../php/Hobby_1_3_DBPreRegister.php",{
-					email: "haveabook.w@gmail.com",
+					email: this.emailaddress,
 				})
 				.then(response => {
 					console.log(response.data);
 					this.data = response.data.data;
 					this.msg = response.data.message;
-					// console.log()
-					// if(this.data.flg){
-					// 	this.reFlg = true;
-					// }
 				})
 				.catch(function (error) {
 					console.log(error);

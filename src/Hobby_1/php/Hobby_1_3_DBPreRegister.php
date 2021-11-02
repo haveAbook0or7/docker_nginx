@@ -21,7 +21,6 @@ function get_token(){
 // ログインデータを取得
 if($JSON_array != NULL){
     $email = $JSON_array["email"];
-    $email = "haveabook.w@gmail.com";
     // まずは既に登録されているものではないかチェック
     //データベースサーバに接続
     if (!$conn = mysqli_connect(HOST, USR, PASS, DB)) {
