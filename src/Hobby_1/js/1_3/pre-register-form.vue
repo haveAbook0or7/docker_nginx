@@ -42,6 +42,8 @@ module.exports = {
 				.catch(function (error) {
 					console.log(error);
 				});
+			}else{
+				this.msg = this.errMsg;
 			}
 		},
 		inputAddr(){

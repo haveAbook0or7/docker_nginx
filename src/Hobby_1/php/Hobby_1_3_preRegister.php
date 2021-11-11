@@ -9,7 +9,7 @@
         <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     </head>
     <body>
-    <header>
+        <header>
             <h1>ツイステカード編成ツール<a href="./Hobby_1_1_home.php" id="homelink">ホームへ戻る</a></h1>
         </header>
         <main id="app">

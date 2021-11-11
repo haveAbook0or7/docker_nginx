@@ -1,3 +1,10 @@
+<?php
+if(isset($_GET["token"])) {
+	$token = trim(htmlspecialchars($_GET["token"], ENT_QUOTES, 'UTF-8'));
+}else{
+	$token = null;
+}
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,13 +20,13 @@
 
 <body>
 <div id="con">
-<pre-register-form></pre-register-form>
+<register-form token="<?= $token ?>"></register-form>
 </div>
 <script>
 	new Vue({
 		el: "#con",
 		components: {
-			'pre-register-form': httpVueLoader('../js/1_3/pre-register-form.vue'),
+			'register-form': httpVueLoader('../js/1_3/register-form.vue'),
 			'custom-buddy': httpVueLoader('../js/1_2/custom-buddy.vue'),
 			'custom-basic': httpVueLoader('../js/1_2/custom-basic.vue'),
 			'card-custom': httpVueLoader('../js/1_2/card-custom.vue'),
