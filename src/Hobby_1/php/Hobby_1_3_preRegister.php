@@ -13,7 +13,7 @@
             <h1>ツイステカード編成ツール<a href="./Hobby_1_1_home.php" id="homelink">ホームへ戻る</a></h1>
         </header>
         <main id="app">
-            <br><br>           
+            <br><br><br><br>
             <pre-register-form></pre-register-form>
         </main>
         <script>

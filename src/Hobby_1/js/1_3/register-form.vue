@@ -1,7 +1,4 @@
 <template>
-    <span>
-    <h2>{{this.msg}}</h2>
-    <br><br><br>
 	<div>
 		<!-- トークン照合クリア -->
 		<table border="0" v-show="tokenflg && !signupflg">
@@ -24,10 +21,10 @@
             </td>
         </tr>
         </table>
-		<input type="button" id="submit" value="登録" v-show="tokenflg" @click="register">
 		<span class="err" id="idErr">{{this.idErr}}</span>
 		<span class="err" id="psErr">{{this.psErr}}</span>
 		<span class="err" id="emErr">{{this.emErr}}</span>
+		<input type="button" id="submit" value="登録" v-show="tokenflg && !signupflg" @click="register">
 		<!-- エラー -->
         <table border="0" v-show="!tokenflg">
         <tr>
@@ -44,7 +41,6 @@
         </tr>
         </table>
 	</div>
-    </span>
 </template>
 
 <script>

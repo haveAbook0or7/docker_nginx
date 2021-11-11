@@ -1,9 +1,6 @@
 <template>
-    <span>
-    <h2>{{this.msg}}</h2>
-    <br><br><br>
 	<div>
-		<table border="0">
+		<table border="0" v-show="showflg && !tempFlg">
         <tr>
 			<td>メールアドレス</td>
             <td>
@@ -12,9 +9,23 @@
         </tr>
         </table>
 		<span id="err">{{this.errMsg}}</span>
-        <input type="button" id="submit" value="仮登録" @click="tempRegister">
+        <input type="button" id="submit" value="仮登録" v-show="showflg && !tempFlg" @click="tempRegister">
+		<!-- エラー -->
+        <table border="0" v-show="!showflg">
+        <tr>
+			<td>{{this.msg}}</td>
+        </tr>
+        </table>
+		<!-- 登録完了 -->
+        <table border="0" v-show="tempFlg">
+        <tr>
+			<td>
+				{{this.msg}}<br>
+				受信したメールのURLから本登録を行ってください。
+			</td>
+        </tr>
+        </table>
 	</div>
-    </span>
 </template>
 
 <script>
@@ -22,6 +33,8 @@ module.exports = {
 	data: function () {
 		return {
 			emailaddress: "",
+			showflg: true,
+			tempFlg: false,
             msg: "",
 			errMsg: "",
 			errFlg: true,
@@ -37,6 +50,8 @@ module.exports = {
 				.then(response => {
 					console.log(response.data);
 					this.data = response.data.data;
+					this.showflg = response.data.data.flg;
+					this.tempFlg = response.data.data.flg;
 					this.msg = response.data.message;
 				})
 				.catch(function (error) {
