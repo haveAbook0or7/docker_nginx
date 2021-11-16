@@ -4,27 +4,21 @@
 		<table border="0" v-show="tokenflg && !signupflg">
         <tr>
 			<td>ID(英数字)</td>
-            <td>
-                <input type="text" v-model="id" @input="inputId">
-            </td>
+            <td><input type="text" v-model="id" @input="inputId"></td>
         </tr>
         <tr>
 			<td>パスワード(英数字6～8桁)</td>
-            <td>
-                <input type="text" v-model="pass" @input="inputPass">
-            </td>
+            <td><input type="text" v-model="pass" @input="inputPass"></td>
         </tr>
         <tr>
 			<td>メールアドレス</td>
-            <td>
-                <input type="text" v-model="emailaddress" @input="inputAddr">
-            </td>
+            <td><input type="text" v-model="emailaddress" @input="inputAddr"></td>
         </tr>
         </table>
 		<span class="err" id="idErr">{{this.idErr}}</span>
 		<span class="err" id="psErr">{{this.psErr}}</span>
 		<span class="err" id="emErr">{{this.emErr}}</span>
-		<input type="button" id="submit" value="登録" v-show="tokenflg && !signupflg" @click="register">
+		<input type="button" id="submit" value="登録" v-show="tokenflg && !signupflg" :disabled="!errFlg" @click="register">
 		<!-- エラー -->
         <table border="0" v-show="!tokenflg">
         <tr>
@@ -54,7 +48,6 @@ module.exports = {
 			token: this.token
 		})
 		.then(response => {
-			console.log(response.data.data);
 			this.tokenflg = response.data.data.flg;
 			this.emailaddress = response.data.data.email;
 		})
@@ -79,7 +72,6 @@ module.exports = {
 			eMsg: "URLが正しくありません。もう一度仮登録からやり直してください。",
 			idErr: "", psErr: "", emErr: "",
 			idFlg: false, psFlg: false, emFlg: true,
-			data: {}
 		}
 	},
 	methods: {
@@ -95,8 +87,6 @@ module.exports = {
 					email: this.emailaddress,
 				})
 				.then(response => {
-					console.log(response.data);
-					
 					if(response.data.data.flg){
 						this.signupflg = true;
 					}else{
@@ -116,14 +106,11 @@ module.exports = {
 								break;
 						}
 					}
-					this.data = response.data.data;
 					this.msg = response.data.message;
 				})
 				.catch(function (error) {
 					console.log(error);
 				});
-			}else{
-				this.msg = this.errMsg;
 			}
 		},
         inputId(){
@@ -135,8 +122,6 @@ module.exports = {
 				this.idErr = "IDは英数字2～40文字です。";
 				this.idFlg = false;
 			}
-			console.log(this.idFlg);
-			console.log(this.errFlg);
 		},
         inputPass(){
 			const regex = /^[a-zA-Z0-9]{6,8}$/;
@@ -147,8 +132,6 @@ module.exports = {
 				this.psErr = "パスワードは英数字6～8文字です";
 				this.psFlg = false;
 			}
-			console.log(this.psFlg);
-			console.log(this.errFlg);
 		},
 		inputAddr(){
 			const regex = /^[a-zA-Z0-9_+-]+(\.[a-zA-Z0-9_+-]+)*@([a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]*\.)+[a-zA-Z]{2,}$/;
@@ -159,8 +142,6 @@ module.exports = {
 				this.emErr = "これはメールアドレスの形式ではありません。";
 				this.emFlg = false;
 			}
-			console.log(this.emFlg);
-			console.log(this.errFlg);
 		}
 	},
 }
@@ -174,18 +155,7 @@ module.exports = {
 		border: 0;
 		color: #ffffff;
 		font-size: 13px;
-	}
-    h2{
-		box-sizing: border-box;
-		position: fixed;
-		width: 905px;
-		height: 48px;
-		margin: 10px 0;
-		border-right: 15px solid #fbfaf5;
-		font: normal 30px "游ゴシック",serif;
-		background-color: #e6b422;
-		color: #fbfaf5;
-		z-index: 5;
+		text-align: center;
 	}
     div{
 		display: inline-flex;
@@ -201,6 +171,9 @@ module.exports = {
         height: 85%;
         margin: 0 8%;
 	}
+	td{
+		width: 50%;
+	}
     input:read-write{
 		height: 18px;
 		width: 200px;
@@ -209,6 +182,7 @@ module.exports = {
 		border: 1.5px solid #e6b422;
 		border-radius: 2px;
         caret-color: #2e2930;
+		text-align: left;
 	}
     input[type=button]{
         width: 80px;
@@ -229,9 +203,13 @@ module.exports = {
         right: 8px;
     }
     input[type=button]:hover {
-        background-color: slategray;
-        box-shadow: slategray 0px 0px 0px 3px;
+        border-color: #e62253;
     }
+	input[type=button]:disabled{
+		background-color: #e6dab8;
+        box-shadow: #e6dab8 0px 0px 0px 3px;
+		border-color: #ffffff;
+	}
 	.err{
 		position: absolute;
 		left: 50%;
@@ -246,8 +224,5 @@ module.exports = {
 	}
 	#emErr{
 		top: 78%;
-	}
-	td{
-		width: 50%;
 	}
 </style>

@@ -1,15 +1,14 @@
 <template>
 	<div>
+		<!-- 初期画面 -->
 		<table border="0" v-show="showflg && !tempFlg">
         <tr>
 			<td>メールアドレス</td>
-            <td>
-                <input type="text" v-model="emailaddress" @input="inputAddr">
-            </td>
+            <td><input type="text" v-model="emailaddress" @input="inputAddr"></td>
         </tr>
         </table>
 		<span id="err">{{this.errMsg}}</span>
-        <input type="button" id="submit" value="仮登録" v-show="showflg && !tempFlg" @click="tempRegister">
+        <input type="button" id="submit" value="仮登録" v-show="showflg && !tempFlg" :disabled="!errFlg" @click="tempRegister">
 		<!-- エラー -->
         <table border="0" v-show="!showflg">
         <tr>
@@ -37,8 +36,7 @@ module.exports = {
 			tempFlg: false,
             msg: "",
 			errMsg: "",
-			errFlg: true,
-			data: {}
+			errFlg: false,
 		}
 	},
 	methods: {
@@ -48,8 +46,6 @@ module.exports = {
 					email: this.emailaddress,
 				})
 				.then(response => {
-					console.log(response.data);
-					this.data = response.data.data;
 					this.showflg = response.data.data.flg;
 					this.tempFlg = response.data.data.flg;
 					this.msg = response.data.message;
@@ -57,8 +53,6 @@ module.exports = {
 				.catch(function (error) {
 					console.log(error);
 				});
-			}else{
-				this.msg = this.errMsg;
 			}
 		},
 		inputAddr(){
@@ -83,18 +77,7 @@ module.exports = {
 		border: 0;
 		color: #ffffff;
 		font-size: 13px;
-	}
-    h2{
-		box-sizing: border-box;
-		position: fixed;
-		width: 905px;
-		height: 48px;
-		margin: 10px 0;
-		border-right: 15px solid #fbfaf5;
-		font: normal 30px "游ゴシック",serif;
-		background-color: #e6b422;
-		color: #fbfaf5;
-		z-index: 5;
+		text-align: center;
 	}
     div{
 		display: inline-flex;
@@ -110,6 +93,9 @@ module.exports = {
         height: 85%;
         margin: 0 8%;
 	}
+	td{
+		width: 50%;
+	}
     input:read-write{
 		height: 18px;
 		width: 200px;
@@ -118,6 +104,7 @@ module.exports = {
 		border: 1.5px solid #e6b422;
 		border-radius: 2px;
         caret-color: #2e2930;
+		text-align: left;
 	}
     input[type=button]{
         width: 80px;
@@ -138,17 +125,18 @@ module.exports = {
         right: 8px;
     }
     input[type=button]:hover {
-        background-color: slategray;
-        box-shadow: slategray 0px 0px 0px 3px;
+		border-color: #e62253;
     }
+	input[type=button]:disabled{
+		background-color: #e6dab8;
+        box-shadow: #e6dab8 0px 0px 0px 3px;
+		border-color: #ffffff;
+	}
 	#err{
 		position: absolute;
 		top: 50%;
 		left: 50%;
 		color: #ea5532;
 		font-size: 11.5px;
-	}
-	td{
-		width: 50%;
 	}
 </style>

@@ -4,46 +4,73 @@
 		<table border="0">
         <tr>
 			<td>ID(英数字)</td>
-            <td>
-                <input type="text" v-model="username">
-            </td>
+            <td><input type="text" v-model="id" @input="inputId"></td>
         </tr>
         <tr>
             <td>パスワード(英数字6～8桁)</td>
-            <td>
-                <input type="password" v-model="password">
-            </td>
+            <td><input type="password" v-model="pass" @input="inputPass"></td>
         </tr>
         </table>
-        <input type="button" id="submit" value="ログイン" @click="loginCheck">
+		<span class="err" id="idErr">{{this.idErr}}</span>
+		<span class="err" id="psErr">{{this.psErr}}</span>
+        <input type="button" id="submit" value="ログイン" :disabled="!errFlg" @click="loginCheck">
 	</div>
 </template>
 
 <script>
 module.exports = {
+	computed: {
+		errFlg: {
+            get(){
+				console.log(this.id);
+                return this.idFlg && this.psFlg ? true : false;
+			}
+        }
+	},
 	data: function () {
 		return {
-			username: "",
-			password: "",
+			id: "",
+			pass: "",
 			reFlg: false,
-			data: {}
+			idErr: "", psErr: "",
+			idFlg: false, psFlg: false,
 		}
 	},
 	methods: {
 		loginCheck(){
-			axios.post("../php/Hobby_1_3_DBLogin.php",{
-				user: this.username,
-				pass: this.password
-			})
-			.then(response => {
-				this.data = response.data.data;
-				if(this.data.flg){
-					this.reFlg = true;
-				}
-			})
-			.catch(function (error) {
-				console.log(error);
-			});
+			if(this.errFlg){
+				axios.post("../php/Hobby_1_3_DBLogin.php",{
+					user: this.id,
+					pass: this.pass
+				})
+				.then(response => {
+					this.reFlg = response.data.data.flg;
+					this.psErr = response.data.message;
+				})
+				.catch(function (error) {
+					console.log(error);
+				});
+			}
+		},
+		inputId(){
+			const regex = /^[a-zA-Z0-9]{2,40}$/;
+			if(regex.test(this.id)){
+				this.idErr = "";
+				this.idFlg = true;
+            }else{
+				this.idErr = "IDは英数字2～40文字です。";
+				this.idFlg = false;
+			}
+		},
+        inputPass(){
+			const regex = /^[a-zA-Z0-9]{6,8}$/;
+			if(regex.test(this.pass)){
+				this.psErr = "";
+				this.psFlg = true;
+            }else{
+				this.psErr = "パスワードは英数字6～8文字です";
+				this.psFlg = false;
+			}
 		},
 	},
 }
@@ -57,6 +84,7 @@ module.exports = {
 		border: 0;
 		color: #ffffff;
 		font-size: 13px;
+		text-align: center;
 	}
     div{
 		display: inline-flex;
@@ -65,6 +93,7 @@ module.exports = {
 		border: 5px double #e6b422;
         height: 200px;
         width: 500px;
+		margin: 0 197.5px;
 	}
     table{
 		width: 70%;
@@ -79,6 +108,7 @@ module.exports = {
 		border: 1.5px solid #e6b422;
 		border-radius: 2px;
         caret-color: #2e2930;
+		text-align: left;
 	}
     input[type=button]{
         width: 80px;
@@ -99,7 +129,23 @@ module.exports = {
         right: 8px;
     }
     input[type=button]:hover {
-        background-color: slategray;
-        box-shadow: slategray 0px 0px 0px 3px;
+        border-color: #e62253;
     }
+	input[type=button]:disabled{
+		background-color: #e6dab8;
+        box-shadow: #e6dab8 0px 0px 0px 3px;
+		border-color: #ffffff;
+	}
+	.err{
+		position: absolute;
+		left: 50%;
+		color: #ea5532;
+		font-size: 11.5px;
+	}
+	#idErr{
+		top: 30%;
+	}
+	#psErr{
+		top: 72%;
+	}
 </style>

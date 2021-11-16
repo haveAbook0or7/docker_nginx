@@ -14,7 +14,9 @@ define('PASS', 'pass');
 define('DB', 'db_hobby');
 
 if($JSON_array != NULL){
-    // トークン照合処理
+    /**
+     * トークン照合処理
+     */
     if($JSON_array["flg"] == "mounted"){
         $token = $JSON_array["token"];
         //データベースサーバに接続
@@ -48,13 +50,16 @@ if($JSON_array != NULL){
         print json_encode($arr, JSON_PRETTY_PRINT);
         return;
     }
-
-    // 登録処理
+    /**
+     * 登録処理
+     */
     if($JSON_array["flg"] == "signup"){
         $id = $JSON_array["id"];
         $pass = $JSON_array["pass"];
         $email = $JSON_array["email"];
-        // まずはIDが既に登録されているものではないかチェック
+        /**
+         * まずはIDが既に登録されているものではないかチェック
+         */
         //データベースサーバに接続
         if (!$conn = mysqli_connect(HOST, USR, PASS, DB)) {
             die('データベースに接続できません');
@@ -73,25 +78,21 @@ if($JSON_array != NULL){
         if($num == 0){
             $flg = true;
         }
-        //データベースの接続を閉じる
-        mysqli_stmt_close($stmt);
-        mysqli_close($conn);
         // 既に使用されているIDならエラーメッセージを返す。
         if(!$flg){
+            //データベースの接続を閉じる
+            mysqli_stmt_close($stmt);
+            mysqli_close($conn);
+            // JSON形式で返す
             $arr["data"]["flg"] = $flg;
             $arr["data"]["err"] = "idErr";
             $arr["message"] = "すでに使用されているIDは使えません。";
             print json_encode($arr, JSON_PRETTY_PRINT);
             return;
         }
-
-        // ここから登録
-        //データベースサーバに接続
-        if (!$conn = mysqli_connect(HOST, USR, PASS, DB)) {
-            die('データベースに接続できません');
-        }
-        //クエリの文字コードを設定
-        mysqli_set_charset($conn, 'utf8');
+        /**
+         * ここから登録
+         */
         //SQL文の作成
         $sql =  "INSERT INTO H1_4_Users(ID, pass, email) VALUES(?,?,?)";
         $stmt = mysqli_prepare($conn, $sql);
@@ -104,25 +105,21 @@ if($JSON_array != NULL){
                 break;
             }
         }
-        //データベースの接続を閉じる
-        mysqli_stmt_close($stmt);
-        mysqli_close($conn);
         // うまくいかなかったらエラーメッセージを返す
         if(!$flg){
+            //データベースの接続を閉じる
+            mysqli_stmt_close($stmt);
+            mysqli_close($conn);
+            // JSON形式で返す
             $arr["data"]["flg"] = $flg;
             $arr["data"]["err"] = "err";
             $arr["message"] = "エラー(001)。もう一度仮登録からやり直してください。";
             print json_encode($arr, JSON_PRETTY_PRINT);
             return;
         }
-
-        // ユーザ専用テーブル作成1
-        //データベースサーバに接続
-        if (!$conn = mysqli_connect(HOST, USR, PASS, DB)) {
-            die('データベースに接続できません');
-        }
-        //クエリの文字コードを設定
-        mysqli_set_charset($conn, 'utf8');
+        /**
+         * ユーザ専用テーブル名取得
+         */
         //SQL文の作成
         $sql =  "SELECT CONCAT(mybase, Dno) FROM H1_4_Users WHERE ID LIKE \"$id\"";
         $stmt = mysqli_prepare($conn, $sql);
@@ -140,23 +137,20 @@ if($JSON_array != NULL){
                 break;
             }
         }
-        //データベースの接続を閉じる
-        mysqli_stmt_close($stmt);
-        mysqli_close($conn);
         // うまくいかなかったらエラーメッセージを返す
         if(!$flg){
+            //データベースの接続を閉じる
+            mysqli_stmt_close($stmt);
+            mysqli_close($conn);
+            // JSON形式で返す
             $arr["data"]["flg"] = $flg;
             $arr["data"]["err"] = "err";
             $arr["message"] = "エラー(002)。もう一度仮登録からやり直してください。";
             print json_encode($arr, JSON_PRETTY_PRINT);
         }
-        // ユーザ専用テーブル作成2
-        //データベースサーバに接続
-        if (!$conn = mysqli_connect(HOST, USR, PASS, DB)) {
-            die('データベースに接続できません');
-        }
-        //クエリの文字コードを設定
-        mysqli_set_charset($conn, 'utf8');
+        /**
+         * ユーザ専用テーブル作成
+         */
         //SQL文の作成
         $sql = "CREATE TABLE $myDbase (SELECT * FROM H1_2_DefaultData)";
         $stmt = mysqli_prepare($conn, $sql);
@@ -168,17 +162,35 @@ if($JSON_array != NULL){
                 break;
             }
         }
-        //データベースの接続を閉じる
-        mysqli_stmt_close($stmt);
-        mysqli_close($conn);
         // うまくいかなかったらエラーメッセージを返す
         if(!$flg){
+            //データベースの接続を閉じる
+            mysqli_stmt_close($stmt);
+            mysqli_close($conn);
+            // JSON形式で返す
             $arr["data"]["flg"] = $flg;
             $arr["data"]["err"] = "err";
             $arr["message"] = "エラー(003)。もう一度仮登録からやり直してください。";
             print json_encode($arr, JSON_PRETTY_PRINT);
         }
-        // 本登録完了
+        /**
+         * 仮登録消す(別に失敗してもいい)
+         */
+        //SQL文の作成
+        $sql = "DELETE FROM H1_4_preRegister WHERE email LIKE \"$email\";";
+        $stmt = mysqli_prepare($conn, $sql);
+        for($i = 0; $i < 10; $i++){
+            mysqli_stmt_execute($stmt);
+            if(mysqli_stmt_affected_rows($stmt) > 0){
+                break;
+            }
+        }
+        //データベースの接続を閉じる
+        mysqli_stmt_close($stmt);
+        mysqli_close($conn);
+        /**
+         * 本登録完了
+         */
         $arr["data"]["flg"] = $flg;
         $arr["message"] = "登録完了しました。";
         print json_encode($arr, JSON_PRETTY_PRINT);

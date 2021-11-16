@@ -5,7 +5,6 @@
     <title>ツイステカード編成ツール</title>
         <meta charset="UTF-8"><meta name = "authr" content="有本 和奏">
         <link href="../css/H_common.css" rel="stylesheet">
-        <style>main{text-align: center;}</style>
         <script src="../lib/vue.js"></script> 
         <script src="https://unpkg.com/http-vue-loader"></script>
         <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
@@ -15,7 +14,7 @@
             <h1>ツイステカード編成ツール<a href="./Hobby_1_1_home.php" id="homelink">ホームへ戻る</a></h1>
         </header>
         <main id="app">
-            <br><br><br>
+            <br><br><br><br>
             <login-form></login-form>
         </main>
         <script>

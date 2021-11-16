@@ -21,7 +21,9 @@ function get_token(){
 // ログインデータを取得
 if($JSON_array != NULL){
     $email = $JSON_array["email"];
-    // まずは既に登録されているものではないかチェック
+    /**
+     *  まずは既に登録されているものではないかチェック
+     */
     //データベースサーバに接続
     if (!$conn = mysqli_connect(HOST, USR, PASS, DB)) {
         die('データベースに接続できません');
@@ -40,26 +42,21 @@ if($JSON_array != NULL){
     if($num == 0){
         $flg = true;
     }
-    //データベースの接続を閉じる
-    mysqli_stmt_close($stmt);
-    mysqli_close($conn);
     // 既に登録ユーザがいたらエラーメッセージを返す。
     if(!$flg){
+        //データベースの接続を閉じる
+        mysqli_stmt_close($stmt);
+        mysqli_close($conn);
         $arr["data"]["flg"] = $flg;
         $arr["message"] = "すでに登録されているメールアドレスは使えません。";
         print json_encode($arr, JSON_PRETTY_PRINT);
         return;
     }
-
-    // ここから仮登録
+    /** 
+     * ここから仮登録 
+     */
     $token = get_token();
-    $deleteday = date("Y-m-d H:i:s", strtotime('+1 day'));
-    //データベースサーバに接続
-    if (!$conn = mysqli_connect(HOST, USR, PASS, DB)) {
-        die('データベースに接続できません');
-    }
-    //クエリの文字コードを設定
-    mysqli_set_charset($conn, 'utf8');
+    $deleteday = date("Y-m-d H:i:s", strtotime('0 day') + 6 * 60 * 60);
     //SQL文の作成
     $sql =  "INSERT INTO H1_4_preRegister(email, token, deletedate) VALUES(?,?,?)";
     $stmt = mysqli_prepare($conn, $sql);
@@ -75,19 +72,25 @@ if($JSON_array != NULL){
     //データベースの接続を閉じる
     mysqli_stmt_close($stmt);
     mysqli_close($conn);
+    // うまくいかなかったらエラーメッセージを返す。
     if(!$flg){
         $arr["data"]["flg"] = $flg;
         $arr["message"] = "エラー。もう一度始めからやり直してください。";
         print json_encode($arr, JSON_PRETTY_PRINT);
         return;
     }
-
+    /**
+     * メール配信
+     */
     mb_language("ja");
     mb_internal_encoding("UTF-8");
     $to = $email; //登録メアド
     $subject = "仮登録完了及び本登録URL通知";
     // $message = "http://haveabook.php.xdomain.jp/Hobby_1/php/Hobby_1_3_Register.php?token=".$token;
-    $message = "http://localhost:8080/Hobby_1/php/Hobby_1_3_Register.php?token=".$token;
+    $message = "
+    こちらのURLから本登録へお進みください。\n
+    なお、こちらのURLの有効期限は約6時間です。有効期限が過ぎた場合はもう一度仮登録からやり直して下さい。\n
+    http://localhost:8080/Hobby_1/php/Hobby_1_3_Register.php?token=".$token;
     $headers = array(
         'From' => 'noreply@test.com',
         'MIME-Version' => '1.0',
@@ -101,7 +104,9 @@ if($JSON_array != NULL){
             break;
         }
     }
-
+    /**
+     * 完了
+     */
     $arr["data"]["flg"] = $flg;
     $arr["message"] = $flg ? "仮登録完了しました。" : "エラー。もう一度始めからやり直してください。";
     print json_encode($arr, JSON_PRETTY_PRINT);
