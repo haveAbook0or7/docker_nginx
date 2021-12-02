@@ -76,5 +76,6 @@ module.exports = {
 		border: 1.5px solid #e6b422;
 		border-radius: 2px;
         caret-color: #2e2930;
+		outline: none;
 	}
 </style>

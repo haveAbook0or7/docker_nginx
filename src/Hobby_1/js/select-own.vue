@@ -68,8 +68,9 @@ module.exports = {
 </script>
 
 <style scoped>
-select{
-	background: #2e2930;
-	border-bottom:  2px solid var(--dynamic-color);
-}
+	select{
+		outline: none;
+		background: #2e2930;
+		border-bottom:  2px solid var(--dynamic-color);
+	}
 </style>
