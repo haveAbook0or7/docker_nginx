@@ -1,13 +1,18 @@
 <template>
 	<div>
 		<h2>
-			<input class="update" type="button" value="追加" @click="clickDataSave()" v-if="showFlg">
+			<input class="update" type="button" value="追加" @click="clickDataSave" v-if="showFlg">
 			<span class="res">{{this.responseMsg}}</span>
 		</h2>
 		<br><br><br>
 		<div class="cards">
 			<div class="card" v-for="card in this.cardDatas" :key="card.cdno">
 				<input-noimg @change="getNoImgData"></input-noimg>
+				<input-basic 
+					:lv_1.sync="card.lvone" :lv_mid.sync="card.lvmiddle" :lv_max.sync="card.lvmax" 
+					:hp_1.sync="card.hpone" :hp_mid.sync="card.hpmiddle" :hp_max.sync="card.hpmax" 
+					:atk_1.sync="card.atkone" :atk_mid.sync="card.atkmiddle" :atk_max.sync="card.atkmax" 
+				></input-basic>
 			</div>
 		</div>
 	</div>
@@ -27,16 +32,16 @@ module.exports = {
 	},
     mounted(){
         var datas = [];
-        for(var i = 0; i < 4; i++){
+        for(var i = 4; i >= 1; i--){
             datas.push({
                 cdno: null,
                 chno: null,
                 img: null,
 				imgname: null,
 
-                lvone: null,
-                lvmiddle: null,
-                lvmax: null,
+                lvone: 1,
+                lvmiddle: 40 + 20 * (i / 2 | 0),
+                lvmax: (40 + 20 * (i / 2 | 0)) + 20,
                 hpone: null,
                 hpmiddle: null,
                 hpmax: null,
@@ -88,7 +93,7 @@ module.exports = {
 	},
 	methods: {
 		clickDataSave(){
-			
+			console.log(this.cardDatas);
 		},
 		getNoImgData(img, imgname, cdno, chno){
 			console.log(img);

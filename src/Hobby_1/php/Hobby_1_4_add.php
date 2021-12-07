@@ -17,6 +17,7 @@
         <meta charset="UTF-8"><meta name = "authr" content="有本 和奏">
         <link href="../css/H_common.css" rel="stylesheet">
         <script src="../lib/vue.js"></script> 
+        <!-- <script src="https://unpkg.com/vue@next"></script> -->
         <script src="https://unpkg.com/http-vue-loader"></script>
         <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     </head>
