@@ -13,6 +13,10 @@
 					:hp_1.sync="card.hpone" :hp_mid.sync="card.hpmiddle" :hp_max.sync="card.hpmax" 
 					:atk_1.sync="card.atkone" :atk_mid.sync="card.atkmiddle" :atk_max.sync="card.atkmax" 
 				></input-basic>
+				<input-masic 
+					:m_lv1.sync="card.m1_1" :m_lv5.sync="card.m1_5" :m_lv10.sync="card.m1_10" 
+					:mbuf_lv1.sync="card.m1buf_1" :mbuf_lv5.sync="card.m1buf_5" :mbuf_lv10.sync="card.m1buf_10"
+				></input-masic>
 			</div>
 		</div>
 	</div>
@@ -93,7 +97,7 @@ module.exports = {
 	},
 	methods: {
 		clickDataSave(){
-			console.log(this.cardDatas);
+			console.log(this.cardDatas[0]);
 		},
 		getNoImgData(img, imgname, cdno, chno){
 			console.log(img);

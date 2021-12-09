@@ -1,5 +1,5 @@
 <template>
-	<select v-model="this.value" :disabled="isDisabled" @change="$emit('change', $event.target.value)" :style="elementColor">
+	<select class="select-option" v-model="selectValue" :disabled="isDisabled" :style="elementColor">
 		<option v-for="option in options[this.op]" :key="option.value" v-bind:value="option.value">
 			{{ option.key }}
 		</option>
@@ -13,12 +13,24 @@ module.exports = {
 		event: 'change'
 	},
 	props: {
-		value: {default: null},
+		value: {default: null,},
 		op: {type: String, required: true},
 		under_color: {default: "#705b67"},
 		disabled: {default: false},
 	},
 	computed: {
+		selectValue: {
+			/** v-modelにthis.valueを入れるとエラーは起きないがStringに勝手になる
+			 *  valueだけだとpropsを直接変えるなと怒られる。
+			 *  computedを使ってうまく迂回するとnullや数値などが反映される。
+			 **/
+			get(){
+				return this.value;
+			},
+			set(value){
+				this.$emit('change', value);
+			}
+		},
 		elementColor: {
 			get () {
 				return {
@@ -51,15 +63,15 @@ module.exports = {
 				opAddCard: n['addC'],
 				opAddM_timas: n['addM_t'],
 				opAddM_power: [{key: "弱", value: "S"}, {key: "強", value: "L"}],
-				opAddM_effect1: [
-					{key: "なし", value: "nN"},
+				opAddM_effect: [
+					{key: "**", value: ""}, {key: "なし", value: "nNnn"}, 
 					{key: "ATK UP", value: "au"}, {key: "ﾀﾞﾒｰｼﾞ UP", value: "du"}, {key: "ATK DOWN", value: "ad"}, {key: "ﾀﾞﾒｰｼﾞ DOWN", value: "dd"},
 					{key: "HP回復", value: "re"},　{key: "HP継続回復", value: "cr"}, {key: "被ﾀﾞﾒｰｼﾞ DOWN", value: "td"}, 
 					{key: "火ﾀﾞﾒｰｼﾞ UP", value: "fu"}, {key: "木ﾀﾞﾒｰｼﾞ UP", value: "tu"}, {key: "水ﾀﾞﾒｰｼﾞ UP", value: "wu"}, {key: "無ﾀﾞﾒｰｼﾞ UP", value: "nu"},
-					{key: "回避", value: "ev"}, {key: "呪い", value: "cu"}, {key: "デュオ魔法", value: "DUO"}
+					{key: "回避", value: "ev"}, {key: "呪い", value: "cu"}, {key: "デュオ魔法", value: null}
 				],
-				opAddM_effect2: [{key: "**", value: ""},{key: "極小", value: "s"}, {key: "小", value: "S"}, {key: "中", value: "M"}, {key: "大", value: "L"}],
-				opAddM_effect3: [{key: "**", value: ""},{key: "1T", value: "1"}, {key: "2T", value: "2"}, {key: "3T", value: "3"}],
+				opAddM_size: [{key: "**", value: ""},{key: "極小", value: "s"}, {key: "小", value: "S"}, {key: "中", value: "M"}, {key: "大", value: "L"}],
+				opAddM_turn: [{key: "**", value: ""},{key: "1T", value: "1"}, {key: "2T", value: "2"}, {key: "3T", value: "3"}],
 				opAddB:[{key: "***", value: ""},{key: "ATK UP(中)", value: "Am"}, {key: "ATK UP(小)", value: "As"}, {key: "HP UP(中)", value: "Hm"}, {key: "HP UP(小)", value: "Hs"}]
 			},
 		}
