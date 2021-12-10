@@ -9,6 +9,7 @@
 			<div class="card" v-for="(card, index) in this.cardDatas" :key="index">
 				<input-noimg 
 					:card_no.sync="card.cdno" :char_no.sync="card.chno" 
+					:img_file.sync="card.imgfile" :img_name.sync="card.imgname" 
 				></input-noimg>
 				<input-basic 
 					:lv_1.sync="card.lvone" :lv_mid.sync="card.lvmiddle" :lv_max.sync="card.lvmax" 
@@ -42,7 +43,7 @@ module.exports = {
             datas.push({
                 cdno: null,
                 chno: -1,
-                img: null,
+                imgfile: null,
 				imgname: null,
 
                 lvone: 1,
