@@ -17,6 +17,8 @@ module.exports = {
 	props: {
 		card_no: {default: null},
 		char_no: {default: "-1"},
+		img_file: {default: null},
+		img_name: {default: null}
 	},
     computed: {
 		v_carc_no:{
@@ -24,29 +26,11 @@ module.exports = {
 			set(value){this.$emit('update:card_no', value)}
 		}
 	},
-	data: function () {
-		return {
-			img: null,
-            imgname: null,
-		}
-	},
 	methods: {
         getFile(filejpeg, filename){
-            this.img = filejpeg;
-            this.imgname = filename;
-            // console.log(this.img)
-            // console.log(this.imgname+" "+this.cdno+" "+this.chno);
-			this.sendData();
+			this.$emit('update:img_file', filejpeg);
+			this.$emit('update:img_name', filename);
         },
-		getChno(value){
-			this.chno = value;
-			// console.log(this.img)
-            // console.log(this.imgname+" "+this.cdno+" "+this.chno);
-			this.sendData();
-		},
-		sendData(){
-			this.$emit('change', this.img, this.imgname, this.cdno, this.chno);
-		}
 	},
 }
 // export default { Node.jsじゃないから、これだとダメだった。 }
