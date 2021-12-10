@@ -5,7 +5,9 @@
         </tr>
         <tr>
             <th>属性</th>
-            <td colspan="3"></td>
+            <td colspan="3">
+                <radio-element :id="id" v-model="m_att" @change="$emit('update:m_lv1', m_1);$emit('update:m_lv5', m_5);$emit('update:m_lv10', m_10);"></radio-element>
+            </td>
         </tr>
         <tr>
             <th>連撃</th>
@@ -66,10 +68,12 @@
 <script>
 module.exports = {
 	components: {
+        'radio-element': httpVueLoader('./radio-element.vue'),
         'select-option': httpVueLoader('../select-option.vue'),
         'img-select': httpVueLoader('./img-select.vue')
     },
 	props: {
+        id: {default: "masic", required: true},
         m_lv1: {default: 0},
         m_lv5: {default: 0},
         m_lv10: {default: 0},
@@ -80,17 +84,17 @@ module.exports = {
     computed: {
 		m_1: {
             get(){
-                return this.m_att+this.m_times_1+this.m_power_1;
+                return this.m_att+this.m_power_1+this.m_times_1;
 			}
         },
         m_5: {
             get(){
-                return this.m_att+this.m_times_5+this.m_power_5;
+                return this.m_att+this.m_power_5+this.m_times_5;
 			}
         },
         m_10: {
             get(){
-                return this.m_att+this.m_times_10+this.m_power_10;
+                return this.m_att+this.m_power_10+this.m_times_10;
 			}
         },
         m_buf_1: {
@@ -189,6 +193,9 @@ module.exports = {
     .right{
         text-align: right;
     }
+    /* .radio-element{
+        text-align: center;
+    } */
     .select-option{
         vertical-align: top;
     }

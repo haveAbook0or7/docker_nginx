@@ -17,8 +17,14 @@
 					:atk_1.sync="card.atkone" :atk_mid.sync="card.atkmiddle" :atk_max.sync="card.atkmax" 
 				></input-basic>
 				<input-masic 
+					:id="'c'+index+'m1'" 
 					:m_lv1.sync="card.m1_1" :m_lv5.sync="card.m1_5" :m_lv10.sync="card.m1_10" 
 					:mbuf_lv1.sync="card.m1buf_1" :mbuf_lv5.sync="card.m1buf_5" :mbuf_lv10.sync="card.m1buf_10"
+				></input-masic>
+				<input-masic 
+					:id="'c'+index+'m2'" 
+					:m_lv1.sync="card.m2_1" :m_lv5.sync="card.m2_5" :m_lv10.sync="card.m2_10" 
+					:mbuf_lv1.sync="card.m2buf_1" :mbuf_lv5.sync="card.m2buf_5" :mbuf_lv10.sync="card.m2buf_10"
 				></input-masic>
 			</div>
 		</div>
@@ -100,7 +106,7 @@ module.exports = {
 	},
 	methods: {
 		clickDataSave(){
-			console.log(this.cardDatas[0]);
+			console.log(this.cardDatas);
 		},
 		getNoImgData(img, imgname, cdno, chno){
 			console.log(img);
