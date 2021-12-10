@@ -26,14 +26,12 @@ if($JSON_array != NULL){
     mysqli_set_charset($conn, 'utf8');
     //SQL文の作成
     $sql = "SELECT ID, CONCAT(mybase, Dno) FROM H1_4_Users WHERE ID LIKE \"$id\" AND pass LIKE \"$ps\";";
-    
     //ステートメントン実行準備
     $stmt = mysqli_prepare($conn, $sql);
     //SQLステートメントの実行
     mysqli_stmt_execute($stmt); 
     mysqli_stmt_store_result($stmt);
     $num = mysqli_stmt_num_rows($stmt);
-    $flg = false;
     $data["flg"] = false;
     if($num > 0){
         //データの取得
@@ -44,7 +42,6 @@ if($JSON_array != NULL){
         $data["user"] = $id;
         $data["mybase"] = $mybase;    
     } 
-
     //データベースの接続を閉じる
     mysqli_stmt_close($stmt);
     mysqli_close($conn);
@@ -53,6 +50,7 @@ if($JSON_array != NULL){
         $_SESSION['myTB'] = $data["mybase"];
     }
     $arr["data"] = $data;
+    $arr["message"] = $data["flg"] ? "" : "IDかパスワードが間違っています。";
     print json_encode($arr, JSON_PRETTY_PRINT);
 }
 ?>

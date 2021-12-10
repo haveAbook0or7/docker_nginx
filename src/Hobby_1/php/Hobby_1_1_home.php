@@ -27,7 +27,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>ツイステカード編成ツール</title>
+        <title>twstカード編成ツール</title>
         <meta charset="UTF-8">
         <meta name = "authr" content="有本 和奏" charset="utf-8">
         <link href="../css/H_common.css" rel="stylesheet">
@@ -37,7 +37,7 @@
     </head>
     <body>
         <header>
-            <h1>ツイステカード編成ツール<a href="Hobby_1_3_preRegister.php"  target="_self">新規登録</a></h1>
+            <h1>twstカード編成ツール<a href="Hobby_1_3_preRegister.php"  target="_self">新規登録</a></h1>
         </header>
         <main id="app">
             <br><br>

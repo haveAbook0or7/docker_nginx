@@ -1,39 +1,28 @@
-<?php
-    require_once('Hobby_1_3_preRegisterM.php');
-    $M = new Hobby_1_3_preRegisterM();
-    
-    $M->DataPOST();
-?>
 <!DOCTYPE html>
 <html>
     <head>
-        <title>ツイステカード編成ツール</title>
-        <meta charset="UTF-8">
-        <meta name = "authr" content="有本 和奏">
-        <link href="../css/Hobby_1/Hobby_1_3_login.css" rel="stylesheet" type="text/css">
+        <title>twstカード編成ツール</title>
+        <meta charset="UTF-8"><meta name = "authr" content="有本 和奏">
+        <link href="../css/H_common.css" rel="stylesheet">
+        <script src="../lib/vue.js"></script> 
+        <script src="https://unpkg.com/http-vue-loader"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     </head>
     <body>
         <header>
-            <div>
-                <h1>ツイステカード編成ツール<a href="../index.html" id="homelink">ホームへ戻る</a></h1>
-            </div>
+            <h1>twstカード編成ツール<a href="./Hobby_1_1_home.php" id="homelink">ホームへ戻る</a></h1>
         </header>
-        <main>
-            <br><br><br><br>            
-            <form action="Hobby_1_3_preRegister.php" method="post">
-                <h3><?= $M->getMsg() ?></h3>
-                <div class="block">
-                    <div class="left">
-                        メールアドレス
-                    </div>
-                    <div class="right">
-                        <input type="text" id="email" name="email" >                        
-                    </div>
-                    <button type="submit" name="submit" value="新規登録">仮登録</button>
-                </div>                
-            </form>            
+        <main id="app">
+            <br><br><br><br>
+            <pre-register-form></pre-register-form>
         </main>
-        <footer>
-        </footer>
+        <script>
+            new Vue({
+                el: "#app",
+                components: {
+                    'pre-register-form': httpVueLoader('../js/1_3/pre-register-form.vue'),
+                }
+            });
+        </script>
     </body>
 </html>
