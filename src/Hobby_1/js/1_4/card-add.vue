@@ -6,8 +6,10 @@
 		</h2>
 		<br><br><br>
 		<div class="cards">
-			<div class="card" v-for="card in this.cardDatas" :key="card.cdno">
-				<input-noimg @change="getNoImgData"></input-noimg>
+			<div class="card" v-for="(card, index) in this.cardDatas" :key="index">
+				<input-noimg 
+					:card_no.sync="card.cdno" :char_no.sync="card.chno" 
+				></input-noimg>
 				<input-basic 
 					:lv_1.sync="card.lvone" :lv_mid.sync="card.lvmiddle" :lv_max.sync="card.lvmax" 
 					:hp_1.sync="card.hpone" :hp_mid.sync="card.hpmiddle" :hp_max.sync="card.hpmax" 
@@ -39,7 +41,7 @@ module.exports = {
         for(var i = 4; i >= 1; i--){
             datas.push({
                 cdno: null,
-                chno: null,
+                chno: -1,
                 img: null,
 				imgname: null,
 

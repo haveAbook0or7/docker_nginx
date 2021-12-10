@@ -13,14 +13,30 @@ module.exports = {
 	components: {
 		'choice-modal-img': httpVueLoader('./choice-modal-img.vue'),
 	},
+	beforeCreate() {
+		this.buddyImg = {
+			11: '11.jpg', 12: '12.jpg', 13: '13.jpg', 14: '14.jpg', 15: '15.jpg',
+			21: '21.jpg', 22: '22.jpg', 23: '23.jpg',
+			31: '31.jpg', 32: '32.jpg', 33: '33.jpg',
+			41: '41.jpg', 42: '42.jpg',
+			51: '51.jpg', 52: '52.jpg', 53: '53.jpg',
+			61: '61.jpg', 62: '62.jpg',
+			71: '71.jpg', 72: '72.jpg', 73: '73.jpg', 74: '74.jpg',
+			82: '82.jpg',
+			"-1": 'none.jpg', 
+		};
+	},
 	props: {
-		init_img: {default:"../img/none.jpg"},
 		value: {default: "-1"},
 		disabled: {default: false}
 	},
 	computed: {
 		isDisabled: {
 			get () {
+				console.log(this.disabled)
+				if(this.disabled){
+					this.getIcon("-1", 'none.jpg');
+				}
 				return this.disabled;
 			},
 			set (value) {
@@ -30,9 +46,10 @@ module.exports = {
 	},
 	data: function () {
 		return {
-			preview: this.init_img,
+			preview: "../img/Another/"+this.buddyImg[this.value],
 			buddy: "",
-			showFlg: false
+			showFlg: false,
+			buddyImg: {}
 		}
 	},
 	methods: {
@@ -43,6 +60,7 @@ module.exports = {
 		getIcon(key, value) {
 			this.preview = '../img/Another/'+value;
 			this.buddy = key;
+			this.$emit('select', this.buddy);
 			this.$emit('update:value', this.buddy);
 		},
 		childShow(flg){

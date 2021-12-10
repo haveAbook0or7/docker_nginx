@@ -2,8 +2,8 @@
 	<div>
         <file-select class="imgfile" @change="getFile"></file-select>
         <span class="no">
-            <label class="text">カードNo<input type="text" maxlength="4" v-model="cdno" @change="sendData"></label>
-            <img-select @select="getChno"></img-select>
+            <label class="text">カードNo<input type="text" maxlength="4" v-model.number="v_carc_no"></label>
+            <img-select :value.sync="this.char_no" @update:value="$emit('update:char_no', this.char_no)"></img-select>
         </span>
     </div>
 </template>
@@ -15,16 +15,19 @@ module.exports = {
         'img-select': httpVueLoader('./img-select.vue')
     },
 	props: {
+		card_no: {default: null},
+		char_no: {default: "-1"},
 	},
     computed: {
-		
+		v_carc_no:{
+			get(){return this.$props.card_no},
+			set(value){this.$emit('update:card_no', value)}
+		}
 	},
 	data: function () {
 		return {
 			img: null,
             imgname: null,
-            cdno: null,
-            chno: null,
 		}
 	},
 	methods: {
@@ -77,5 +80,8 @@ module.exports = {
 		border-radius: 2px;
         caret-color: #2e2930;
 		outline: none;
+	}
+	.img-select{
+		margin: 10px;
 	}
 </style>

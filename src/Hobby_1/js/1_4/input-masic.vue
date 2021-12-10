@@ -95,17 +95,17 @@ module.exports = {
         },
         m_buf_1: {
             get(){
-                return this.m_ef_1_1.join("") + this.m_ef_2_1.join("") + this.duo1_1;
+                return this.m_ef_1_1.join("") + this.m_ef_2_1.join("") + (this.duo1_1 == "-1" ? "":this.duo1_1);
 			}
         },
         m_buf_5: {
             get(){
-                return this.m_ef_1_5.join("") + this.m_ef_2_5.join("") + this.duo1_5;
+                return this.m_ef_1_5.join("") + this.m_ef_2_5.join("") + (this.duo1_5 == "-1" ? "":this.duo1_5);
 			}
         },
         m_buf_10: {
             get(){
-                return this.m_ef_1_10.join("") + this.m_ef_2_10.join("") + this.duo1_10;
+                return this.m_ef_1_10.join("") + this.m_ef_2_10.join("") + (this.duo1_10 == "-1" ? "":this.duo1_10);
 			}
         },
         disabled: {
@@ -140,9 +140,9 @@ module.exports = {
             m_ef_1_1: ["","",""], m_ef_2_1: ["","",""],
             m_ef_1_5: ["","",""], m_ef_2_5: ["","",""],
             m_ef_1_10: ["","",""], m_ef_2_10: ["","",""],
-            duo1_1: "",
-            duo1_5: "",
-            duo1_10: "",
+            duo1_1: "-1",
+            duo1_5: "-1",
+            duo1_10: "-1",
         }
     },
     methods: {
