@@ -26,6 +26,10 @@
 					:m_lv1.sync="card.m2_1" :m_lv5.sync="card.m2_5" :m_lv10.sync="card.m2_10" 
 					:mbuf_lv1.sync="card.m2buf_1" :mbuf_lv5.sync="card.m2buf_5" :mbuf_lv10.sync="card.m2buf_10"
 				></input-masic>
+				<input-buddy 
+					:b1_char.sync="card.b1" :b2_char.sync="card.b2" :b3_char.sync="card.b3" 
+					:b1_type.sync="card.b1type" :b2_type.sync="card.b2type" :b3_type.sync="card.b3type" 
+				></input-buddy>
 			</div>
 		</div>
 	</div>
@@ -75,11 +79,11 @@ module.exports = {
                 m2buf_5: null,
                 m2buf_10: null,
 
-                b1: null,
+                b1: -1,
                 b1type: null,
-                b2: null,
+                b2: -1,
                 b2type: null,
-                b3: null,
+                b3: -1,
                 b3type: null,
             });
         }
