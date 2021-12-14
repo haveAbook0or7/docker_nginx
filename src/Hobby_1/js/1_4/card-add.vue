@@ -106,7 +106,7 @@ module.exports = {
 	},
 	methods: {
 		clickDataSave(){
-			console.log(this.cardDatas);
+			console.log(this.cardDatas[0]);
 		},
 		getNoImgData(img, imgname, cdno, chno){
 			console.log(img);
