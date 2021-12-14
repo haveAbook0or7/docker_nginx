@@ -4,9 +4,9 @@
             <th colspan="3">バディ</th>
         </tr>
         <tr>
-            <td><img-select :value.sync="this.b1_char" @update:value="$emit('update:b1_char', this.b1_char)"></img-select></td>
-            <td><img-select :value.sync="this.b2_char" @update:value="$emit('update:b2_char', this.b2_char)"></img-select></td>
-            <td><img-select :value.sync="this.b3_char" @update:value="$emit('update:b3_char', this.b3_char)"></img-select></td>
+            <td><img-select v-model="v_b1_char"></img-select></td>
+            <td><img-select v-model="v_b2_char"></img-select></td>
+            <td><img-select v-model="v_b3_char"></img-select></td>
         </tr>
         <tr>
             <td><select-option op="opAddB" v-model="b1[0]" @change="$emit('update:b1_type', b1.join(''))"></select-option></td>
@@ -34,6 +34,26 @@ module.exports = {
         b1_type: {default: null},
         b2_type: {default: null},
         b3_type: {default: null},
+	},
+    computed: {
+		v_b1_char:{
+			get(){return this.$props.b1_char},
+			set(value){
+				this.$emit('update:b1_char', value)
+			}
+		},
+		v_b2_char:{
+			get(){return this.$props.b2_char},
+			set(value){
+				this.$emit('update:b2_char', value)
+			}
+		},
+        v_b3_char:{
+			get(){return this.$props.b3_char},
+			set(value){
+				this.$emit('update:b3_char', value)
+			}
+		}
 	},
     data:()=>{
         return{

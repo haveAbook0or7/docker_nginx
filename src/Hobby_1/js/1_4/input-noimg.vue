@@ -33,7 +33,6 @@ module.exports = {
 		v_char_no:{
 			get(){return this.$props.char_no},
 			set(value){
-				console.log(value);
 				this.$emit('update:char_no', value)
 			}
 		},

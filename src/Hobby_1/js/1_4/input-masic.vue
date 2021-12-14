@@ -27,21 +27,21 @@
                 <select-option v-for="(m_ef, index) in m_ef_1_1" :key="index" 
                     :op="oplabel[index]" v-model="m_ef_1_1[index]" @change="$emit('update:mbuf_lv1', m_buf_1)" 
                     :disabled="disabled.m_ef_1_1[index]"></select-option>
-                <img-select :value.sync="duo1_1" @update:value="$emit('update:mbuf_lv1', m_buf_1)"
+                <img-select v-model="duo1_1" @change="$emit('update:mbuf_lv1', m_buf_1)"
                     :disabled="disabled.m_ef_1_1[3]"></img-select>
             </td>
             <td>
                 <select-option v-for="(m_ef, index) in m_ef_1_5" :key="index" 
                     :op="oplabel[index]" v-model="m_ef_1_5[index]" @change="$emit('update:mbuf_lv5', m_buf_5)" 
                     :disabled="disabled.m_ef_1_5[index]"></select-option>
-                <img-select :value.sync="duo1_5" @update:value="$emit('update:mbuf_lv5', m_buf_5)"
+                <img-select v-model="duo1_5" @change="$emit('update:mbuf_lv5', m_buf_5)"
                     :disabled="disabled.m_ef_1_5[3]"></img-select>
             </td>
             <td>
                 <select-option v-for="(m_ef, index) in m_ef_1_10" :key="index" 
                     :op="oplabel[index]" v-model="m_ef_1_10[index]" @change="$emit('update:mbuf_lv10', m_buf_10)" 
                     :disabled="disabled.m_ef_1_10[index]"></select-option>
-                <img-select :value.sync="duo1_10" @update:value="$emit('update:mbuf_lv10', m_buf_10)"
+                <img-select v-model="duo1_10" @change="$emit('update:mbuf_lv10', m_buf_10)"
                     :disabled="disabled.m_ef_1_10[3]"></img-select>
             </td>
         </tr>
