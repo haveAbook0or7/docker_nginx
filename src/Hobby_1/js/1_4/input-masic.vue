@@ -1,7 +1,7 @@
 <template>
 	<table border="0">
         <tr>
-            <th></th><th>Lv1</th><th>Lv5</th><th>Lv10</th>
+            <th>M{{id.slice(-1)}}</th><th>Lv1</th><th>Lv5</th><th>Lv10</th>
         </tr>
         <tr>
             <th>属性</th>
@@ -21,7 +21,7 @@
             <td class="right"><select-option op="opAddM_power" v-model="m_power_5" @change="$emit('update:m_lv5', m_5)"></select-option></td>
             <td class="right"><select-option op="opAddM_power" v-model="m_power_10" @change="$emit('update:m_lv10', m_10)"></select-option></td>
         </tr>
-        <tr>
+        <tr style="border-top: 2px solid rgba(255, 255, 255, 0.1);">
             <th rowspan="2">追加効果</th>
             <td>
                 <select-option v-for="(m_ef, index) in m_ef_1_1" :key="index" 
@@ -178,24 +178,23 @@ module.exports = {
 		color: white;
 	}
     table{
-        width: 100%;
-        border-spacing: 0px;
+        border-collapse: collapse;
     }
     th{
         min-width: 55px;
         height: 25px;
+        background: rgba(255, 255, 255, 0.1);
     }
     td{
         min-width: 55px;
         text-align: left;
         vertical-align: top;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-right-width: 2px;
     }
-    .right{
+    td.right{
         text-align: right;
     }
-    /* .radio-element{
-        text-align: center;
-    } */
     .select-option{
         vertical-align: top;
     }

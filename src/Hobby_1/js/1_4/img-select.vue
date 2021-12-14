@@ -33,7 +33,6 @@ module.exports = {
 	computed: {
 		isDisabled: {
 			get () {
-				console.log(this.disabled)
 				if(this.disabled){
 					this.getIcon("-1", 'none.jpg');
 				}
@@ -60,7 +59,6 @@ module.exports = {
 		getIcon(key, value) {
 			this.preview = '../img/Another/'+value;
 			this.buddy = key;
-			this.$emit('select', this.buddy);
 			this.$emit('update:value', this.buddy);
 		},
 		childShow(flg){

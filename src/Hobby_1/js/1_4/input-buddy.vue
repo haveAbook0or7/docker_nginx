@@ -51,6 +51,13 @@ module.exports = {
 		background: #2e2930;
 		color: white;
 	}
+    table{
+        border-collapse: collapse;
+    }
+    th{
+        height: 25px;
+        background: rgba(255, 255, 255, 0.1);
+    }
     .img-select{
         margin: 0 auto;
     }

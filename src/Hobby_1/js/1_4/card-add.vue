@@ -5,7 +5,7 @@
 			<span class="res">{{this.responseMsg}}</span>
 		</h2>
 		<br><br><br>
-		<div class="cards">
+		<div class="cards" v-if="showFlg">
 			<div class="card" v-for="(card, index) in this.cardDatas" :key="index">
 				<input-noimg 
 					:card_no.sync="card.cdno" :char_no.sync="card.chno" 
@@ -44,8 +44,7 @@ module.exports = {
 		'input-noimg': httpVueLoader('./input-noimg.vue'),
     },
 	props: {
-		mydbname: {default:"H1_2_DefaultDataMax"},
-		init_msg: {default:"initMsg"},
+		log_user: {default: "ゲスト"},
 	},
     mounted(){
         var datas = [];
@@ -92,7 +91,7 @@ module.exports = {
 	computed: {
 		showFlg: {
 			get(){
-				return this.mydbname == "H1_2_DefaultDataMax" ? false : true;
+				return this.log_user == "wakana" ? true : false;
 			}
 		},
 	},
@@ -101,11 +100,8 @@ module.exports = {
 			Dormitory: ["","Heartslabyul","Savanaclaw","Octavinelle","Scarabia","Pomefiore","Ignihyde","Diasomnia","Ramshackle"],
 			flexibleDatas: [],
 			cardDatas: [],
-			message: "",
 
-			changeFlg: [],
-
-			responseMsg: this.init_msg,
+			responseMsg: this.log_user == "wakana" ? "ユーザーID:"+this.log_user : "操作権限がありません。",
 		}
 	},
 	methods: {
