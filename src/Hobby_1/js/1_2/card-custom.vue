@@ -4,7 +4,7 @@
 		<h2>
 			<input class="update" type="button" value="更新" @click="clickDataSave()" v-if="showFlg">
 			<span class="res">{{this.responseMsg}}</span>
-			<input class="sort" type="button" value="ソート" @click="clickOpenSortModal()">
+			<input class="sort" type="button" value="ソート" @click="$refs.modalSort.openModal()">
 			<img class="updown" :src="'../img/'+this.updownImg" width="20" height="20" @click="clickUpDown()">
 		</h2>
 		<br><br><br>
@@ -183,9 +183,6 @@ module.exports = {
 				console.log(error);
 			});
 		},
-		clickOpenSortModal(){
-			this.$refs.modalSort.openModal();
-		},
 		changeSort(value){
 			this.radioValue = value;
 		},
@@ -275,7 +272,7 @@ module.exports = {
 		font: normal 30px "游ゴシック",serif;
 		background-color: #e6b422;
 		color: #fbfaf5;
-		z-index: 5;
+		z-index: 2;
 	}
 	.cards{
 		background: #fbfaf5;

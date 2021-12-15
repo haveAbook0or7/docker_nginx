@@ -1,8 +1,8 @@
 <template>
-	<div id="overlay" :class="this.modalClass" @click="closeModal()">
-        <div id="modal" :class="this.modalClass" @click="stop()">
+	<div id="overlay" v-show="this.showFlg" @click="closeModal()">
+        <div id="modal" v-show="this.showFlg" @click="$event.stopPropagation()">
 			<sort-modal ref="modalSort" @sort="changeSort" @search="changeSearch"></sort-modal>
-			<input class="sort" type="button" value="ソート" @click="clickOpenSortModal()">
+			<input class="sort" type="button" value="ソート" @click="$refs.modalSort.openModal()">
             <img class="updown" :src="'../img/'+this.updownImg" width="20" height="20" @click="clickUpDown()">
 			<br>
             <img v-for="card in this.datas" 
@@ -83,6 +83,7 @@ module.exports = {
 	data: function () {
 		return {
 			modalClass: "hidden",
+			showFlg: false,
 			target: "",
 			Dormitory: ["","Heartslabyul","Savanaclaw","Octavinelle","Scarabia","Pomefiore","Ignihyde","Diasomnia","Ramshackle"],
 			data: [],
@@ -112,13 +113,10 @@ module.exports = {
 	methods: {
 		openModal(value){
 			this.target = value;
-			this.modalClass = "";
+			this.showFlg = true;
 		},
 		closeModal(){
-			this.modalClass = "hidden";
-		},
-		stop(){
-			event.stopPropagation();
+			this.showFlg = false;
 		},
 		choiceCard(value){
 			//データの中身を複製して渡すため、一度JSONにして戻すことで別のオブジェクトにしている
@@ -126,9 +124,6 @@ module.exports = {
 			/** クリックしたアイコンを親コンポーネントに送る */
 			this.$emit('choice-card', copyData, this.target);
 			this.closeModal();
-		},
-		clickOpenSortModal(){
-			this.$refs.modalSort.openModal();
 		},
 		changeSort(value){
 			this.radioValue = value;

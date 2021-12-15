@@ -4,21 +4,21 @@
 		<table border="0" v-show="tokenflg && !signupflg">
         <tr>
 			<td>ID(英数字)</td>
-            <td><input type="text" v-model="id" @input="inputId"></td>
+            <td><input type="text" v-model="id" @input="inputId" @keydown.enter="register"></td>
         </tr>
         <tr>
 			<td>パスワード(英数字6～8桁)</td>
-            <td><input type="text" v-model="pass" @input="inputPass"></td>
+            <td><input type="text" v-model="pass" @input="inputPass" @keydown.enter="register"></td>
         </tr>
         <tr>
 			<td>メールアドレス</td>
-            <td><input type="text" v-model="emailaddress" @input="inputAddr"></td>
+            <td><input type="text" v-model="emailaddress" @input="inputAddr" @keydown.enter="register"></td>
         </tr>
         </table>
 		<span class="err" id="idErr">{{this.idErr}}</span>
 		<span class="err" id="psErr">{{this.psErr}}</span>
 		<span class="err" id="emErr">{{this.emErr}}</span>
-		<input type="button" id="submit" value="登録" v-show="tokenflg && !signupflg" :disabled="!errFlg" @click="register">
+		<input type="button" value="登録" v-show="tokenflg && !signupflg" :disabled="!errFlg" @click="register" @keydown.enter="register">
 		<!-- エラー -->
         <table border="0" v-show="!tokenflg">
         <tr>

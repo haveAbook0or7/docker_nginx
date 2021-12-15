@@ -4,16 +4,16 @@
 		<table border="0">
         <tr>
 			<td>ID(英数字)</td>
-            <td><input type="text" v-model="id" @input="inputId"></td>
+            <td><input type="text" v-model="id" @input="inputId" @keydown.enter="loginCheck" autofocus></td>
         </tr>
         <tr>
             <td>パスワード(英数字6～8桁)</td>
-            <td><input type="password" v-model="pass" @input="inputPass"></td>
+            <td><input type="password" v-model="pass" @input="inputPass" @keydown.enter="loginCheck"></td>
         </tr>
         </table>
 		<span class="err" id="idErr">{{this.idErr}}</span>
 		<span class="err" id="psErr">{{this.psErr}}</span>
-        <input type="button" id="submit" value="ログイン" :disabled="!errFlg" @click="loginCheck">
+        <input type="button" id="submit" value="ログイン" @click="loginCheck" @keydown.enter="loginCheck">
 	</div>
 </template>
 
