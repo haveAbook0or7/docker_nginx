@@ -1,6 +1,6 @@
 <template>
-	<div id="overlaySort" :class="this.modalClass" @click="closeModal()">
-		<div id="modalSort" :class="this.modalClass" @click="stop()">
+	<div id="overlaySort" v-show="this.showFlg" @click="closeModal()">
+		<div id="modalSort" v-show="this.showFlg" @click="$event.stopPropagation()">
             <input id="default" type="radio" v-model="radioValue" value="default" @change="changeSort"><label for="default">デフォルト</label>
             <input id="Lv"      type="radio" v-model="radioValue" value="Lv"      @change="changeSort"><label for="Lv">Lv</label>
             <input id="HP"      type="radio" v-model="radioValue" value="HP"      @change="changeSort"><label for="HP">HP</label>
@@ -35,7 +35,7 @@ module.exports = {
 	},
 	data: function () {
 		return {
-			modalClass: "hidden",
+			showFlg: false,
 			Dormitory: ["","Heartslabyul","Savanaclaw","Octavinelle","Scarabia","Pomefiore","Ignihyde","Diasomnia","Ramshackle"],
 			radioValue: "default",
 			search: {
@@ -59,13 +59,10 @@ module.exports = {
 	},
 	methods: {
 		openModal(){
-			this.modalClass = "";
+			this.showFlg = true;
 		},
 		closeModal(){
-			this.modalClass = "hidden";
-		},
-		stop(){
-			event.stopPropagation();
+			this.showFlg = false;
 		},
 		changeSort(){
 			this.$emit('sort', this.radioValue);
@@ -90,9 +87,6 @@ module.exports = {
 		padding: 0;
 		border: 0;
 		color: black;
-	}
-	.hidden{
-		display: none !important;
 	}
 	#overlaySort{
 		/*　要素を重ねた時の順番　*/
@@ -183,7 +177,7 @@ module.exports = {
 		justify-content: center; /* 文字の位置を中央にする */
 		align-items: center;
 		margin-bottom: 5px;
-		font-size: 13px;
+		font-size: 12px;
 		border: 1px solid #e6b422;
 	}
 	input[type=checkbox]:checked + label{
@@ -200,18 +194,24 @@ module.exports = {
 		position: absolute;
 		right: 0;
 		bottom: 0;
+		z-index: -1;
 		border-style: solid;
-		border-width: 0 0 19px 20px;
-		border-color: transparent transparent #e6b422 transparent;
+		border-width: 5px 14px 15px 10px;
+		border-color: transparent #e6b422 #e6b422 transparent;
 	}
-	input[type=checkbox]:checked + label > span{
+	input[type=checkbox] + label > span{
 		position: absolute;
 		right: 1px;
 		bottom: 2px;
-		width: 5px;
+		width: 10px;
 		height: 10px;
 		background: transparent;
 		border-style: solid;
+		border-width: 1px;
+		border-color: #333631;
+	}
+	input[type=checkbox]:checked + label > span{
+		width: 5px;
 		border-width: 0 2px 2px 0;
 		border-color: transparent #333631 #333631 transparent;
 		-webkit-transform: rotate(45deg);

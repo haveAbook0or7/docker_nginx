@@ -1,7 +1,7 @@
 <template>
 	<table border="0">
         <tr>
-            <th></th><th>Lv1</th><th>Lv5</th><th>Lv10</th>
+            <th>M{{id.slice(-1)}}</th><th>Lv1</th><th>Lv5</th><th>Lv10</th>
         </tr>
         <tr>
             <th>属性</th>
@@ -21,27 +21,27 @@
             <td class="right"><select-option op="opAddM_power" v-model="m_power_5" @change="$emit('update:m_lv5', m_5)"></select-option></td>
             <td class="right"><select-option op="opAddM_power" v-model="m_power_10" @change="$emit('update:m_lv10', m_10)"></select-option></td>
         </tr>
-        <tr>
+        <tr style="border-top: 2px solid rgba(255, 255, 255, 0.1);">
             <th rowspan="2">追加効果</th>
             <td>
                 <select-option v-for="(m_ef, index) in m_ef_1_1" :key="index" 
                     :op="oplabel[index]" v-model="m_ef_1_1[index]" @change="$emit('update:mbuf_lv1', m_buf_1)" 
                     :disabled="disabled.m_ef_1_1[index]"></select-option>
-                <img-select :value.sync="duo1_1" @update:value="$emit('update:mbuf_lv1', m_buf_1)"
+                <img-select v-model="duo1_1" @change="$emit('update:mbuf_lv1', m_buf_1)"
                     :disabled="disabled.m_ef_1_1[3]"></img-select>
             </td>
             <td>
                 <select-option v-for="(m_ef, index) in m_ef_1_5" :key="index" 
                     :op="oplabel[index]" v-model="m_ef_1_5[index]" @change="$emit('update:mbuf_lv5', m_buf_5)" 
                     :disabled="disabled.m_ef_1_5[index]"></select-option>
-                <img-select :value.sync="duo1_5" @update:value="$emit('update:mbuf_lv5', m_buf_5)"
+                <img-select v-model="duo1_5" @change="$emit('update:mbuf_lv5', m_buf_5)"
                     :disabled="disabled.m_ef_1_5[3]"></img-select>
             </td>
             <td>
                 <select-option v-for="(m_ef, index) in m_ef_1_10" :key="index" 
                     :op="oplabel[index]" v-model="m_ef_1_10[index]" @change="$emit('update:mbuf_lv10', m_buf_10)" 
                     :disabled="disabled.m_ef_1_10[index]"></select-option>
-                <img-select :value.sync="duo1_10" @update:value="$emit('update:mbuf_lv10', m_buf_10)"
+                <img-select v-model="duo1_10" @change="$emit('update:mbuf_lv10', m_buf_10)"
                     :disabled="disabled.m_ef_1_10[3]"></img-select>
             </td>
         </tr>
@@ -178,24 +178,23 @@ module.exports = {
 		color: white;
 	}
     table{
-        width: 100%;
-        border-spacing: 0px;
+        border-collapse: collapse;
     }
     th{
         min-width: 55px;
         height: 25px;
+        background: rgba(255, 255, 255, 0.1);
     }
     td{
         min-width: 55px;
         text-align: left;
         vertical-align: top;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-right-width: 2px;
     }
-    .right{
+    td.right{
         text-align: right;
     }
-    /* .radio-element{
-        text-align: center;
-    } */
     .select-option{
         vertical-align: top;
     }

@@ -550,17 +550,22 @@ module.exports = {
 		right: 0;
 		bottom: 0;
 		border-style: solid;
-		border-width: 0 0 19px 20px;
-		border-color: transparent transparent var(--dynamic-color) transparent;
+		border-width: 5px 14px 15px 10px;
+		border-color: transparent var(--dynamic-color) var(--dynamic-color) transparent;
 	}
-	input[type=checkbox]:checked + label > span{
+	input[type=checkbox] + label > span{
 		position: absolute;
 		right: 1px;
 		bottom: 2px;
-		width: 5px;
+		width: 10px;
 		height: 10px;
 		background: transparent;
 		border-style: solid;
+		border-width: 1px;
+		border-color: #e6b422;
+	}
+	input[type=checkbox]:checked + label > span{
+		width: 5px;
 		border-width: 0 2px 2px 0;
 		border-color: transparent #e6b422 #e6b422 transparent;
 		-webkit-transform: rotate(45deg);

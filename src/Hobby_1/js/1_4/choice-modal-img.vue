@@ -1,32 +1,35 @@
 <template>
 	<div>
-		<img v-for="buddy in buddyImg" 
-			:src="'../img/Another/'+buddy.value" 
-			:key="buddy.key" 
-			@click="sendIcon(buddy.key, buddy.value)" 
+		<img v-for="(char, index) in charArray" 
+			:src="'../img/Another/'+imgChar[char]" 
+			:key="index" 
+			@click="$emit('change', char)" 
 			alt="" width="30" height="30">
 	</div>
 </template>
 
 <script>
 module.exports = {
-	props: {
+	model: {
+		prop: 'value',
+		event: 'change'
 	},
-	data: function () {
-		let b = [{key: -1, value: 'none.jpg'}];
+	props: {
+		value: {default: "-1"}
+	},
+	data: ()=>{
 		return {
-			buddyImg: [
-				{key: 11, value: '11.jpg'},{key: 12, value: '12.jpg'},{key: 13, value: '13.jpg'},{key: 14, value: '14.jpg'},{key: 15, value: '15.jpg'},
-				{key: 21, value: '21.jpg'},{key: 22, value: '22.jpg'},{key: 23, value: '23.jpg'},
-				{key: 31, value: '31.jpg'},{key: 32, value: '32.jpg'},{key: 33, value: '33.jpg'},
-				{key: 41, value: '41.jpg'},{key: 42, value: '42.jpg'},
-				{key: 51, value: '51.jpg'},{key: 52, value: '52.jpg'},{key: 53, value: '53.jpg'},
-				{key: 61, value: '61.jpg'},{key: 62, value: '62.jpg'},
-				{key: 71, value: '71.jpg'},{key: 72, value: '72.jpg'},{key: 73, value: '73.jpg'},{key: 74, value: '74.jpg'},
-				{key: 82, value: '82.jpg'},
-				{key: -1, value: 'none.jpg'}
+			charArray: [
+				11, 12, 13, 14, 15,
+				21, 22, 23,
+				31, 32, 33,
+				41, 42,
+				51, 52, 53,
+				61, 62,
+				71, 72, 73, 74,
+				82, -1
 			],
-			imgBuddy: {
+			imgChar: {
 				11: '11.jpg', 12: '12.jpg', 13: '13.jpg', 14: '14.jpg', 15: '15.jpg',
 				21: '21.jpg', 22: '22.jpg', 23: '23.jpg',
 				31: '31.jpg', 32: '32.jpg', 33: '33.jpg',
@@ -34,16 +37,9 @@ module.exports = {
 				51: '51.jpg', 52: '52.jpg', 53: '53.jpg',
 				61: '61.jpg', 62: '62.jpg',
 				71: '71.jpg', 72: '72.jpg', 73: '73.jpg', 74: '74.jpg',
-				82: '82.jpg', 99: 'none.jpg'
-			},
-			showFlg: true,
+				82: '82.jpg', "-1": 'none.jpg'
+			}
 		}
-	},
-	methods:{
-		sendIcon(key, value){
-			/** クリックしたアイコンを親コンポーネントに送る */
-			this.$emit('catch-icon', key, value);
-		},
 	}
 }
 // export default { Node.jsじゃないから、これだとダメだった。 }

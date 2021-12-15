@@ -5,7 +5,7 @@
 			<span class="res">{{this.responseMsg}}</span>
 		</h2>
 		<br><br><br>
-		<div class="cards">
+		<div class="cards" v-if="showFlg">
 			<div class="card" v-for="(card, index) in this.cardDatas" :key="index">
 				<input-noimg 
 					:card_no.sync="card.cdno" :char_no.sync="card.chno" 
@@ -26,6 +26,10 @@
 					:m_lv1.sync="card.m2_1" :m_lv5.sync="card.m2_5" :m_lv10.sync="card.m2_10" 
 					:mbuf_lv1.sync="card.m2buf_1" :mbuf_lv5.sync="card.m2buf_5" :mbuf_lv10.sync="card.m2buf_10"
 				></input-masic>
+				<input-buddy 
+					:b1_char.sync="card.b1" :b2_char.sync="card.b2" :b3_char.sync="card.b3" 
+					:b1_type.sync="card.b1type" :b2_type.sync="card.b2type" :b3_type.sync="card.b3type" 
+				></input-buddy>
 			</div>
 		</div>
 	</div>
@@ -40,8 +44,7 @@ module.exports = {
 		'input-noimg': httpVueLoader('./input-noimg.vue'),
     },
 	props: {
-		mydbname: {default:"H1_2_DefaultDataMax"},
-		init_msg: {default:"initMsg"},
+		log_user: {default: "ゲスト"},
 	},
     mounted(){
         var datas = [];
@@ -75,11 +78,11 @@ module.exports = {
                 m2buf_5: null,
                 m2buf_10: null,
 
-                b1: null,
+                b1: -1,
                 b1type: null,
-                b2: null,
+                b2: -1,
                 b2type: null,
-                b3: null,
+                b3: -1,
                 b3type: null,
             });
         }
@@ -88,7 +91,7 @@ module.exports = {
 	computed: {
 		showFlg: {
 			get(){
-				return this.mydbname == "H1_2_DefaultDataMax" ? false : true;
+				return this.log_user == "wakana" ? true : false;
 			}
 		},
 	},
@@ -97,16 +100,13 @@ module.exports = {
 			Dormitory: ["","Heartslabyul","Savanaclaw","Octavinelle","Scarabia","Pomefiore","Ignihyde","Diasomnia","Ramshackle"],
 			flexibleDatas: [],
 			cardDatas: [],
-			message: "",
 
-			changeFlg: [],
-
-			responseMsg: this.init_msg,
+			responseMsg: this.log_user == "wakana" ? "ユーザーID:"+this.log_user : "操作権限がありません。",
 		}
 	},
 	methods: {
 		clickDataSave(){
-			console.log(this.cardDatas);
+			console.log(this.cardDatas[0]);
 		},
 		getNoImgData(img, imgname, cdno, chno){
 			console.log(img);

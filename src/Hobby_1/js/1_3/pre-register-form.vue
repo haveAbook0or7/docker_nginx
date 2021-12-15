@@ -4,11 +4,11 @@
 		<table border="0" v-show="showflg && !tempFlg">
         <tr>
 			<td>メールアドレス</td>
-            <td><input type="text" v-model="emailaddress" @input="inputAddr"></td>
+            <td><input type="text" v-model="emailaddress" @input="inputAddr" @keydown.enter="tempRegister"></td>
         </tr>
         </table>
 		<span id="err">{{this.errMsg}}</span>
-        <input type="button" id="submit" value="仮登録" v-show="showflg && !tempFlg" :disabled="!errFlg" @click="tempRegister">
+        <input type="button" value="仮登録" v-show="showflg && !tempFlg" :disabled="!errFlg" @click="tempRegister" @keydown.enter="tempRegister">
 		<!-- エラー -->
         <table border="0" v-show="!showflg">
         <tr>

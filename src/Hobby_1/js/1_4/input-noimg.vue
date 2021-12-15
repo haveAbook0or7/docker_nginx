@@ -2,8 +2,8 @@
 	<div>
         <file-select class="imgfile" @change="getFile"></file-select>
         <span class="no">
-            <label class="text">カードNo<input type="text" maxlength="4" v-model.number="v_carc_no"></label>
-            <img-select :value.sync="this.char_no" @update:value="$emit('update:char_no', this.char_no)"></img-select>
+            <label class="text">カードNo<input type="text" maxlength="4" v-model.number="v_card_no"></label>
+            <img-select v-model="v_char_no"></img-select>
         </span>
     </div>
 </template>
@@ -21,10 +21,21 @@ module.exports = {
 		img_name: {default: null}
 	},
     computed: {
-		v_carc_no:{
+		v_card_no:{
 			get(){return this.$props.card_no},
-			set(value){this.$emit('update:card_no', value)}
-		}
+			set(value){
+				const regex = /^[0-9]{1,3}$/
+				if(regex.test(value)){
+					this.$emit('update:card_no', value)
+				}
+			}
+		},
+		v_char_no:{
+			get(){return this.$props.char_no},
+			set(value){
+				this.$emit('update:char_no', value)
+			}
+		},
 	},
 	methods: {
         getFile(filejpeg, filename){
@@ -63,7 +74,6 @@ module.exports = {
 		border: 1.5px solid #e6b422;
 		border-radius: 2px;
         caret-color: #2e2930;
-		outline: none;
 	}
 	.img-select{
 		margin: 10px;
