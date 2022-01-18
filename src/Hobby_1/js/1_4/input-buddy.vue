@@ -9,14 +9,14 @@
             <td><img-select v-model="v_b3_char"></img-select></td>
         </tr>
         <tr>
-            <td><select-option op="opAddB" v-model="b1[0]" @change="$emit('update:b1_type', b1.join(''))"></select-option></td>
-            <td><select-option op="opAddB" v-model="b2[0]" @change="$emit('update:b2_type', b2.join(''))"></select-option></td>
-            <td><select-option op="opAddB" v-model="b3[0]" @change="$emit('update:b3_type', b3.join(''))"></select-option></td>
+            <td><select-option op="opAddB" v-model="b1[0]" @change="$emit('update:b1_type', b1.join('') == '' ? null : b1.join(''))"></select-option></td>
+            <td><select-option op="opAddB" v-model="b2[0]" @change="$emit('update:b2_type', b2.join('') == '' ? null : b2.join(''))"></select-option></td>
+            <td><select-option op="opAddB" v-model="b3[0]" @change="$emit('update:b3_type', b3.join('') == '' ? null : b3.join(''))"></select-option></td>
         </tr>
         <tr>
-            <td><select-option op="opAddB" v-model="b1[1]" @change="$emit('update:b1_type', b1.join(''))"></select-option></td>
-            <td><select-option op="opAddB" v-model="b2[1]" @change="$emit('update:b2_type', b2.join(''))"></select-option></td>
-            <td><select-option op="opAddB" v-model="b3[1]" @change="$emit('update:b3_type', b3.join(''))"></select-option></td>
+            <td><select-option op="opAddB" v-model="b1[1]" @change="$emit('update:b1_type', b1.join('') == '' ? null : b1.join(''))"></select-option></td>
+            <td><select-option op="opAddB" v-model="b2[1]" @change="$emit('update:b2_type', b2.join('') == '' ? null : b2.join(''))"></select-option></td>
+            <td><select-option op="opAddB" v-model="b3[1]" @change="$emit('update:b3_type', b3.join('') == '' ? null : b3.join(''))"></select-option></td>
         </tr>
     </table>
 </template>

@@ -59,10 +59,10 @@ module.exports = {
                 lvmiddle: 40 + 20 * (i / 2 | 0),
                 lvmax: (40 + 20 * (i / 2 | 0)) + 20,
                 hpone: null,
-                hpmiddle: null,
+                hpmiddle: 0,
                 hpmax: null,
                 atkone: null,
-                atkmiddle: null,
+                atkmiddle: 0,
                 atkmax: null,
 
                 m1_1: null,
@@ -98,19 +98,106 @@ module.exports = {
 	data: function () {
 		return {
 			Dormitory: ["","Heartslabyul","Savanaclaw","Octavinelle","Scarabia","Pomefiore","Ignihyde","Diasomnia","Ramshackle"],
-			flexibleDatas: [],
-			cardDatas: [],
+			initDatas: {
+                cdno: null,
+                chno: -1,
+                imgfile: null,
+				imgname: null,
 
+                lvone: null,
+                lvmiddle: null,
+                lvmax: null,
+                hpone: null,
+                hpmiddle: null,
+                hpmax: null,
+                atkone: null,
+                atkmiddle: null,
+                atkmax: null,
+
+                m1_1: null,
+                m1_5: null,
+                m1_10: null,
+                m1buf_1: null,
+                m1buf_5: null,
+                m1buf_10: null,
+                m2_1: null,
+                m2_5: null,
+                m2_10: null,
+                m2buf_1: null,
+                m2buf_5: null,
+                m2buf_10: null,
+
+                b1: -1,
+                b1type: null,
+                b2: -1,
+                b2type: null,
+                b3: -1,
+                b3type: null,
+            },
+			cardDatas: [],
+			addDatas: [],
 			responseMsg: this.log_user == "wakana" ? "ユーザーID:"+this.log_user : "操作権限がありません。",
 		}
 	},
 	methods: {
 		clickDataSave(){
-			console.log(this.cardDatas[0]);
-		},
-		getNoImgData(img, imgname, cdno, chno){
-			console.log(img);
-			console.log(imgname+" "+cdno+" "+chno);
+			console.log(JSON.stringify(this.cardDatas[0]));
+			let addCheck = this.isNotNullOnly();
+			console.log(addCheck);
+			this.addDatas = [];
+			for(let i = 0; i < 4; i++){
+				if(addCheck[i]){
+					this.addDatas.push(this.cardDatas[i]);
+				}
+			}
+			console.log(this.addDatas);
+			axios.post("../php/Hobby_1_4_DBInsert.php",{
+				data: this.addDatas
+			})
+			.then(response => {
+				console.log(response.data);
+				if(response.data.data.flg){
+					this.responseMsg = response.data.data.count + "個のデータ登録完了しました。";
+				}else{
+					this.responseMsg = "エラーが発生しました。登録出来たデータは" + response.data.data.count +"個です。";
+				}
+			})
+			.catch(function (error) {
+				console.log(error);
+			});
+			},
+		isNotNullOnly(){
+			let flgs = [true, true, true, true];
+			for(let i = 0; i < 4; i++){
+				for(let key in this.cardDatas[i]){
+					switch(key){
+						case "cdno":
+							if(this.cardDatas[i][key] == null){
+								flgs[i] = false;
+								continue;
+							}
+							break;
+						case "b2":
+						case "b3":
+							if(this.cardDatas[i][key] == this.initDatas[key] && this.cardDatas[i][key+"type"] == this.initDatas[key+"type"]){
+							}else if(this.cardDatas[i][key] != this.initDatas[key] && this.cardDatas[i][key+"type"] != this.initDatas[key+"type"]){
+							}else{
+								flgs[i] = false;
+								continue;
+							}
+							break;
+						case "b2type":
+						case "b3type":
+							break;
+						default:
+							if(this.cardDatas[i][key] == this.initDatas[key]){
+								flgs[i] = false;
+								continue;
+							}
+					}
+				}
+			}
+			return flgs;
 		}
 
 	},
