@@ -25,32 +25,29 @@ if($JSON_array != NULL){
     //クエリの文字コードを設定
     mysqli_set_charset($conn, 'utf8');
     //SQL文の作成
-    $sql = "SELECT ID, CONCAT(mybase, Dno) FROM H1_4_Users WHERE ID LIKE \"$id\" AND pass LIKE \"$ps\";";
+    $sql = "SELECT ID, CONCAT(\"H1_3_UserData_\", ID) FROM H1_4_Users WHERE ID = ? AND pass = ?;";
     //ステートメントン実行準備
     $stmt = mysqli_prepare($conn, $sql);
+    mysqli_stmt_bind_param($stmt, "ss", $id, $ps);
     //SQLステートメントの実行
     mysqli_stmt_execute($stmt); 
     mysqli_stmt_store_result($stmt);
     $num = mysqli_stmt_num_rows($stmt);
-    $data["flg"] = false;
-    if($num > 0){
-        //データの取得
-        //取り出した値を変数に入れる
-        mysqli_stmt_bind_result($stmt, $id, $mybase);
+    $arr["data"]["flg"] = false;
+    if($num == 1){
+        mysqli_stmt_bind_result($stmt, $resid, $mybase);
         mysqli_stmt_fetch($stmt);
-        $data["flg"] = true;
-        $data["user"] = $id;
-        $data["mybase"] = $mybase;    
-    } 
+        $arr["data"]["flg"] = true;
+        $arr["data"]["user"] = $resid;
+        $_SESSION['userID'] = $resid;
+        $arr["data"]["mybase"] = $mybase;
+        $_SESSION['myTB'] = $mybase;
+    }
     //データベースの接続を閉じる
+    mysqli_stmt_free_result($stmt);
     mysqli_stmt_close($stmt);
     mysqli_close($conn);
-    if($data["flg"]){
-        $_SESSION['userID'] = $data["user"];
-        $_SESSION['myTB'] = $data["mybase"];
-    }
-    $arr["data"] = $data;
-    $arr["message"] = $data["flg"] ? "" : "IDかパスワードが間違っています。";
+    $arr["message"] = $arr["data"]["flg"] ? "" : "IDかパスワードが間違っています。";
     print json_encode($arr, JSON_PRETTY_PRINT);
 }
 ?>

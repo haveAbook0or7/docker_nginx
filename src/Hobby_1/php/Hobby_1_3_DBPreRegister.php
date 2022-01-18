@@ -21,94 +21,87 @@ function get_token(){
 // ログインデータを取得
 if($JSON_array != NULL){
     $email = $JSON_array["email"];
-    /**
-     *  まずは既に登録されているものではないかチェック
-     */
     //データベースサーバに接続
     if (!$conn = mysqli_connect(HOST, USR, PASS, DB)) {
         die('データベースに接続できません');
     }
     //クエリの文字コードを設定
     mysqli_set_charset($conn, 'utf8');
-    //SQL文の作成
-    $sql = "SELECT ID FROM H1_4_Users WHERE email LIKE \"$email\";";
-    //ステートメントン実行準備
-    $stmt = mysqli_prepare($conn, $sql);
-    //SQLステートメントの実行
-    mysqli_stmt_execute($stmt); 
-    mysqli_stmt_store_result($stmt);
-    $num = mysqli_stmt_num_rows($stmt);
-    $flg = false;
-    if($num == 0){
-        $flg = true;
-    }
-    // 既に登録ユーザがいたらエラーメッセージを返す。
-    if(!$flg){
-        //データベースの接続を閉じる
-        mysqli_stmt_close($stmt);
-        mysqli_close($conn);
-        $arr["data"]["flg"] = $flg;
-        $arr["message"] = "すでに登録されているメールアドレスは使えません。";
-        print json_encode($arr, JSON_PRETTY_PRINT);
-        return;
-    }
-    /** 
-     * ここから仮登録 
-     */
-    $token = get_token();
-    $deleteday = date("Y-m-d H:i:s", strtotime('0 day') + 6 * 60 * 60);
-    //SQL文の作成
-    $sql =  "INSERT INTO H1_4_preRegister(email, token, deletedate) VALUES(?,?,?)";
-    $stmt = mysqli_prepare($conn, $sql);
-    mysqli_stmt_bind_param($stmt, 'sss', $email, $token, $deleteday);
-    $flg = false;
-    for($i = 0; $i < 10; $i++){
-        mysqli_stmt_execute($stmt);
-        if(mysqli_stmt_affected_rows($stmt) > 0){
+    try{
+        // トランザクション開始
+        $conn->begin_transaction();
+        try{
+            /**
+             *  まずは既に登録されているものではないかチェック
+             */
+            $sql = "SELECT ID FROM H1_4_Users WHERE email = ?;";
+            $stmt = mysqli_prepare($conn, $sql);
+            mysqli_stmt_bind_param($stmt, "s", $email);
+            //SQLステートメントの実行
+            mysqli_stmt_execute($stmt); 
+            mysqli_stmt_store_result($stmt);
+            $num = mysqli_stmt_num_rows($stmt);
+            // 既に登録ユーザがいたらエラーメッセージを返す。
+            if($num != 0){
+                throw new Exception("すでに登録されているメールアドレスは使えません。");
+            }
+            /** 
+             * ここから仮登録 
+             */
+            $token = get_token();
+            $deleteday = date("Y-m-d H:i:s", strtotime('0 day') + 6 * 60 * 60);
+            //SQL文の作成
+            $sql =  "INSERT INTO H1_4_preRegister(email, token, deletedate) VALUES(?,?,?)";
+            $stmt = mysqli_prepare($conn, $sql);
+            mysqli_stmt_bind_param($stmt, 'sss', $email, $token, $deleteday);
+            mysqli_stmt_execute($stmt);
+            // うまくいかなかったらエラーメッセージを返す。
+            if(mysqli_stmt_affected_rows($stmt) != 1){
+                throw new Exception("エラー。もう一度始めからやり直してください。");
+            }
+            /**
+             * メール配信
+             */
+            mb_language("ja");
+            mb_internal_encoding("UTF-8");
+            $to = $email; //登録メアド
+            $subject = "仮登録完了及び本登録URL通知";
+            // $message = "http://haveabook.php.xdomain.jp/Hobby_1/php/Hobby_1_3_Register.php?token=".$token;
+            $message = "
+            こちらのURLから本登録へお進みください。\n
+            なお、こちらのURLの有効期限は約6時間です。有効期限が過ぎた場合はもう一度仮登録からやり直して下さい。\n
+            http://localhost:8080/Hobby_1/php/Hobby_1_3_Register.php?token=".$token;
+            $headers = array(
+                'From' => 'noreply@test.com',
+                'MIME-Version' => '1.0',
+                'Content-Transfer-Encoding' => '8bit',
+                'Content-Type' => 'text/plain; charset=UTF-8',
+            ); 
+            if(!mb_send_mail($to, $subject, $message, $headers)){
+                throw new Exception("エラー。もう一度始めからやり直してください。");
+            }
+            // コミット
+            $conn->commit();
+            $msg = "仮登録完了しました。";
             $flg = true;
-            break;
+        }catch(Exception $e){
+            // エラーが発生したらロールバック
+            $conn->rollback();
+            throw $e;
         }
+    }catch(Exception $e){
+        $msg = $e->getMessage();
+        $flg = false;
     }
     //データベースの接続を閉じる
+    mysqli_stmt_free_result($stmt);
     mysqli_stmt_close($stmt);
     mysqli_close($conn);
-    // うまくいかなかったらエラーメッセージを返す。
-    if(!$flg){
-        $arr["data"]["flg"] = $flg;
-        $arr["message"] = "エラー。もう一度始めからやり直してください。";
-        print json_encode($arr, JSON_PRETTY_PRINT);
-        return;
-    }
-    /**
-     * メール配信
-     */
-    mb_language("ja");
-    mb_internal_encoding("UTF-8");
-    $to = $email; //登録メアド
-    $subject = "仮登録完了及び本登録URL通知";
-    // $message = "http://haveabook.php.xdomain.jp/Hobby_1/php/Hobby_1_3_Register.php?token=".$token;
-    $message = "
-    こちらのURLから本登録へお進みください。\n
-    なお、こちらのURLの有効期限は約6時間です。有効期限が過ぎた場合はもう一度仮登録からやり直して下さい。\n
-    http://localhost:8080/Hobby_1/php/Hobby_1_3_Register.php?token=".$token;
-    $headers = array(
-        'From' => 'noreply@test.com',
-        'MIME-Version' => '1.0',
-        'Content-Transfer-Encoding' => '8bit',
-        'Content-Type' => 'text/plain; charset=UTF-8',
-    ); 
-    $flg = false;
-    for($i = 0; $i < 10; $i++){
-        if(mb_send_mail($to, $subject, $message, $headers)){
-            $flg = true;
-            break;
-        }
-    }
     /**
      * 完了
      */
     $arr["data"]["flg"] = $flg;
-    $arr["message"] = $flg ? "仮登録完了しました。" : "エラー。もう一度始めからやり直してください。";
+    $arr["message"] = $msg;
     print json_encode($arr, JSON_PRETTY_PRINT);
 }
 ?>

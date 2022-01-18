@@ -118,7 +118,6 @@ if($JSON_array != NULL){
                 // Userのテーブルに初期値追加
                 for($j = 0; $j < count($arrUT); $j++){
                     $sql6 = "INSERT INTO {$arrUT[$j]} SELECT * FROM H1_2_DefaultData WHERE cdno = ?";
-                    // $msg[] = $sql6;
                     $stmt= mysqli_prepare($conn, $sql6);
                     mysqli_stmt_bind_param($stmt, "i", $datas[$i]["cdno"]);
                     mysqli_stmt_execute($stmt);
