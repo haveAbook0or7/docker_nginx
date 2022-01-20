@@ -1,8 +1,5 @@
 <?php
-// リクエストのbodyを取り出す。
-$JSON_string = file_get_contents('php://input');
-// JSON文字列を変換。arrayにするためにはtrueが必要です。
-$JSON_array = JSON_decode($JSON_string,true);
+session_start();
 //データベース定義
 // define('HOST', 'mysql1.php.xdomain.ne.jp');
 // define('USR', 'haveabook_user1');
@@ -12,10 +9,11 @@ define('HOST', 'db');
 define('USR', 'db_user');
 define('PASS', 'pass');
 define('DB', 'db_hobby');
+define('MYDBSTART', 'H1_3_UserData_');
 
-// 誰のデータか取得
-if($JSON_array != NULL){
-    $myTB = $JSON_array["myDB"];
+// データを取得するテーブル名取得
+if(substr($_SESSION['myTB'], 0, strlen(MYDBSTART)) == MYDBSTART){
+    $myTB = $_SESSION['myTB'];
 }else{
     $myTB = "H1_2_DefaultDataMax";
 }
