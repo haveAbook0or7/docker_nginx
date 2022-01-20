@@ -120,6 +120,7 @@ if($JSON_array != NULL){
                 // コミット
                 $conn->commit();
                 $msg = "登録完了しました。";
+                $err = "";
                 $flg = true;
             }catch(Exception $e){
                 // エラーが発生したらロールバック
@@ -127,7 +128,9 @@ if($JSON_array != NULL){
                 throw $e;
             }
         }catch(Exception $e){
-            $msg = $e->getMessage();
+            $errmsg = $e->getMessage();
+            $msg = explode(":",$errmsg)[1];
+            $err = explode(":",$errmsg)[0];
             $flg = false;
         }
         //データベースの接続を閉じる
@@ -138,6 +141,7 @@ if($JSON_array != NULL){
          * 本登録完了
          */
         $arr["data"]["flg"] = $flg;
+        $arr["data"]["err"] = $err;
         $arr["message"] = $msg;
         print json_encode($arr, JSON_PRETTY_PRINT);
     }

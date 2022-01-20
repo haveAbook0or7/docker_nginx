@@ -240,6 +240,7 @@ module.exports = {
 				data: sendDatas
 			})
 			.then(response => {
+				console.log(response.data)
 				this.responseMsg = response.data.msg;
 				// 各変数を再ロード
 				this.changeFlg = [];
