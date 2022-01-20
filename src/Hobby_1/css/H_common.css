@@ -2,6 +2,9 @@
     margin: 0px;
     padding: 0px;
     border: 0;
+    -webkit-appearance: none;
+    -webkit-touch-callout: none;
+    -webkit-text-size-adjust: 100%;
 }
 body{
     background: #2e2930;
@@ -57,4 +60,13 @@ input[type=text]:read-only{
 }
 input[type=text]:read-write:focus{
     outline: 1px auto #e4007f;
+}
+input[type="button"] {
+    border-radius: 0;
+    -webkit-box-sizing: content-box;
+    -webkit-appearance: button;
+    appearance: button;
+    border: none;
+    box-sizing: border-box;
+    cursor: pointer;
 }
