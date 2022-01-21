@@ -106,6 +106,9 @@ module.exports = {
         font-size: 12px;
 		color: white;
 	}
+    table{
+		width: 100%;
+	}
     img{
         background: transparent;
     }

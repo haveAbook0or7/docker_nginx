@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div :style="variable">
 		<sort-modal ref="modalSort" @sort="changeSort" @search="changeSearch"></sort-modal>
 		<h2>
 			<input class="update" type="button" value="更新" @click="clickDataSave()" v-if="showFlg">
@@ -7,7 +7,7 @@
 			<input class="sort" type="button" value="ソート" @click="$refs.modalSort.openModal()">
 			<img class="updown" :src="'../img/'+this.updownImg" width="20" height="20" @click="clickUpDown()">
 		</h2>
-		<br><br><br>
+		<div class="space"></div>
 		<div class="cards">
 			<div class="card" v-for="card in this.sortDatas" :key="card.cdno">
 				<img :src="'../img/'+Dormitory[Math.floor(card.chno/10)]+'/'+card.img" width="70.5" height="74.7">
@@ -57,10 +57,58 @@ module.exports = {
 		init_msg: {default:"initMsg"},
 	},
 	mounted() {
+		// 端末の種類取得
+		this.media = getMedia();
 		// データをロード
 		this.loading();
 	},
 	computed: {
+		variable() {
+			switch(this.media){
+				case "PC":
+					return {
+						"--h2H": "48px",
+						"--buttonW": "50px",
+						"--buttonH": "18px",
+						"--buttonR": "32px",
+						"--buttonFS": "10px",
+						"--updwW": "20px",
+						"--updwH": "20px",
+						"--resL": "70px",
+						"--resFS": "16px",
+						"--spaceH": "60px",
+						"--cardW": "120px",
+					}
+				case "TabletPC":
+					return {
+						"--h2H": "65px",
+						"--buttonW": "80px",
+						"--buttonH": "36px",
+						"--buttonR": "50px",
+						"--buttonFS": "16px",
+						"--updwW": "40px",
+						"--updwH": "40px",
+						"--resL": "100px",
+						"--resFS": "25px",
+						"--spaceH": "80px",
+						"--cardW": "200px",
+					}
+				case "SmartPhone":
+					return {
+						"--h2H": "",
+						"--buttonW": "",
+						"--buttonH": "",
+						"--buttonR": "",
+						"--buttonFS": "",
+						"--updwW": "",
+						"--updwH": "",
+						"--resL": "",
+						"--resFS": "",
+						"--spaceH": "",
+						"--cardW": "",
+					}
+			}
+		},
 		showFlg: {
 			get(){
 				return this.mydbname == "H1_2_DefaultDataMax" ? false : true;
@@ -139,6 +187,7 @@ module.exports = {
 	},
 	data: function () {
 		return {
+			media: "PC",
 			Dormitory: ["","Heartslabyul","Savanaclaw","Octavinelle","Scarabia","Pomefiore","Ignihyde","Diasomnia","Ramshackle"],
 			flexibleDatas: [],
 			originDatas:[],
@@ -170,7 +219,16 @@ module.exports = {
 		}
 	},
 	methods: {
+		isSmartPhone() {
+			console.log(window.matchMedia);
+			if (window.matchMedia && window.matchMedia('(max-device-width: 800px)').matches) {
+				return true;
+			} else {
+				return false;
+			}
+		},
 		loading(){
+			this.responseMsg = this.media;
 			axios.post("../php/Hobby_1_1_DB.php",{
 				myDB: this.mydbname
 			})
@@ -267,7 +325,7 @@ module.exports = {
 		box-sizing: border-box;
 		position: fixed;
 		width: 905px;
-		height: 48px;
+		height: var(--h2H);
 		margin: 10px 0;
 		border-right: 15px solid #fbfaf5;
 		font: normal 30px "游ゴシック",serif;
@@ -275,31 +333,16 @@ module.exports = {
 		color: #fbfaf5;
 		z-index: 2;
 	}
-	.cards{
-		background: #fbfaf5;
-		width: 905px;
-	}
-	.card{
-		width: 120px;
-		margin: 2.5px;
-		display: inline-block;
-		text-align: center;
-		border: 2px solid #e6b422;
-		background: #2e2930;
-	}
-	table{
-		width: 100%;
-	}
 	.sort, .update{
 		position: absolute;
 		bottom: 10px;
-		right: 32px;
-		width: 50px;
-        height: 18px;
+		right: var(--buttonR);
+		width: var(--buttonW);
+        height: var(--buttonH);
         display: inline-block;
         text-align: center;
         background-color: #2e2930;
-        font-size: 10px;
+        font-size: var(--buttonFS);
         text-decoration: none;
         font-weight: bold;
         padding: 1px 2px;
@@ -307,6 +350,10 @@ module.exports = {
         margin: 0 2px;
 		color: #fff;
         box-shadow: #2e2930 0px 0px 0px 3px;
+	}
+	.update{
+		font-weight:normal;
+		left: 5px;
 	}
 	.sort:hover, .update:active{
         background-color: slategray;
@@ -316,20 +363,31 @@ module.exports = {
 		position: absolute;
 		bottom: 9px;
 		right: 5px;
+		width: var(--updwW);
+		height: var(--updwH);
 		border: 1px solid gray;
-	}
-	.update{
-		width: 50px;
-        height: 24px;
-		font-size: 13px;
-		font-weight:normal;
-		left: 5px;
 	}
 	.res{
 		position: absolute;
-		left: 70px;
+		left: var(--resL);
 		bottom: 6px;
-		font-size: 16px;
+		font-size: var(--resFS);
 		font-style: italic;
+	}
+	.space{
+		height: var(--spaceH);
+	}
+	.cards{
+		background: #fbfaf5;
+		width: 905px;
+		text-align: center;
+	}
+	.card{
+		width: var(--cardW);
+		margin: 2.5px;
+		display: inline-block;
+		text-align: center;
+		border: 2px solid #e6b422;
+		background: #2e2930;
 	}
 </style>

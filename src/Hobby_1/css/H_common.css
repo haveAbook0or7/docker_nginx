@@ -2,8 +2,6 @@
     margin: 0px;
     padding: 0px;
     border: 0;
-    -webkit-appearance: none;
-    -webkit-touch-callout: none;
     -webkit-text-size-adjust: 100%;
 }
 body{
@@ -66,7 +64,6 @@ input[type="button"] {
     -webkit-box-sizing: content-box;
     -webkit-appearance: button;
     appearance: button;
-    border: none;
     box-sizing: border-box;
     cursor: pointer;
 }
