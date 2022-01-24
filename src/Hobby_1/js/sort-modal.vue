@@ -1,6 +1,6 @@
 <template>
-	<div id="overlaySort" v-show="this.showFlg" @click="closeModal()">
-		<div id="modalSort" v-show="this.showFlg" @click="$event.stopPropagation()">
+	<div id="overlaySort" :class="media" :style="variable" v-show="this.showFlg" @click="closeModal()">
+		<div class="sort-modal" id="modalSort" v-show="this.showFlg" @click="$event.stopPropagation()">
             <input id="default" type="radio" v-model="radioValue" value="default" @change="changeSort"><label for="default">デフォルト</label>
             <input id="Lv"      type="radio" v-model="radioValue" value="Lv"      @change="changeSort"><label for="Lv">Lv</label>
             <input id="HP"      type="radio" v-model="radioValue" value="HP"      @change="changeSort"><label for="HP">HP</label>
@@ -33,8 +33,70 @@ module.exports = {
 	props: {
 		id_name: {default:"myselectimg"},
 	},
+	mounted() {
+		// 端末の種類取得
+		this.media = getMedia();
+	},
+	computed: {
+		variable() {
+			switch(this.media){
+				case "PC":
+					return {
+						"--W": "245px",
+						"--R": "10px",
+						"--FS": "13px",
+						"--radioW": "16px",
+						"--radioH": "16px",
+						"--radioM": "5px 10px",
+						"--buttonW": "50px",
+						"--buttonH": "18px",
+						"--buttonM": "8px 2px",
+						"--checkW": "120px",
+						"--checkH": "30px",
+						"--checkMB": "5px",
+						"--checkFS": "12px",
+						"--checkD": "1",
+					}
+				case "TabletPC":
+					return {
+						"--W": "445px",
+						"--R": "10px",
+						"--FS": "20px",
+						"--radioW": "30px",
+						"--radioH": "30px",
+						"--radioM": "15px 10px",
+						"--buttonW": "80px",
+						"--buttonH": "36px",
+						"--buttonM": "16px 2px",
+						"--checkW": "200px",
+						"--checkH": "55px",
+						"--checkMB": "10px",
+						"--checkFS": "20px",
+						"--checkD": "1",
+					}
+				case "SmartPhone":
+					return {
+						"--W": "80%",
+						"--R": "5%",
+						"--FS": "50px",
+						"--radioW": "50px",
+						"--radioH": "56px",
+						"--radioM": "20px 15px",
+						"--buttonW": "170px",
+						"--buttonH": "60px",
+						"--buttonM": "32px 2px",
+						"--checkW": "380px",
+						"--checkH": "100px",
+						"--checkMB": "20px",
+						"--checkFS": "45px",
+						"--checkD": "2",
+					}
+			}
+		},
+	},
 	data: function () {
 		return {
+			media: "PC",
 			showFlg: false,
 			Dormitory: ["","Heartslabyul","Savanaclaw","Octavinelle","Scarabia","Pomefiore","Ignihyde","Diasomnia","Ramshackle"],
 			radioValue: "default",
@@ -87,6 +149,7 @@ module.exports = {
 		padding: 0;
 		border: 0;
 		color: black;
+		font-size: var(--FS);
 	}
 	#overlaySort{
 		/*　要素を重ねた時の順番　*/
@@ -98,16 +161,15 @@ module.exports = {
 		width:100%;
 		height:100%;
 		background-color:rgba(0,0,0,0.5);
-		
 	}
 	#modalSort{
 		z-index:4;
-		width: 245px;
+		width: var(--W);
 		padding: 1em;
 		background-color: #fff;
 		position: absolute;
-		top: 18%;
-		right: 10px;
+		top: 15%;
+		right: var(--R);
 	}
 	/* ラジオボタン */
 	input[type=radio]{
@@ -118,8 +180,8 @@ module.exports = {
 	input[type=radio] + label{
 		position: relative;
 		display: inline-block;
-		padding-left: 24px;
-		margin: 5px 10px;
+		padding-left: calc(var(--radioH) + 6px);
+		margin: var(--radioM);
 	}
 	input[type=radio] + label:before{
 		content: "";
@@ -128,10 +190,10 @@ module.exports = {
 		top: 0;
 		left: 0;
 		display: block;
-		width: 16px;
-		height: 16px;
+		width: var(--radioW);
+		height: var(--radioH);
 		border: 2px solid #e6b422;
-		border-radius: 16px;
+		border-radius: var(--radioH);
 	}
 	input[type=radio]:checked + label{
 		padding-top: 4px;
@@ -140,23 +202,23 @@ module.exports = {
 	}
 	input[type=radio]:checked + label:before{
 		top: 0;
-		width: 110%;
-		height: 24px;
+		width: 108%;
+		height: calc(var(--radioH) + 6px);
 		background: #e6b422;
 	}
 	/* ボタン */
 	input[type=button]{
-		width: 50px;
-        height: 18px;
+		width: var(--buttonW);
+        height: var(--buttonH);
         display: inline-block;
         text-align: center;
         background-color: #e6b422;
-        font-size: 10px;
+        font-size: calc(var(--FS) - 3px);
         text-decoration: none;
         font-weight: bold;
         padding: 1px 2px;
         border: 0.5px dashed #ffffff;
-        margin: 8px 2px;
+        margin: var(--buttonM);
         box-shadow: #e6b422 0px 0px 0px 3px;
 		color: #ffffff;
 	}
@@ -170,14 +232,14 @@ module.exports = {
 	}
 	input[type=checkbox] + label{
 		display: inline-flex;
-		width: 120px;
-		height: 30px;
+		width: var(--checkW);
+		height: var(--checkH);
 		box-sizing: border-box; /* border等込みでwidthのサイズにする */
 		position: relative;
 		justify-content: center; /* 文字の位置を中央にする */
 		align-items: center;
-		margin-bottom: 5px;
-		font-size: 12px;
+		margin-bottom: var(--checkMB);
+		font-size: var(--checkFS);
 		border: 1px solid #e6b422;
 	}
 	input[type=checkbox]:checked + label{
@@ -196,23 +258,23 @@ module.exports = {
 		bottom: 0;
 		z-index: -1;
 		border-style: solid;
-		border-width: 5px 14px 15px 10px;
+		border-width: calc(5px*var(--checkD)) calc(14px*var(--checkD)) calc(15px*var(--checkD)) calc(10px*var(--checkD));
 		border-color: transparent #e6b422 #e6b422 transparent;
 	}
 	input[type=checkbox] + label > span{
 		position: absolute;
 		right: 1px;
 		bottom: 2px;
-		width: 10px;
-		height: 10px;
+		width: calc(10px * var(--checkD));
+		height: calc(10px * var(--checkD));
 		background: transparent;
 		border-style: solid;
 		border-width: 1px;
 		border-color: #333631;
 	}
 	input[type=checkbox]:checked + label > span{
-		width: 5px;
-		border-width: 0 2px 2px 0;
+		width: calc(5px * var(--checkD));
+		border-width: 0 calc(2px*var(--checkD)) calc(2px*var(--checkD)) 0;
 		border-color: transparent #333631 #333631 transparent;
 		-webkit-transform: rotate(45deg);
 		transform: rotate(45deg);

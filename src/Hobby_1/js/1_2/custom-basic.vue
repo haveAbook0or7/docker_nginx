@@ -27,60 +27,42 @@ module.exports = {
         'select-own': httpVueLoader('../select-own.vue'),
     },
 	props: {
+		media: {default:"PC"},
 		id_name: {default:"own"},
         show_flg: {default: true},
         init_lv: {default: 0},
         init_hp: {default: 0},
         init_atk: {default: 0},
 	},
-    mounted(){
-        // 端末の種類取得
-		this.media = getMedia();
-    },
     computed: {
         variable() {
 			switch(this.media){
 				case "PC":
 					return {
-						"--h2H": "48px",
-						"--buttonW": "50px",
-						"--buttonH": "18px",
-						"--buttonR": "32px",
-						"--buttonFS": "10px",
-						"--updwW": "20px",
-						"--updwH": "20px",
-						"--resL": "70px",
-						"--resFS": "16px",
-						"--spaceH": "60px",
-						"--cardW": "120px",
+						"--FS": "13px",
+						"--selectW": "initial",
+						"--selectH": "initial",
+						"--border": "2px",
+						"--textW": "40px",
+						"--textH": "18px",
 					}
 				case "TabletPC":
 					return {
-						"--h2H": "65px",
-						"--buttonW": "80px",
-						"--buttonH": "36px",
-						"--buttonR": "50px",
-						"--buttonFS": "16px",
-						"--updwW": "40px",
-						"--updwH": "40px",
-						"--resL": "100px",
-						"--resFS": "25px",
-						"--spaceH": "80px",
-						"--cardW": "200px",
+						"--FS": "20px",
+						"--selectW": "60px",
+						"--selectH": "30px",
+						"--border": "3px",
+						"--textW": "60px",
+						"--textH": "25px",
 					}
 				case "SmartPhone":
 					return {
-						"--h2H": "",
-						"--buttonW": "",
-						"--buttonH": "",
-						"--buttonR": "",
-						"--buttonFS": "",
-						"--updwW": "",
-						"--updwH": "",
-						"--resL": "",
-						"--resFS": "",
-						"--spaceH": "",
-						"--cardW": "",
+						"--FS": "50px",
+						"--selectW": "160px",
+						"--selectH": "70px",
+						"--border": "6px",
+						"--textW": "160px",
+						"--textH": "70px",
 					}
 			}
 		},
@@ -93,7 +75,6 @@ module.exports = {
 	},
 	data: function () {
 		return {
-            media: "PC",
 			cardLv: this.init_lv,
             hp: this.init_hp,
             atk: this.init_atk,
@@ -123,16 +104,18 @@ module.exports = {
 		width: 100%;
 	}
     td{
-        font-size: 20px;
+        font-size: var(--FS);
     }
     .select-own{
-        height: 30px;
-		width: 60px;
+        height: var(--selectH);
+		width: var(--selectW);
+		font-size: var(--FS);
+		border-bottom-width: var(--border);
     }
     input[type=text]:read-write{
-		height: 25px;
-		width: 60px;
-        font-size: 18px;
+		height: var(--textH);
+		width: var(--textW);
+        font-size: var(--FS);
 		color: #2e2930;
 		background: #fbfaf5;
 		border: 1.5px solid #e6b422;
@@ -140,8 +123,8 @@ module.exports = {
         caret-color: #2e2930;
 	}
     input[type=text]:read-only{
-		height: 18px;
-		width: 40px;
+		height: var(--textH);
+		width: var(--textW);
 		border: 1px solid #aaaaaa;
 		border-radius: 2px;
 	}

@@ -1,5 +1,5 @@
 <template>
-	<table border="0">
+	<table border="0" :class="media" :style="variable">
         <tr>
             <td>
                 <img :id="this.id_name+'_buddy1flg'" class="imgflg" :src="'../img/'+this.imgflg[1]" width="35" height="35">
@@ -37,6 +37,7 @@ module.exports = {
         'select-own': httpVueLoader('../select-own.vue'),
     },
 	props: {
+        media: {default:"PC"},
 		id_name: {default:"own"},
         show_flg: {default: true},
         init_buddy1: {default: -1},
@@ -47,6 +48,37 @@ module.exports = {
         init_lv3: {default: 0},
 	},
     computed: {
+        variable() {
+			switch(this.media){
+				case "PC":
+					return {
+						"--FS": "13px",
+						"--selectW": "initial",
+						"--selectH": "initial",
+						"--border": "2px",
+						"--imgW": "1",
+						"--imgH": "1",
+					}
+				case "TabletPC":
+					return {
+						"--FS": "20px",
+						"--selectW": "60px",
+						"--selectH": "30px",
+						"--border": "3px",
+						"--imgW": "1.5",
+						"--imgH": "1.5",
+					}
+				case "SmartPhone":
+					return {
+						"--FS": "50px",
+						"--selectW": "140px",
+						"--selectH": "70px",
+						"--border": "6px",
+						"--imgW": "3",
+						"--imgH": "3",
+					}
+			}
+		},
 		img: {
 			get(){
 				var applyimg = {1: "none.jpg", 2: "none.jpg", 3: "none.jpg"};
@@ -109,8 +141,14 @@ module.exports = {
     table{
 		width: 100%;
 	}
+    td{
+        font-size: var(--FS);
+        text-align: center;
+    }
     img{
         background: transparent;
+        width: calc(35px * var(--imgW));
+		height: calc(35px * var(--imgH));
     }
     .img{
         position: relative;
@@ -119,7 +157,10 @@ module.exports = {
         position: absolute;
         z-index: 2;
     }
-    td{
-        text-align: center;
+    .select-own{
+        height: var(--selectH);
+		width: var(--selectW);
+		font-size: var(--FS);
+		border-bottom-width: var(--border);
     }
 </style>

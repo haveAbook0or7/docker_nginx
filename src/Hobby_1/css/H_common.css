@@ -22,14 +22,14 @@ h1{
     font: normal 35px '游ゴシック',serif;
 }
 main{
-    width: 905px;
+    width: 100%;
     display: inline-block;
     text-align: left;
 }
 h2{
     box-sizing: border-box;
     position: relative;
-    width: 905px;
+    /* width: 100%; */
     margin: 10px 0;
     border-right: 15px solid #fbfaf5;
     font: normal 30px "游ゴシック",serif;

@@ -32,10 +32,11 @@
         <script src="../lib/vue.js"></script> 
         <script src="https://unpkg.com/http-vue-loader"></script>
         <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <script src="../lib/checkMedia.js"></script>
     </head>
     <body>
         <header>
-            <h1>twstカード編成ツール<a href="Hobby_1_3_preRegister.php"  target="_self">新規登録</a></h1>
+            <h1>twstカード編成ツール<span id="alert" style="font-size:13px;color:red;"></span><a href="Hobby_1_3_preRegister.php"  target="_self">新規登録</a></h1>
         </header>
         <main id="app">
             <br><br>
@@ -43,6 +44,9 @@
             <card-select :mydbname="'<?= $_SESSION['myTB'] ?>'"></card-select>
         </main>
         <script>
+            if(getMedia() == "SmartPhone" && window.orientation == 0){
+                document.getElementById("alert").innerHTML = "このページは横向き表示推奨です。";
+            }
             new Vue({
                 el: "#app",
                 components: {

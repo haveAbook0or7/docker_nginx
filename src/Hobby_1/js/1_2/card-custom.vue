@@ -1,5 +1,5 @@
 <template>
-	<div :style="variable">
+	<div class="card-custom" :style="variable">
 		<sort-modal ref="modalSort" @sort="changeSort" @search="changeSearch"></sort-modal>
 		<h2>
 			<input class="update" type="button" value="更新" @click="clickDataSave()" v-if="showFlg">
@@ -12,6 +12,7 @@
 			<div class="card" v-for="card in this.sortDatas" :key="card.cdno">
 				<img :src="'../img/'+Dormitory[Math.floor(card.chno/10)]+'/'+card.img" width="70.5" height="74.7">
 				<custom-basic 
+					:media="media" 
 					:id_name="card.cdno" 
 					:show_flg="showFlg" 
 					:init_lv="card.lv" 
@@ -20,6 +21,7 @@
 					:ref="'basic'+card.cdno" 
 					@change="changeData"></custom-basic>
 				<custom-masic 
+					:media="media" 
 					:id_name="card.cdno" 
 					:show_flg="showFlg" 
 					:init_masic1="card.m1_1" 
@@ -29,6 +31,7 @@
 					:ref="'masic'+card.cdno" 
 					@change="changeData"></custom-masic>
 				<custom-buddy 
+					:media="media" 
 					:id_name="card.cdno" 
 					:show_flg="showFlg" 
 					:init_buddy1="card.b1" 
@@ -67,6 +70,7 @@ module.exports = {
 			switch(this.media){
 				case "PC":
 					return {
+						"--W": "905px",
 						"--h2H": "48px",
 						"--buttonW": "50px",
 						"--buttonH": "18px",
@@ -78,9 +82,12 @@ module.exports = {
 						"--resFS": "16px",
 						"--spaceH": "60px",
 						"--cardW": "120px",
+						"--imgW": "1",
+						"--imgH": "1",
 					}
 				case "TabletPC":
 					return {
+						"--W": "905px",
 						"--h2H": "65px",
 						"--buttonW": "80px",
 						"--buttonH": "36px",
@@ -92,20 +99,25 @@ module.exports = {
 						"--resFS": "25px",
 						"--spaceH": "80px",
 						"--cardW": "200px",
+						"--imgW": "1",
+						"--imgH": "1",
 					}
 				case "SmartPhone":
 					return {
-						"--h2H": "",
-						"--buttonW": "",
-						"--buttonH": "",
-						"--buttonR": "",
-						"--buttonFS": "",
-						"--updwW": "",
-						"--updwH": "",
-						"--resL": "",
-						"--resFS": "",
-						"--spaceH": "",
-						"--cardW": "",
+						"--W": "100%",
+						"--h2H": "100px",
+						"--buttonW": "170px",
+						"--buttonH": "60px",
+						"--buttonR": "80px",
+						"--buttonFS": "30px",
+						"--updwW": "70px",
+						"--updwH": "70px",
+						"--resL": "190px",
+						"--resFS": "25px",
+						"--spaceH": "130px",
+						"--cardW": "450px",
+						"--imgW": "3",
+						"--imgH": "3",
 					}
 			}
 		},
@@ -219,16 +231,7 @@ module.exports = {
 		}
 	},
 	methods: {
-		isSmartPhone() {
-			console.log(window.matchMedia);
-			if (window.matchMedia && window.matchMedia('(max-device-width: 800px)').matches) {
-				return true;
-			} else {
-				return false;
-			}
-		},
 		loading(){
-			this.responseMsg = this.media;
 			axios.post("../php/Hobby_1_1_DB.php",{
 				myDB: this.mydbname
 			})
@@ -321,11 +324,15 @@ module.exports = {
 		color: #ffffff;
 		font-size: 13px;
 	}
+	.card-custom{
+		width: var(--W);
+		margin: auto;
+	}
 	h2{
 		box-sizing: border-box;
 		position: fixed;
-		width: 905px;
 		height: var(--h2H);
+		width: var(--W);
 		margin: 10px 0;
 		border-right: 15px solid #fbfaf5;
 		font: normal 30px "游ゴシック",serif;
@@ -379,7 +386,7 @@ module.exports = {
 	}
 	.cards{
 		background: #fbfaf5;
-		width: 905px;
+		width: var(--W);
 		text-align: center;
 	}
 	.card{
@@ -389,5 +396,9 @@ module.exports = {
 		text-align: center;
 		border: 2px solid #e6b422;
 		background: #2e2930;
+	}
+	.card > img{
+		width: calc(70.5px * var(--imgW));
+		height: calc(74.7px * var(--imgH));
 	}
 </style>
