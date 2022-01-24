@@ -85,5 +85,7 @@ module.exports = {
 		outline: none;
 		background: #2e2930;
 		border-bottom:  2px solid var(--dynamic-color);
+		-webkit-border-radius: 0;
+		border-radius: 0;
 	}
 </style>

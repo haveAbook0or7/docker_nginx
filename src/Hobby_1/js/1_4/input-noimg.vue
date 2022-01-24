@@ -2,7 +2,7 @@
 	<div>
         <file-select class="imgfile" @change="getFile"></file-select>
         <span class="no">
-            <label class="text">カードNo<input type="text" maxlength="4" v-model.number="v_card_no"></label>
+            <label class="text">カードNo<input type="text" maxlength="3" v-model.number="v_card_no"></label>
             <img-select v-model="v_char_no"></img-select>
         </span>
     </div>
@@ -25,6 +25,9 @@ module.exports = {
 			get(){return this.$props.card_no},
 			set(value){
 				const regex = /^[0-9]{1,3}$/
+				if(value == ""){
+					this.$emit('update:card_no', null)
+				}
 				if(regex.test(value)){
 					this.$emit('update:card_no', value)
 				}

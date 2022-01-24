@@ -1,5 +1,5 @@
 <template>
-	<select v-model="selected" :disabled="isDisabled" @change="updateValue" :style="elementColor">
+	<select class="select-own" v-model="selected" :disabled="isDisabled" @change="updateValue" :style="elementColor">
 		<option v-for="option in options[this.op]" :key="option.value" v-bind:value="option.value">
 			{{ option.key }}
 		</option>
@@ -72,5 +72,7 @@ module.exports = {
 		outline: none;
 		background: #2e2930;
 		border-bottom:  2px solid var(--dynamic-color);
+		-webkit-border-radius: 0;
+		border-radius: 0;
 	}
 </style>

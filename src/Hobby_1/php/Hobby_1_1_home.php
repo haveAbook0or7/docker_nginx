@@ -1,8 +1,6 @@
 <?php
     session_start();
     function login(){
-        // $_SESSION['userID'] = "wakana";
-        // $_SESSION['myTB'] = "H1_3_UserData1";
         if(isset($_GET['logout'])){
             $_SESSION['userID'] = "";
             $_SESSION['myTB'] = "H1_2_DefaultDataMax";

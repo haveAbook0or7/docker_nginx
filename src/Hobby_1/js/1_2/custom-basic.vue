@@ -1,5 +1,5 @@
 <template>
-	<table border="0">
+	<table border="0" :class="media" :style="variable">
         <tr>
 			<td>Lv</td>
             <td>
@@ -9,7 +9,7 @@
         <tr>
             <td>HP</td>
             <td>
-                <input :id="this.id_name+'_hp'" type="text" ref="uu" v-model="hp" :readonly="this.disabled" @change="changeData">
+                <input :id="this.id_name+'_hp'" type="text" v-model="hp" :readonly="this.disabled" @change="changeData">
             </td>
         </tr>
         <tr>
@@ -33,7 +33,57 @@ module.exports = {
         init_hp: {default: 0},
         init_atk: {default: 0},
 	},
+    mounted(){
+        // 端末の種類取得
+		this.media = getMedia();
+    },
     computed: {
+        variable() {
+			switch(this.media){
+				case "PC":
+					return {
+						"--h2H": "48px",
+						"--buttonW": "50px",
+						"--buttonH": "18px",
+						"--buttonR": "32px",
+						"--buttonFS": "10px",
+						"--updwW": "20px",
+						"--updwH": "20px",
+						"--resL": "70px",
+						"--resFS": "16px",
+						"--spaceH": "60px",
+						"--cardW": "120px",
+					}
+				case "TabletPC":
+					return {
+						"--h2H": "65px",
+						"--buttonW": "80px",
+						"--buttonH": "36px",
+						"--buttonR": "50px",
+						"--buttonFS": "16px",
+						"--updwW": "40px",
+						"--updwH": "40px",
+						"--resL": "100px",
+						"--resFS": "25px",
+						"--spaceH": "80px",
+						"--cardW": "200px",
+					}
+				case "SmartPhone":
+					return {
+						"--h2H": "",
+						"--buttonW": "",
+						"--buttonH": "",
+						"--buttonR": "",
+						"--buttonFS": "",
+						"--updwW": "",
+						"--updwH": "",
+						"--resL": "",
+						"--resFS": "",
+						"--spaceH": "",
+						"--cardW": "",
+					}
+			}
+		},
 		disabled: {
             get(){
                 // 閲覧モードなら操作できないようにする
@@ -43,6 +93,7 @@ module.exports = {
 	},
 	data: function () {
 		return {
+            media: "PC",
 			cardLv: this.init_lv,
             hp: this.init_hp,
             atk: this.init_atk,
@@ -68,9 +119,20 @@ module.exports = {
 		background: #2e2930;
 		color: white;
 	}
+    table{
+		width: 100%;
+	}
+    td{
+        font-size: 20px;
+    }
+    .select-own{
+        height: 30px;
+		width: 60px;
+    }
     input[type=text]:read-write{
-		height: 18px;
-		width: 40px;
+		height: 25px;
+		width: 60px;
+        font-size: 18px;
 		color: #2e2930;
 		background: #fbfaf5;
 		border: 1.5px solid #e6b422;

@@ -26,27 +26,25 @@ if($JSON_array != NULL){
         //クエリの文字コードを設定
         mysqli_set_charset($conn, 'utf8');
         //SQL文の作成
-        $sql = "SELECT email FROM H1_4_preRegister WHERE token LIKE \"$token\";";
-        //ステートメントン実行準備
+        $sql = "SELECT email FROM H1_4_preRegister WHERE token = ?;";
         $stmt = mysqli_prepare($conn, $sql);
+        mysqli_stmt_bind_param($stmt, "s", $token);
         //SQLステートメントの実行
         mysqli_stmt_execute($stmt); 
         mysqli_stmt_store_result($stmt);
         $num = mysqli_stmt_num_rows($stmt);
-        $flg = false;
-        $res = "";
-        if($num != 0){
-            mysqli_stmt_bind_result($stmt, $email);
+        $arr["data"]["flg"] = false;
+        if($num == 1){
+            mysqli_stmt_bind_result($stmt, $resemail);
             mysqli_stmt_fetch($stmt);
-            $flg = true;
-            $res = $email;
+            $arr["data"]["flg"] = true;
+            $arr["data"]["email"] = $resemail;
         }
         //データベースの接続を閉じる
+        mysqli_stmt_free_result($stmt);
         mysqli_stmt_close($stmt);
         mysqli_close($conn);
         // フラグを返す
-        $arr["data"]["flg"] = $flg;
-        $arr["data"]["email"] = $res;
         print json_encode($arr, JSON_PRETTY_PRINT);
         return;
     }
@@ -57,142 +55,94 @@ if($JSON_array != NULL){
         $id = $JSON_array["id"];
         $pass = $JSON_array["pass"];
         $email = $JSON_array["email"];
-        /**
-         * まずはIDが既に登録されているものではないかチェック
-         */
         //データベースサーバに接続
         if (!$conn = mysqli_connect(HOST, USR, PASS, DB)) {
             die('データベースに接続できません');
         }
         //クエリの文字コードを設定
         mysqli_set_charset($conn, 'utf8');
-        //SQL文の作成
-        $sql = "SELECT * FROM H1_4_Users WHERE ID LIKE \"$id\";";
-        //ステートメントン実行準備
-        $stmt = mysqli_prepare($conn, $sql);
-        //SQLステートメントの実行
-        mysqli_stmt_execute($stmt); 
-        mysqli_stmt_store_result($stmt);
-        $num = mysqli_stmt_num_rows($stmt);
-        $flg = false;
-        if($num == 0){
-            $flg = true;
-        }
-        // 既に使用されているIDならエラーメッセージを返す。
-        if(!$flg){
-            //データベースの接続を閉じる
-            mysqli_stmt_close($stmt);
-            mysqli_close($conn);
-            // JSON形式で返す
-            $arr["data"]["flg"] = $flg;
-            $arr["data"]["err"] = "idErr";
-            $arr["message"] = "すでに使用されているIDは使えません。";
-            print json_encode($arr, JSON_PRETTY_PRINT);
-            return;
-        }
-        /**
-         * ここから登録
-         */
-        //SQL文の作成
-        $sql =  "INSERT INTO H1_4_Users(ID, pass, email) VALUES(?,?,?)";
-        $stmt = mysqli_prepare($conn, $sql);
-        mysqli_stmt_bind_param($stmt, 'sss', $id, $pass, $email);
-        $flg = false;
-        for($i = 0; $i < 10; $i++){
-            mysqli_stmt_execute($stmt);
-            if(mysqli_stmt_affected_rows($stmt) > 0){
+        try{
+            // トランザクション開始
+            $conn->begin_transaction();
+            try{
+                /**
+                 * まずはIDが既に登録されているものではないかチェック
+                 */
+                $sql = "SELECT * FROM H1_4_Users WHERE ID = ?;";
+                $stmt = mysqli_prepare($conn, $sql);
+                mysqli_stmt_bind_param($stmt, "s", $id);
+                //SQLステートメントの実行
+                mysqli_stmt_execute($stmt); 
+                mysqli_stmt_store_result($stmt);
+                $num = mysqli_stmt_num_rows($stmt);
+                // 既に使用されているIDならエラーメッセージを返す。
+                if($num != 0){
+                    throw new Exception("idErr:すでに使用されているIDは使えません。");
+                }
+                /**
+                 * ここから登録
+                 */
+                $sql =  "INSERT INTO H1_4_Users(ID, pass, email) VALUES(?,?,?)";
+                $stmt = mysqli_prepare($conn, $sql);
+                mysqli_stmt_bind_param($stmt, 'sss', $id, $pass, $email);
+                mysqli_stmt_execute($stmt);
+                // うまくいかなかったらエラーメッセージを返す
+                if(mysqli_stmt_affected_rows($stmt) != 1){
+                    throw new Exception("err:エラー(001)。もう一度仮登録からやり直してください。");
+                }
+                /**
+                 * ユーザ専用テーブル作成
+                 */
+                $sql = "CREATE TABLE H1_3_UserData_{$id} LIKE H1_2_DefaultData";
+                $stmt = mysqli_prepare($conn, $sql);
+                mysqli_stmt_execute($stmt);
+                // うまくいかなかったらエラーメッセージを返す
+                if(mysqli_stmt_error($stmt) != ""){
+                    throw new Exception("err:エラー(002)。もう一度仮登録からやり直してください。");
+                }
+                /**
+                 * 初期データ追加
+                 */
+                $sql = "INSERT INTO H1_3_UserData_{$id} SELECT * FROM H1_2_DefaultData";
+                $stmt = mysqli_prepare($conn, $sql);
+                mysqli_stmt_execute($stmt);
+                if(mysqli_stmt_affected_rows($stmt) < 1){
+                    throw new Exception("err:エラー(003)。もう一度仮登録からやり直してください。");
+                }
+                /**
+                 * 仮登録消す(別に失敗してもいい)
+                 */
+                //SQL文の作成
+                $sql = "DELETE FROM H1_4_preRegister WHERE email = ?;";
+                $stmt = mysqli_prepare($conn, $sql);
+                mysqli_stmt_bind_param($stmt, 's', $email);
+                mysqli_stmt_execute($stmt);
+                // コミット
+                $conn->commit();
+                $msg = "登録完了しました。";
+                $err = "";
                 $flg = true;
-                break;
+            }catch(Exception $e){
+                // エラーが発生したらロールバック
+                $conn->rollback();
+                throw $e;
             }
-        }
-        // うまくいかなかったらエラーメッセージを返す
-        if(!$flg){
-            //データベースの接続を閉じる
-            mysqli_stmt_close($stmt);
-            mysqli_close($conn);
-            // JSON形式で返す
-            $arr["data"]["flg"] = $flg;
-            $arr["data"]["err"] = "err";
-            $arr["message"] = "エラー(001)。もう一度仮登録からやり直してください。";
-            print json_encode($arr, JSON_PRETTY_PRINT);
-            return;
-        }
-        /**
-         * ユーザ専用テーブル名取得
-         */
-        //SQL文の作成
-        $sql =  "SELECT CONCAT(mybase, Dno) FROM H1_4_Users WHERE ID LIKE \"$id\"";
-        $stmt = mysqli_prepare($conn, $sql);
-        $flg = false;
-        $myDbase = null;
-        for($i = 0; $i < 10; $i++){
-            mysqli_stmt_execute($stmt);
-            mysqli_stmt_store_result($stmt);
-            $num = mysqli_stmt_num_rows($stmt);
-            if($num > 0){
-                mysqli_stmt_bind_result($stmt, $mybase);
-                mysqli_stmt_fetch($stmt);
-                $flg = true;
-                $myDbase = $mybase;
-                break;
-            }
-        }
-        // うまくいかなかったらエラーメッセージを返す
-        if(!$flg){
-            //データベースの接続を閉じる
-            mysqli_stmt_close($stmt);
-            mysqli_close($conn);
-            // JSON形式で返す
-            $arr["data"]["flg"] = $flg;
-            $arr["data"]["err"] = "err";
-            $arr["message"] = "エラー(002)。もう一度仮登録からやり直してください。";
-            print json_encode($arr, JSON_PRETTY_PRINT);
-        }
-        /**
-         * ユーザ専用テーブル作成
-         */
-        //SQL文の作成
-        $sql = "CREATE TABLE $myDbase (SELECT * FROM H1_2_DefaultData)";
-        $stmt = mysqli_prepare($conn, $sql);
-        $flg = false;
-        for($i = 0; $i < 10; $i++){
-            mysqli_stmt_execute($stmt);
-            if(mysqli_stmt_error($stmt) == ""){
-                $flg = true;
-                break;
-            }
-        }
-        // うまくいかなかったらエラーメッセージを返す
-        if(!$flg){
-            //データベースの接続を閉じる
-            mysqli_stmt_close($stmt);
-            mysqli_close($conn);
-            // JSON形式で返す
-            $arr["data"]["flg"] = $flg;
-            $arr["data"]["err"] = "err";
-            $arr["message"] = "エラー(003)。もう一度仮登録からやり直してください。";
-            print json_encode($arr, JSON_PRETTY_PRINT);
-        }
-        /**
-         * 仮登録消す(別に失敗してもいい)
-         */
-        //SQL文の作成
-        $sql = "DELETE FROM H1_4_preRegister WHERE email LIKE \"$email\";";
-        $stmt = mysqli_prepare($conn, $sql);
-        for($i = 0; $i < 10; $i++){
-            mysqli_stmt_execute($stmt);
-            if(mysqli_stmt_affected_rows($stmt) > 0){
-                break;
-            }
+        }catch(Exception $e){
+            $errmsg = $e->getMessage();
+            $msg = explode(":",$errmsg)[1];
+            $err = explode(":",$errmsg)[0];
+            $flg = false;
         }
         //データベースの接続を閉じる
+        mysqli_stmt_free_result($stmt);
         mysqli_stmt_close($stmt);
         mysqli_close($conn);
         /**
          * 本登録完了
          */
         $arr["data"]["flg"] = $flg;
-        $arr["message"] = "登録完了しました。";
+        $arr["data"]["err"] = $err;
+        $arr["message"] = $msg;
         print json_encode($arr, JSON_PRETTY_PRINT);
     }
 }

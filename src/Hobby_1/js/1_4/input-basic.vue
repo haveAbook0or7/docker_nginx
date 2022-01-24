@@ -11,15 +11,15 @@
         </tr>
         <tr>
             <th class="left">HP</th>
-            <td><input type="text" maxlength="5" v-model="this.hp_1" @change="$emit('update:hp_1', $event.target.value)"></td>
-            <td><input type="text" maxlength="5" v-model="this.hp_mid" @change="$emit('update:hp_mid', $event.target.value)"></td>
-            <td><input type="text" maxlength="5" v-model="this.hp_max" @change="$emit('update:hp_max', $event.target.value)"></td>
+            <td><input type="text" maxlength="5" v-model.number="v_hp_1"></td>
+            <td><input type="text" maxlength="5" v-model.number="v_hp_mid"></td>
+            <td><input type="text" maxlength="5" v-model.number="v_hp_max"></td>
         </tr>
         <tr>
             <th class="left">ATK</th>
-            <td><input type="text" maxlength="5" v-model="this.atk_1" @change="$emit('update:atk_1', $event.target.value)"></td>
-            <td><input type="text" maxlength="5" v-model="this.atk_mid" @change="$emit('update:atk_mid', $event.target.value)"></td>
-            <td><input type="text" maxlength="5" v-model="this.atk_max" @change="$emit('update:atk_max', $event.target.value)"></td>
+            <td><input type="text" maxlength="5" v-model.number="v_atk_1"></td>
+            <td><input type="text" maxlength="5" v-model.number="v_atk_mid"></td>
+            <td><input type="text" maxlength="5" v-model.number="v_atk_max"></td>
         </tr>
     </table>
 </template>
@@ -39,6 +39,62 @@ module.exports = {
         atk_1: {default: 0},
         atk_mid: {default: 0},
         atk_max: {default: 0},
+	},
+    computed: {
+		v_hp_1:{
+			get(){return this.$props.hp_1},
+			set(value){
+				const regex = /^[0-9]{3,5}$/
+				if(regex.test(value)){
+					this.$emit('update:hp_1', value)
+				}
+			}
+		},
+		v_hp_mid:{
+			get(){return this.$props.hp_mid},
+			set(value){
+				const regex = /^[0-9]{3,5}$/
+				if(regex.test(value)){
+					this.$emit('update:hp_mid', value)
+				}
+			}
+		},
+        v_hp_max:{
+			get(){return this.$props.hp_max},
+			set(value){
+				const regex = /^[0-9]{3,5}$/
+				if(regex.test(value)){
+					this.$emit('update:hp_max', value)
+				}
+			}
+		},
+        v_atk_1:{
+			get(){return this.$props.atk_1},
+			set(value){
+				const regex = /^[0-9]{3,5}$/
+				if(regex.test(value)){
+					this.$emit('update:atk_1', value)
+				}
+			}
+		},
+		v_atk_mid:{
+			get(){return this.$props.atk_mid},
+			set(value){
+				const regex = /^[0-9]{3,5}$/
+				if(regex.test(value)){
+					this.$emit('update:atk_mid', value)
+				}
+			}
+		},
+        v_atk_max:{
+			get(){return this.$props.atk_max},
+			set(value){
+				const regex = /^[0-9]{3,5}$/
+				if(regex.test(value)){
+					this.$emit('update:atk_max', value)
+				}
+			}
+		},
 	},
 }
 // export default { Node.jsじゃないから、これだとダメだった。 }

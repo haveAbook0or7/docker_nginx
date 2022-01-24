@@ -82,4 +82,7 @@ module.exports = {
 		background: #2e2930;
 		color: white;
 	}
+	table{
+		width: 100%;
+	}
 </style>

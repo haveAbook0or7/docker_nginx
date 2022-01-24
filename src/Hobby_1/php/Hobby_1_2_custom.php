@@ -19,6 +19,7 @@
         <script src="../lib/vue.js"></script> 
         <script src="https://unpkg.com/http-vue-loader"></script>
         <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <script src="../lib/checkMedia.js"></script> 
     </head>
     <body>
         <header>

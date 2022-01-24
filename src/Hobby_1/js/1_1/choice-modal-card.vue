@@ -24,9 +24,7 @@ module.exports = {
 		mydbname: {default:"H1_2_DefaultDataMax"},
 	},
 	mounted() {
-		axios.post("../php/Hobby_1_1_DB.php",{
-			myDB: this.mydbname
-		})
+		axios.get("../php/Hobby_1_1_DB.php")
 		.then(response => {
 			this.message = response.data.message;
 			console.log(this.message);
