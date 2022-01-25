@@ -5,20 +5,25 @@
             $_SESSION['userID'] = "";
             $_SESSION['myTB'] = "H1_2_DefaultDataMax";
         }
+        // if($_SESSION['userID'] != "" && $_SESSION['myTB'] != ""){
+        //     if($_SESSION['userID'] == "wakana"){ // 管理者
+        //         return $_SESSION['userID'].
+        //                 '<span><a href="Hobby_1_2_custom.php" id="customlink">カードステータス編集</a> 
+        //                 <a href="Hobby_1_4_add.php" id="addlink">カード追加</a> 
+        //                 <a href="Hobby_1_1_home.php?logout='.$_SESSION['userID'].'">ログアウト</a></span>';
+        //     }
+        //     return $_SESSION['userID'].
+        //             '<span><a href="Hobby_1_2_custom.php" id="customlink">カードステータス編集</a> 
+        //             <a href="Hobby_1_1_home.php?logout='.$_SESSION['userID'].'">ログアウト</a></span>';
+        // }        
+        // $_SESSION['myTB'] = "H1_2_DefaultDataMax";
+        // return 'ゲスト <span><a href="Hobby_1_2_custom.php" id="customlink" target="_blank">カードステータス閲覧</a> 
+                // <a href="Hobby_1_3_login.php">ログイン</a></span>';
         if($_SESSION['userID'] != "" && $_SESSION['myTB'] != ""){
-            if($_SESSION['userID'] == "wakana"){ // 管理者
-                return $_SESSION['userID'].
-                        '<span><a href="Hobby_1_2_custom.php" id="customlink">カードステータス編集</a> 
-                        <a href="Hobby_1_4_add.php" id="addlink">カード追加</a> 
-                        <a href="Hobby_1_1_home.php?logout='.$_SESSION['userID'].'">ログアウト</a></span>';
-            }
-            return $_SESSION['userID'].
-                    '<span><a href="Hobby_1_2_custom.php" id="customlink">カードステータス編集</a> 
-                    <a href="Hobby_1_1_home.php?logout='.$_SESSION['userID'].'">ログアウト</a></span>';
+            return $_SESSION['userID'];
         }        
         $_SESSION['myTB'] = "H1_2_DefaultDataMax";
-        return 'ゲスト <span><a href="Hobby_1_2_custom.php" id="customlink" target="_blank">カードステータス閲覧</a> 
-                <a href="Hobby_1_3_login.php">ログイン</a></span>';
+        return 'ゲスト';
     }
     $log = login();
 ?>
@@ -33,6 +38,7 @@
         <script src="https://unpkg.com/http-vue-loader"></script>
         <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
         <script src="../lib/checkMedia.js"></script>
+        <style></style>
     </head>
     <body>
         <header>
@@ -40,8 +46,7 @@
         </header>
         <main id="app">
             <br><br>
-            <h2>ユーザーID: <?= $log?></h2>
-            <card-select :mydbname="'<?= $_SESSION['myTB'] ?>'"></card-select>
+            <card-select loguser="<?= $log ?>" mydbname="<?= $_SESSION['myTB'] ?>"></card-select>
         </main>
         <script>
             if(getMedia() == "SmartPhone" && window.orientation == 0){

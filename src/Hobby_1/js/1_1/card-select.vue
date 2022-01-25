@@ -1,15 +1,29 @@
 <template>
-	<div class="cards">
-		<div class="card" v-for="data in cardData" :key="data.id_name">
-			<img :id="data.id_name" :src="'../img/'+data.cardImg" width="70.5" height="74.7" @click="clickOpenModal(data.id_name)">
-			<view-hpatk :id_name="data.id_name" ref="hpatk" @extract="extractHPATK" @change-basic="changeBasicValue"></view-hpatk>
-			<view-buddy :id_name="data.id_name" ref="buddy" @change="changeBuddyLv"></view-buddy>
-			<view-damage :id_name="data.id_name" :m="'1'" ref="damage1" @attribute="giveAttribute" @change-lv="changeMasicLv" @calc-damage="changeTotalDamage"></view-damage>
-			<view-damage :id_name="data.id_name" :m="'2'" ref="damage2" @attribute="giveAttribute" @change-lv="changeMasicLv" @calc-damage="changeTotalDamage"></view-damage>
+	<div class="card-select">
+		<h2>ユーザーID: {{loguser}}
+			<span v-if="is_gest">
+				<a href="Hobby_1_2_custom.php" class="italic" target="_blank">カードステータス閲覧</a> 
+                <a href="Hobby_1_3_login.php">ログイン</a>
+			</span>
+			<span v-else>
+				<a href="Hobby_1_2_custom.php" class="italic">カードステータス編集</a> 
+                <a v-if="is_master" href="Hobby_1_4_add.php" class="italic">カード追加</a> 
+				<a :href="'Hobby_1_1_home.php?logout='+loguser">ログアウト</a>
+			</span>
+		</h2>
+		<div class="space"></div>
+		<div class="cards">
+			<div class="card" v-for="data in cardData" :key="data.id_name">
+				<img :id="data.id_name" :src="'../img/'+data.cardImg" width="70.5" height="74.7" @click="clickOpenModal(data.id_name)">
+				<view-hpatk :id_name="data.id_name" ref="hpatk" @extract="extractHPATK" @change-basic="changeBasicValue"></view-hpatk>
+				<view-buddy :id_name="data.id_name" ref="buddy" @change="changeBuddyLv"></view-buddy>
+				<view-damage :id_name="data.id_name" :m="'1'" ref="damage1" @attribute="giveAttribute" @change-lv="changeMasicLv" @calc-damage="changeTotalDamage"></view-damage>
+				<view-damage :id_name="data.id_name" :m="'2'" ref="damage2" @attribute="giveAttribute" @change-lv="changeMasicLv" @calc-damage="changeTotalDamage"></view-damage>
+			</div>
+			<view-total class="total" ref="total"></view-total>
+			<choice-modal-card :mydbname="this.mydbname" ref="modal" @choice-card="getCard"></choice-modal-card>
 		</div>
-		<view-total class="total" ref="total"></view-total>
-		<choice-modal-card :mydbname="this.mydbname" ref="modal" @choice-card="getCard"></choice-modal-card>
-	</div>
+		</div>
 </template>
 
 <script>
@@ -22,7 +36,22 @@ module.exports = {
 		'choice-modal-card': httpVueLoader('./choice-modal-card.vue'),
     },
 	props: {
+		loguser: {default: "ゲスト"},
 		mydbname: {default:"H1_2_DefaultDataMax"},
+	},
+	computed: {
+		is_master(){
+			if(this.loguser == "wakana"){
+				return true;
+			}
+			return false;
+		},
+		is_gest(){
+			if(this.loguser == "ゲスト"){
+				return true;
+			}
+			return false;
+		}
 	},
 	data: function () {
 		return {
@@ -131,6 +160,43 @@ module.exports = {
 		border: 0;
 		color: #ffffff;
 		font-size: 13px;
+	}
+	.card-select{
+		width: 905px;
+		margin: auto;
+	}
+	h2{
+		box-sizing: border-box;
+		position: fixed;
+		/* height: var(--h2H);
+		width: var(--W); */
+		height: 48px;
+		width: 905px;
+		margin: 10px 0;
+		border-right: 15px solid #fbfaf5;
+		font: normal 30px "游ゴシック",serif;
+		background-color: #e6b422;
+		color: #fbfaf5;
+		z-index: 3;
+	}
+	span{
+		position: absolute;
+		right: 0;
+		bottom: 0;
+	}
+	a{
+		font: normal 25px "游ゴシック",serif;
+		color: #2e2930;
+	}
+	.italic{
+		font-style: italic;
+		font-size: 20px;
+	}
+	a:visited{
+		color: #e4007f;
+	}
+	.space{
+		height: 60px;
 	}
 	.card{
 		width: 140px;

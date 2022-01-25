@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="login-form">
 		<meta v-if="reFlg" http-equiv="refresh" content=" 0; url=Hobby_1_1_home.php">
 		<table border="0">
         <tr>
@@ -86,14 +86,13 @@ module.exports = {
 		font-size: 13px;
 		text-align: center;
 	}
-    div{
-		display: inline-flex;
+	.login-form{
+		width: 500px;
+		margin: auto;
         position: relative;
 		background: #2e2930;
 		border: 5px double #e6b422;
         height: 200px;
-        width: 500px;
-		margin: 0 197.5px;
 	}
     table{
 		width: 70%;

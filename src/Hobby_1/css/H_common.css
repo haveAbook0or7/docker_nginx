@@ -36,21 +36,13 @@ h2{
     background-color: #e6b422;
     color: white;
 }
-h1>a, h2>span{
+h1>a{
     position: absolute;
     right: 0;
     bottom: 0;
     font: normal 25px "游ゴシック",serif;
-    color: #2e2930;
 }
-h2>span>a{
-    color: #2e2930;
-}
-#customlink, #addlink{
-    font-style: italic;
-    font-size: 20px;
-}
-a:visited, h2>span>a:visited{
+a:visited{
     color: #e4007f;
 }
 input[type=text]:read-only{
