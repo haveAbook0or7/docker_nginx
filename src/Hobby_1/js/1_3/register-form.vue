@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="register-form">
 		<!-- トークン照合クリア -->
 		<table border="0" v-show="tokenflg && !signupflg">
         <tr>
@@ -157,14 +157,14 @@ module.exports = {
 		font-size: 13px;
 		text-align: center;
 	}
-    div{
-		display: inline-flex;
+    .register-form{
+		display: flex;
         position: relative;
 		background: #2e2930;
 		border: 5px double #e6b422;
         height: 200px;
         width: 500px;
-        margin: 0 197.5px;
+        margin: auto;
 	}
     table{
 		width: 100%;

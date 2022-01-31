@@ -1,10 +1,10 @@
 <template>
-	<div>
+	<div class="card-add">
 		<h2>
 			<input class="update" type="button" value="追加" @click="clickDataSave" v-if="showFlg">
 			<span class="res">{{this.responseMsg}}</span>
 		</h2>
-		<br><br><br>
+		<div class="space"></div>
 		<div class="cards" v-if="showFlg">
 			<div class="card" v-for="(card, index) in this.cardDatas" :key="index">
 				<input-noimg 
@@ -213,6 +213,10 @@ module.exports = {
 		color: #ffffff;
 		font-size: 13px;
 	}
+	.card-add{
+		width: 905px;
+		margin: auto;
+	}
 	h2{
 		box-sizing: border-box;
 		position: fixed;
@@ -224,6 +228,9 @@ module.exports = {
 		background-color: #e6b422;
 		color: #fbfaf5;
 		z-index: 5;
+	}
+	.space{
+		height: 60px;
 	}
 	.cards{
 		background: #fbfaf5;

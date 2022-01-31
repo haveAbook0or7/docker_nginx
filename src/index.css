@@ -1,6 +1,14 @@
 
 @import url("./Hobby_1/css/H_common.css");
 
+h2{
+    width: 905px;
+    margin: auto;
+}
+.contents{
+    width: 905px;
+    margin: auto;
+}
 a{
     position: relative;
     font-size: 18px;
