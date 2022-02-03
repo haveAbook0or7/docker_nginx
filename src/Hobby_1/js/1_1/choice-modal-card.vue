@@ -1,10 +1,9 @@
 <template>
-	<div id="overlay" v-show="this.showFlg" @click="closeModal()">
+	<div id="overlay" v-show="this.showFlg" @click="closeModal()" class="choice-modal-card" :style="variable">
         <div id="modal" v-show="this.showFlg" @click="$event.stopPropagation()">
 			<sort-modal ref="modalSort" @sort="changeSort" @search="changeSearch"></sort-modal>
 			<input class="sort" type="button" value="ソート" @click="$refs.modalSort.openModal()">
             <img class="updown" :src="'../img/'+this.updownImg" width="20" height="20" @click="clickUpDown()">
-			<br>
             <img v-for="card in this.datas" 
 			:src="'../img/'+Dormitory[Math.floor(card.chno/10)]+'/'+card.img" 
 			:key="card.cdno" 
@@ -22,6 +21,7 @@ module.exports = {
     },
 	props: {
 		mydbname: {default:"H1_2_DefaultDataMax"},
+		media: {default: "PCH"},
 	},
 	mounted() {
 		axios.get("../php/Hobby_1_1_DB.php")
@@ -35,6 +35,40 @@ module.exports = {
 		});
 	},
 	computed: {
+		variable() {
+			switch(this.media.slice(0, -1)){
+				case "PC":
+					return {
+						"--buttonW": "50px",
+						"--buttonH": "18px",
+						"--buttonR": "35px",
+						"--buttonFS": "10px",
+						"--updwS": "20px",
+						"--modalP": "35px",
+						"--imgS": "1",
+					}
+				case "TabletPC":
+					return {
+						"--buttonW": "80px",
+						"--buttonH": "36px",
+						"--buttonR": "55px",
+						"--buttonFS": "16px",
+						"--updwS": "40px",
+						"--modalP": "55px",
+						"--imgS": "1.2",
+					}
+				case "SmartPhone":
+					return {
+						"--buttonW": "120px",
+						"--buttonH": "46px",
+						"--buttonR": "70px",
+						"--buttonFS": "25px",
+						"--updwS": "50px",
+						"--modalP": "70px",
+						"--imgS": "1.2",
+					}
+			}
+		},
 		datas: {
 			get(){
 				const keys = {default: "cdno", Lv: "lv", HP: "hp", ATK: "atk", chNo: "chno"};
@@ -144,9 +178,6 @@ module.exports = {
 		padding: 0;
 		border: 0;
 	}
-	.hidden{
-		display: none !important;
-	}
 	#overlay{
 		/*　要素を重ねた時の順番　*/
 		z-index:3;
@@ -157,9 +188,6 @@ module.exports = {
 		width:100%;
 		height:100%;
 		background-color:rgba(0,0,0,0.5);
-		
-	}
-	#overlay{
 		/*　画面の中央に要素を表示させる設定　*/
 		display: flex;
 		align-items: center;
@@ -170,24 +198,27 @@ module.exports = {
 		width:70%;
 		height: 70%;
 		overflow: scroll;
-		padding: 1em;
+		padding: var(--modalP) 1em 1em;
 		background-color: #fff;
 		position: absolute;
+		text-align: center;
 	}
 	img{
+		width: calc(70.5px * var(--imgS));
+		height: calc(74.7px * var(--imgS));
 		margin: 4px;
 		border: 1px solid gray;
 	}
 	.sort{
 		position: absolute;
 		top: 10px;
-		right: 35px;
-		width: 50px;
-        height: 18px;
+		right: var(--buttonR);
+		width: var(--buttonW);
+        height: var(--buttonH);
         display: inline-block;
         text-align: center;
         background-color: #e6b422;
-        font-size: 10px;
+        font-size: var(--buttonFS);
         text-decoration: none;
         font-weight: bold;
         padding: 1px 2px;
@@ -204,6 +235,8 @@ module.exports = {
 		position: absolute;
 		top: 4px;
 		right: 5px;
+		width: var(--updwS);
+		height: var(--updwS);
 	}
 	.hide{
 		display: none;

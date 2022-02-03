@@ -1,6 +1,7 @@
 <template>
-	<div class="card-select">
-		<h2>ユーザーID: {{loguser}}
+	<div class="card-select" :style="variable">
+		<h2>
+			<span class="user">ユーザーID: {{loguser}}</span>
 			<span v-if="is_gest">
 				<a href="Hobby_1_2_custom.php" class="italic" target="_blank">カードステータス閲覧</a> 
                 <a href="Hobby_1_3_login.php">ログイン</a>
@@ -13,17 +14,19 @@
 		</h2>
 		<div class="space"></div>
 		<div class="cards">
-			<div class="card" v-for="data in cardData" :key="data.id_name">
-				<img :id="data.id_name" :src="'../img/'+data.cardImg" width="70.5" height="74.7" @click="clickOpenModal(data.id_name)">
-				<view-hpatk :id_name="data.id_name" ref="hpatk" @extract="extractHPATK" @change-basic="changeBasicValue"></view-hpatk>
-				<view-buddy :id_name="data.id_name" ref="buddy" @change="changeBuddyLv"></view-buddy>
-				<view-damage :id_name="data.id_name" :m="'1'" ref="damage1" @attribute="giveAttribute" @change-lv="changeMasicLv" @calc-damage="changeTotalDamage"></view-damage>
-				<view-damage :id_name="data.id_name" :m="'2'" ref="damage2" @attribute="giveAttribute" @change-lv="changeMasicLv" @calc-damage="changeTotalDamage"></view-damage>
+			<div>
+				<div class="card" v-for="data in cardData" :key="data.id_name">
+					<img :id="data.id_name" :src="'../img/'+data.cardImg" width="70.5" height="74.7" @click="clickOpenModal(data.id_name)">
+					<view-basic ref="hpatk" :id_name="data.id_name" :media="media" @extract="extractHPATK" @change-basic="changeBasicValue"></view-basic>
+					<view-buddy ref="buddy" :id_name="data.id_name" :media="media" @change="changeBuddyLv"></view-buddy>
+					<view-damage ref="damage1" :id_name="data.id_name" :m="'1'" :media="media" @attribute="giveAttribute" @change-lv="changeMasicLv" @calc-damage="changeTotalDamage"></view-damage>
+					<view-damage ref="damage2" :id_name="data.id_name" :m="'2'" :media="media" @attribute="giveAttribute" @change-lv="changeMasicLv" @calc-damage="changeTotalDamage"></view-damage>
+				</div>
 			</div>
-			<view-total class="total" ref="total"></view-total>
-			<choice-modal-card :mydbname="this.mydbname" ref="modal" @choice-card="getCard"></choice-modal-card>
+			<view-total ref="total" :media="media"></view-total>
+			<choice-modal-card ref="modal" :mydbname="this.mydbname" :media="media" @choice-card="getCard"></choice-modal-card>
 		</div>
-		</div>
+	</div>
 </template>
 
 <script>
@@ -32,14 +35,61 @@ module.exports = {
 		'view-total': httpVueLoader('./view-total.vue'),
 		'view-damage': httpVueLoader('./view-damage.vue'),
 		'view-buddy': httpVueLoader('./view-buddy.vue'),
-		'view-hpatk': httpVueLoader('./view-hpatk.vue'),
+		'view-basic': httpVueLoader('./view-basic.vue'),
 		'choice-modal-card': httpVueLoader('./choice-modal-card.vue'),
     },
+	mounted() {
+		// 端末の種類取得
+		this.media = getMedia();
+		console.log(this.media)
+	},
 	props: {
 		loguser: {default: "ゲスト"},
 		mydbname: {default:"H1_2_DefaultDataMax"},
 	},
 	computed: {
+		variable() {
+			console.log(this.media.slice(0, -1))
+			console.log(this.media.slice(0, -1))
+			switch(this.media.slice(0, -1)){
+				case "PC":
+					return {
+						"--W": "905px",
+						"--h2H": "48px",
+						"--userFS": "30px",
+						"--aFS": "25px",
+						"--spaceH": "60px",
+						"--cardsFD": "initial",
+						"--cardW": "140px",
+						"--borderW": "0 0 0 2px",
+						"--imgS": "1",
+					}
+				case "TabletPC":
+					return {
+						"--W": "100%",
+						"--h2H": "65px",
+						"--userFS": "35px",
+						"--aFS": "30px",
+						"--spaceH": "80px",
+						"--cardsFD": "column-reverse",
+						"--cardW": "20%",
+						"--borderW": "2px 0 0 0",
+						"--imgS": "1.2",
+					}
+				case "SmartPhone":
+					return {
+						"--W": "100%",
+						"--h2H": "40px",
+						"--userFS": "25px",
+						"--aFS": "25px",
+						"--spaceH": "52px",
+						"--cardsFD": "column-reverse",
+						"--cardW": "20%",
+						"--borderW": "2px 0 0 0",
+						"--imgS": "1.2",
+					}
+			}
+		},
 		is_master(){
 			if(this.loguser == "wakana"){
 				return true;
@@ -55,6 +105,7 @@ module.exports = {
 	},
 	data: function () {
 		return {
+			media: "PCH",
 			Dormitory: ["","Heartslabyul","Savanaclaw","Octavinelle","Scarabia","Pomefiore","Ignihyde","Diasomnia","Ramshackle"],
 			chnos: [0, 0, 0, 0, 0],
 			cardData: {
@@ -162,16 +213,14 @@ module.exports = {
 		font-size: 13px;
 	}
 	.card-select{
-		width: 905px;
+		width: var(--W);
 		margin: auto;
 	}
 	h2{
 		box-sizing: border-box;
 		position: fixed;
-		/* height: var(--h2H);
-		width: var(--W); */
-		height: 48px;
-		width: 905px;
+		height: var(--h2H);
+		width: var(--W);
 		margin: 10px 0;
 		border-right: 15px solid #fbfaf5;
 		font: normal 30px "游ゴシック",serif;
@@ -184,32 +233,47 @@ module.exports = {
 		right: 0;
 		bottom: 0;
 	}
+	.user{
+		left: 0;
+		font-size: var(--userFS);
+	}
 	a{
-		font: normal 25px "游ゴシック",serif;
+		font: normal var(--aFS) "游ゴシック",serif;
 		color: #2e2930;
 	}
 	.italic{
 		font-style: italic;
-		font-size: 20px;
+		font-size: calc(var(--aFS) / 5 * 4);
 	}
 	a:visited{
 		color: #e4007f;
 	}
 	.space{
-		height: 60px;
+		height: var(--spaceH);
 	}
-	.card{
-		width: 140px;
-		display: inline-block;
-		text-align: center;
-	}
+	/* カード */
 	.cards{
+		box-sizing: border-box;
+		width: var(--W);
 		display: inline-flex;
+		flex-direction: var(--cardsFD);
 		background: #fbfaf5;
 		border: 5px double #e6b422;
 	}
-	.total{
-		border-left: 2px solid #e6b422;
+	.card{
+		width: var(--cardW);
+		display: inline-block;
+		text-align: center;
+	}
+	.card > img{
+		width: calc(70.5px * var(--imgS));
+		height: calc(74.7px * var(--imgS));
+		margin: 5px;
+	}
+	.view-total{
+		border-style: solid;
+		border-color: #e6b422;
+		border-width: var(--borderW);
 	}
 	table{
 		width: 100%;

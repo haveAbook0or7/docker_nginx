@@ -40,9 +40,13 @@ module.exports = {
 	computed: {
 		variable() {
 			switch(this.media){
-				case "PC":
+				case "PCH":
+				case "PCW":
 					return {
+						"--Dis": "initial",
+						"--AL": "initial",
 						"--W": "245px",
+						"--T": "18%",
 						"--R": "10px",
 						"--FS": "13px",
 						"--radioW": "16px",
@@ -57,9 +61,13 @@ module.exports = {
 						"--checkFS": "12px",
 						"--checkD": "1",
 					}
-				case "TabletPC":
+				case "TabletPCH":
+				case "TabletPCW":
 					return {
+						"--Dis": "initial",
+						"--AL": "initial",
 						"--W": "445px",
+						"--T": "20%",
 						"--R": "10px",
 						"--FS": "20px",
 						"--radioW": "30px",
@@ -74,16 +82,19 @@ module.exports = {
 						"--checkFS": "20px",
 						"--checkD": "1",
 					}
-				case "SmartPhone":
+				case "SmartPhoneH":
 					return {
+						"--Dis": "flex",
+						"--AL": "center",
 						"--W": "80%",
-						"--R": "5%",
-						"--FS": "50px",
+						"--T": "initial",
+						"--R": "initial",
+						"--FS": "45px",
 						"--radioW": "50px",
-						"--radioH": "56px",
+						"--radioH": "54px",
 						"--radioM": "20px 15px",
-						"--buttonW": "170px",
-						"--buttonH": "60px",
+						"--buttonW": "180px",
+						"--buttonH": "70px",
 						"--buttonM": "32px 2px",
 						"--checkW": "380px",
 						"--checkH": "100px",
@@ -91,12 +102,32 @@ module.exports = {
 						"--checkFS": "45px",
 						"--checkD": "2",
 					}
+				case "SmartPhoneW":
+					return {
+						"--Dis": "flex",
+						"--AL": "center",
+						"--W": "80%",
+						"--T": "initial",
+						"--R": "initial",
+						"--FS": "25px",
+						"--radioW": "40px",
+						"--radioH": "40px",
+						"--radioM": "10px 10px",
+						"--buttonW": "130px",
+						"--buttonH": "45px",
+						"--buttonM": "10px 2px",
+						"--checkW": "180px",
+						"--checkH": "50px",
+						"--checkMB": "10px",
+						"--checkFS": "20px",
+						"--checkD": "1.2",
+					}
 			}
 		},
 	},
 	data: function () {
 		return {
-			media: "PC",
+			media: "PCH",
 			showFlg: false,
 			Dormitory: ["","Heartslabyul","Savanaclaw","Octavinelle","Scarabia","Pomefiore","Ignihyde","Diasomnia","Ramshackle"],
 			radioValue: "default",
@@ -161,6 +192,10 @@ module.exports = {
 		width:100%;
 		height:100%;
 		background-color:rgba(0,0,0,0.5);
+		/*　画面の中央に要素を表示させる設定　*/
+		display: var(--Dis);
+		align-items: var(--AL);
+		justify-content: var(--AL);
 	}
 	#modalSort{
 		z-index:4;
@@ -168,7 +203,7 @@ module.exports = {
 		padding: 1em;
 		background-color: #fff;
 		position: absolute;
-		top: 15%;
+		top: var(--T);
 		right: var(--R);
 	}
 	/* ラジオボタン */

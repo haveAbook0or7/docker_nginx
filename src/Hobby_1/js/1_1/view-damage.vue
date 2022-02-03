@@ -1,5 +1,5 @@
 <template>
-	<table border="0" :id="this.id_name+'_TMagic'" :style="elementColor">
+	<table border="0" :id="this.id_name+'_TMagic'" class="view-damage" :style="variable">
         <tr>
             <td colspan="2">
 				<input :id="this.id_name+'_MtORf'+this.m" type="checkbox" v-model="isUse" @change="changeUse">
@@ -58,7 +58,46 @@ module.exports = {
 	},
 	props: {
 		id_name: {default:"myselectimg"},
-		m: {default:"1"}
+		m: {default:"1"},
+		media: {default: "PCH"},
+	},
+	computed: {
+		
+		variable() {
+			let styles = {
+				"--dynamic-color": this.colors
+			};
+			switch(this.media.slice(0, -1)){
+				case "PC":
+					Object.assign(styles, {
+						"--FS": "12px",
+						"--textW": "40px",
+						"--textH": "18px",
+                        "--selectW": "initial",
+						"--selectH": "initial",
+					});
+					break;
+				case "TabletPC":
+					Object.assign(styles, {
+						"--FS": "16px",
+						"--textW": "60px",
+						"--textH": "25px",
+                        "--selectW": "60px",
+						"--selectH": "26px",
+					});
+					break;
+				case "SmartPhone":
+					Object.assign(styles, {
+						"--FS": "18px",
+						"--textW": "60px",
+						"--textH": "20px",
+                        "--selectW": "60px",
+						"--selectH": "28px",
+					});
+					break;
+			}
+			return styles;
+		},
 	},
 	data: function () {
 		return {
@@ -110,13 +149,6 @@ module.exports = {
 
 			colors: "#705b67"
 		}
-	},
-	computed: {
-		elementColor() {
-			return {
-				"--dynamic-color": this.colors
-			}
-		},
 	},
 	methods: {
 		// 受け取ったデータを保存。表示できるやつは表示
@@ -509,18 +541,25 @@ module.exports = {
 <style scoped>
 	*{
 		background: #2e2930;
+		font-size: var(--FS);
 	}
 	.tds{
-		font-size: 12px;
+		font-size: calc(var(--FS) / 13 * 11);
 		text-align: right;
 		height: 20px;
 	}
+	/* テキスト */
 	input[type=text]{
-		height: 18px;
-		width: 40px;
+        height: var(--textH);
+		width: var(--textW);
 		border: 1px solid var(--dynamic-color);
-		border-radius: 2px;
-	}
+        border-radius: 2px;
+    }
+	/* セレクトボックス */
+	.select-own{
+        width: var(--selectW);
+        height: var(--selectH);
+    }
 	/* チェックボックス */
 	input[type=checkbox]{
 		display: none;
@@ -531,7 +570,6 @@ module.exports = {
 		position: relative;
 		justify-content: center; /* 文字の位置を中央にする */
 		align-items: center;
-		font-size: 13px;
 		color: var(--dynamic-color);
 		border: 1px solid var(--dynamic-color);
 	}

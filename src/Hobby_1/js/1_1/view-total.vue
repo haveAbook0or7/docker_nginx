@@ -1,15 +1,21 @@
 <template>
-	<div>
+	<div class="view-total" :style="variable">
         <table>
-            <tr style="height: 40px;">
-                <td>合計HP</td><td>合計HP(回復込み)</td>
+			<tr>
+				<th colspan="2">合計HP</th>
+			</tr>
+            <tr>
+                <td>回復なし</td>
+				<td><input type="text" :value="this.totalHP" readonly></td>
             </tr>
             <tr>
-                <td><input type="text" :value="this.totalHP" readonly></td>
+				<td>回復込み</td>
                 <td><input type="text" :value="this.totalHPre" readonly></td>
 			</tr>
-            <tr style="height: 40px;">
-				<td colspan="2">各試験の予想トータルダメージ</td>
+		</table>
+		<table>
+            <tr>
+				<th colspan="2">各試験の予想トータルダメージ</th>
 			</tr>
             <tr>
                 <td class="natural">無属性の試験</td>
@@ -27,8 +33,10 @@
                 <td class="fire">火属性の試験</td>
                 <td><input class="fire" type="text" :value="this.fire" readonly></td>
             </tr>
-            <tr style="height: 40px;">
-                <td colspan="2">各試験の予想ダメージ(選択)</td>
+		</table>
+		<table>
+            <tr>
+                <th colspan="2">各試験の予想ダメージ(選択)</th>
             </tr>
             <tr>
                 <td class="natural">無属性の試験</td>
@@ -52,6 +60,48 @@
 
 <script>
 module.exports = {
+	props: {
+		media: {default: "PCH"},
+	},
+	computed: {
+		variable() {
+			switch(this.media.slice(0, -1)){
+				case "PC":
+					return {
+						"--FS": "13px",
+						"--W": "195px",
+						"--H": "706px",
+						"--Dis": "initial",
+						"--FD": "column",
+						"--tableBS": "initial",
+						"--textW": "60px",
+						"--textH": "18px",
+					}
+				case "TabletPC":
+					return {
+						"--FS": "18px",
+						"--W": "100%",
+						"--H": "170px",
+						"--Dis": "inline-flex",
+						"--FD": "row",
+						"--tableBS": "initial",
+						"--textW": "80px",
+						"--textH": "25px",
+					}
+				case "SmartPhone":
+					return {
+						"--FS": "18px",
+						"--W": "100%",
+						"--H": "160px",
+						"--Dis": "inline-flex",
+						"--FD": "row",
+						"--tableBS": "0",
+						"--textW": "80px",
+						"--textH": "22px",
+					}
+			}
+		},
+	},
 	data: function () {
 		return {
             damages: {
@@ -143,18 +193,33 @@ module.exports = {
 	*{
         background: #2e2930;
 		text-align: center;
+		font-size: var(--FS);
 		--natural: #a58f86;
 		--fire: #ea5506;
 		--tree: #c3d825;
 		--water: #0094c8;
+	}
+	.view-total{
+		box-sizing: border-box;
+		width: var(--W);
+		height: var(--H);
+		display: var(--Dis);
+		flex-direction: var(--FD);
+	}
+	table{
+		border-spacing: var(--tableBS);
+	}
+	th{
+		height: 40px;
+		font-weight: 500;
 	}
 	td.natural{color: var(--natural);}
 	td.fire{color: var(--fire);}
 	td.tree{color: var(--tree);}
 	td.water{color: var(--water);}
 	input[type=text]{
-		height: 18px;
-		width: 60px;
+		height: var(--textH);
+		width: var(--textW);
 		text-align: left;
 		border: 1px solid #aaaaaa;
 		border-radius: 2px;
@@ -163,5 +228,4 @@ module.exports = {
 	input.fire{border-color: var(--fire);}
 	input.tree{border-color: var(--tree);}
 	input.water{border-color: var(--water);}
-	div{height: 706px;}
 </style>

@@ -1,5 +1,5 @@
 <template>
-	<table border="0" class="THpAtk">
+	<table border="0" class="view-basic" :style="variable">
         <tr>
             <td colspan="3">
                 <input type="button" value="MAX" @click="clickMAX('max')">
@@ -34,6 +34,40 @@ module.exports = {
     },
 	props: {
 		id_name: {default:"myselectimg"},
+        media: {default: "PCH"},
+	},
+    computed: {
+		variable() {
+			switch(this.media.slice(0, -1)){
+				case "PC":
+					return {
+						"--FS": "13px",
+						"--buttonW": "50px",
+						"--buttonH": "18px",
+						"--buttonFS": "10px",
+						"--textW": "40px",
+						"--textH": "18px",
+					}
+				case "TabletPC":
+					return {
+						"--FS": "18px",
+						"--buttonW": "80px",
+						"--buttonH": "28px",
+						"--buttonFS": "16px",
+						"--textW": "60px",
+						"--textH": "25px",
+					}
+				case "SmartPhone":
+					return {
+						"--FS": "18px",
+						"--buttonW": "80px",
+						"--buttonH": "28px",
+						"--buttonFS": "16px",
+						"--textW": "60px",
+						"--textH": "20px",
+					}
+			}
+		},
 	},
 	data: function () {
 		return {
@@ -121,34 +155,20 @@ module.exports = {
 <style scoped>
     *{
 		background: #2e2930;
-	}
-    input[type=text]:read-only{
-		height: 18px;
-		width: 40px;
-		border: 1px solid #aaaaaa;
-		border-radius: 2px;
-	}
-    input[type=text]:read-write{
-		height: 18px;
-		width: 40px;
-		color: #2e2930;
-		background: #fbfaf5;
-		border: 1.5px solid #e6b422;
-		border-radius: 2px;
-        caret-color: #2e2930;
+        font-size: var(--FS);
 	}
     input[type=button]{
-        width: 50px;
-        height: 18px;
+        width: var(--buttonW);
+        height: var(--buttonH);
         display: inline-block;
         text-align: center;
         background-color: #e6b422;
-        font-size: 10px;
+        font-size: var(--buttonFS);
         text-decoration: none;
         font-weight: bold;
         padding: 1px 2px;
         border: 0.5px dashed #ffffff;
-        margin: 0 2px;
+        margin: 3px;
         box-shadow: #e6b422 0px 0px 0px 3px;
         z-index: 3;
     }
@@ -157,4 +177,18 @@ module.exports = {
         box-shadow: slategray 0px 0px 0px 3px;
         z-index: 3;
     }
+    input[type=text]{
+        height: var(--textH);
+		width: var(--textW);
+        border-radius: 2px;
+    }
+    input[type=text]:read-only{
+		border: 1px solid #aaaaaa;
+	}
+    input[type=text]:read-write{
+		color: #2e2930;
+		background: #fbfaf5;
+		border: 1.5px solid #e6b422;
+        caret-color: #2e2930;
+	}
 </style>

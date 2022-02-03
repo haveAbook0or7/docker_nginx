@@ -36,7 +36,7 @@ module.exports = {
 	},
     computed: {
         variable() {
-			switch(this.media){
+			switch(this.media.slice(0, -1)){
 				case "PC":
 					return {
 						"--FS": "13px",
@@ -125,6 +125,7 @@ module.exports = {
     input[type=text]:read-only{
 		height: var(--textH);
 		width: var(--textW);
+		font-size: var(--FS);
 		border: 1px solid #aaaaaa;
 		border-radius: 2px;
 	}

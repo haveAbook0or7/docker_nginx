@@ -35,7 +35,7 @@ module.exports = {
 	},
 	computed: {
 		variable() {
-			switch(this.media){
+			switch(this.media.slice(0, -1)){
 				case "PC":
 					return {
 						"--FS": "13px",

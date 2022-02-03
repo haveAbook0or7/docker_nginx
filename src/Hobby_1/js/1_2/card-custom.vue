@@ -67,7 +67,7 @@ module.exports = {
 	},
 	computed: {
 		variable() {
-			switch(this.media){
+			switch(this.media.slice(0, -1)){
 				case "PC":
 					return {
 						"--W": "905px",
@@ -199,7 +199,7 @@ module.exports = {
 	},
 	data: function () {
 		return {
-			media: "PC",
+			media: "PCH",
 			Dormitory: ["","Heartslabyul","Savanaclaw","Octavinelle","Scarabia","Pomefiore","Ignihyde","Diasomnia","Ramshackle"],
 			flexibleDatas: [],
 			originDatas:[],
@@ -377,7 +377,7 @@ module.exports = {
 	.res{
 		position: absolute;
 		left: var(--resL);
-		bottom: 6px;
+		bottom: 0;
 		font-size: var(--resFS);
 		font-style: italic;
 	}

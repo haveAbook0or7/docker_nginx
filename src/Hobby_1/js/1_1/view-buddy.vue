@@ -1,5 +1,5 @@
 <template>
-	<table border="0" class="TBuddy">
+	<table border="0" class="view-buddy" :style="variable">
         <tr>
             <td>
                 <img :id="this.id_name+'_buddy1flg'" class="imgflg" :src="'../img/'+this.imgflg[1]" width="35" height="35">
@@ -40,6 +40,31 @@ module.exports = {
     },
 	props: {
 		id_name: {default:"myselectimg"},
+        media: {default: "PCH"},
+	},
+    computed: {
+		variable() {
+			switch(this.media.slice(0, -1)){
+				case "PC":
+					return {
+						"--FS": "12px",
+                        "--selectW": "initial",
+						"--selectH": "initial",
+					}
+				case "TabletPC":
+					return {
+						"--FS": "16px",
+                        "--selectW": "50px",
+						"--selectH": "26px",
+					}
+				case "SmartPhone":
+					return {
+						"--FS": "18px",
+                        "--selectW": "50px",
+						"--selectH": "26px",
+					}
+			}
+		},
 	},
 	data: function () {
 		return {
@@ -105,7 +130,7 @@ module.exports = {
 <style scoped>
 	*{
         background: #2e2930;
-        font-size: 12px;
+        font-size: var(--FS);
 	}
     img{
         background: transparent;
@@ -119,5 +144,9 @@ module.exports = {
     }
     td{
         text-align: center;
+    }
+    .select-own{
+        width: var(--selectW);
+        height: var(--selectH);
     }
 </style>
