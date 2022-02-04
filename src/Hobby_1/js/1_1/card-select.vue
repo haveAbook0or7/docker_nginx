@@ -31,7 +31,7 @@
 					></view-basic>
 					<view-buddy 
 						ref="buddy" :id_name="data.id_name" :media="media" 
-						@change="changeBuddyLv"
+						:chnos.sync="chnos" :values.sync="data.values"
 					></view-buddy>
 					<view-damage ref="damage1" :id_name="data.id_name" :m="'1'" :media="media" @attribute="giveAttribute" @change-lv="changeMasicLv" @calc-damage="changeTotalDamage"></view-damage>
 					<view-damage ref="damage2" :id_name="data.id_name" :m="'2'" :media="media" @attribute="giveAttribute" @change-lv="changeMasicLv" @calc-damage="changeTotalDamage"></view-damage>
@@ -154,11 +154,6 @@ module.exports = {
 		applyData(card){
 			// 画像を表示
 			this.cardData[card].cardImg = this.Dormitory[Math.floor(this.cardData[card].values.chno/10)]+'/'+this.cardData[card].values.img;
-			// バディ
-			this.$refs.buddy[card[4]-1].applyBuddy(this.cardData[card].values);
-			for(var i = 0; i < 5; i++){
-				this.$refs.buddy[i].changeBuddy(this.chnos);
-			}
 			// ダメージ計算
 			this.$refs.damage1[card[4]-1].applyMbuf(this.cardData[card].values);
 			this.$refs.damage2[card[4]-1].applyMbuf(this.cardData[card].values);
@@ -178,16 +173,11 @@ module.exports = {
 				this.$refs.damage2[i].calcDamage(this.cardData["card"+(i+1)].values, this.chnos);
 			}
 		},
-		// 基礎ステータスいじった時(MAX,無凸MAX含む)
+		// 
 		changeMaxStatus(label, card){
 			// this.cardData[card].values["hp"] = hp;
 			// this.cardData[card].values["atk"] = atk;
 			// this.applyData(card);
-		},
-		// バディLvをいじった時
-		changeBuddyLv(cid, bid, value){
-			this.cardData["card"+cid].values["b"+bid+"lv"] = value;
-			this.applyData("card"+cid);
 		},
 		// 魔法Lvをいじった時
 		changeMasicLv(cid, mid, value){

@@ -2,32 +2,32 @@
 	<table border="0" class="view-buddy" :style="variable">
         <tr>
             <td>
-                <img :id="this.id_name+'_buddy1flg'" class="imgflg" :src="'../img/'+this.imgflg[1]" width="35" height="35">
-                <img :id="this.id_name+'_buddy1'" class="img" :src="'../img/Another/'+this.img[1]" width="35" height="35">
+                <img class="imgflg" :src="'../img/'+v_buddy[1]">
+                <img class="img" :src="'../img/Another/'+v_img[1]">
             </td>
             <td>
-                <img :id="this.id_name+'_buddy2flg'" class="imgflg" :src="'../img/'+this.imgflg[2]" width="35" height="35">
-                <img :id="this.id_name+'_buddy2'" class="img" :src="'../img/Another/'+this.img[2]" width="35" height="35">
+                <img class="imgflg" :src="'../img/'+v_buddy[2]">
+                <img class="img" :src="'../img/Another/'+v_img[2]">
             </td>
             <td>
-                <img :id="this.id_name+'_buddy3flg'" class="imgflg" :src="'../img/'+this.imgflg[3]" width="35" height="35">
-                <img :id="this.id_name+'_buddy3'" class="img" :src="'../img/Another/'+this.img[3]" width="35" height="35">
+                <img class="imgflg" :src="'../img/'+v_buddy[3]">
+                <img class="img" :src="'../img/Another/'+v_img[3]">
             </td>
         </tr>
         <tr>
-            <td :id="this.id_name+'_b1ty'">{{Btype1[1]}}<br>{{Btype2[1]}}</td>
-            <td :id="this.id_name+'_b2ty'">{{Btype1[2]}}<br>{{Btype2[2]}}</td>
-            <td :id="this.id_name+'_b3ty'">{{Btype1[3]}}<br>{{Btype2[3]}}</td>
+            <td>{{v_Btype_1[1]}}<br>{{v_Btype_2[1]}}</td>
+            <td>{{v_Btype_1[2]}}<br>{{v_Btype_2[2]}}</td>
+            <td>{{v_Btype_1[3]}}<br>{{v_Btype_2[3]}}</td>
         </tr>
         <tr>
             <td>
-                <select-own :id="this.id_name+'_b1lv'" :op="'opLv'" ref="b1lv" @up-value="changeBuddyLv"></select-own>
+                <select-option op="opLv" v-model="values.b1lv" :disabled="values.b1 == -1 || values.b1 == undefined"></select-option>
             </td>
             <td>
-                <select-own :id="this.id_name+'_b2lv'" :op="'opLv'" ref="b2lv" @up-value="changeBuddyLv"></select-own>
+                <select-option op="opLv" v-model="values.b2lv" :disabled="values.b2 == -1 || values.b2 == undefined"></select-option>
             </td>
             <td>
-                <select-own :id="this.id_name+'_b3lv'" :op="'opLv'" ref="b3lv" @up-value="changeBuddyLv"></select-own>
+                <select-option op="opLv" v-model="values.b3lv" :disabled="values.b3 == -1 || values.b3 == undefined"></select-option>
             </td>
         </tr>
     </table>
@@ -36,11 +36,14 @@
 <script>
 module.exports = {
 	components: {
+        'select-option': httpVueLoader('../select-option.vue'),
         'select-own': httpVueLoader('../select-own.vue'),
     },
 	props: {
 		id_name: {default:"myselectimg"},
         media: {default: "PCH"},
+        chnos: {default: ()=>[0,0,0,0,0],},
+        values: {default: {}},
 	},
     computed: {
 		variable() {
@@ -65,6 +68,52 @@ module.exports = {
 					}
 			}
 		},
+        v_img:{
+            get(){
+                let img = {1: "none.jpg", 2: "none.jpg", 3: "none.jpg"};
+                if(this.values.b1 != undefined){
+                    for(var i = 1; i <= 3; i++){
+                        img[i] = this.values["b"+i] == -1 ? "none.jpg" : this.values["b"+i]+".jpg";
+                    }
+                }
+                return img;
+            }
+        },
+        v_buddy:{
+            get(){
+                let buddy = {1: "off.png", 2: "off.png", 3: "off.png"};
+                if(this.values.b1 != undefined){
+                    buddy = this.isBuddy();
+                }
+                return buddy;
+            }
+        },
+        v_Btype_1:{
+            get(){
+                let types = {1: "***", 2: "***", 3: "***"};
+                if(this.values.b1type != undefined){
+                    for(var i = 1; i <= 3; i++){
+                        let type = this.values["b"+i+"type"];
+                        types[i] = this.buddytype[type.substr(0, 2)];
+                    }
+                }
+                return types;
+            }
+        },
+        v_Btype_2:{
+            get(){
+                let types = {1: "***", 2: "***", 3: "***"};
+                if(this.values.b1type != undefined){
+                    for(var i = 1; i <= 3; i++){
+                        let type = this.values["b"+i+"type"];
+                        if(type.length == 4){
+                            types[i] = this.buddytype[type.substr(2)];
+                        }
+                    }
+                }
+                return types;
+            }
+        },
 	},
 	data: function () {
 		return {
@@ -72,57 +121,23 @@ module.exports = {
                 Hm: "H(中)", Hs: "H(小)",
                 Am: "A(中)", As: "A(小)"
 			},
-            values: {},
-            chnos: [],
-            imgflg: {1: "off.png", 2: "off.png", 3: "off.png"},
-            img: {1: "none.jpg", 2: "none.jpg", 3: "none.jpg"},
-            Btype1: {1: "***", 2: "***", 3: "***"},
-            Btype2: {1: "***", 2: "***", 3: "***"},
 		}
 	},
 	methods: {
-        // 受け取ったデータを保存。表示できるやつは表示
-		applyBuddy(values){
-            this.values = values;
-            for(var i = 1; i <= 3; i++){
-                // アイコンを表示
-                this.img[i] = values["b"+i] == -1 ? "none.jpg" : values["b"+i]+".jpg";
-                // バフの種類を表示していく
-                var Btype = values["b"+i+"type"];
-                this.$set(this.Btype1, i, this.buddytype[Btype[0]+Btype[1]]); // dataのオブジェクトを含む更新をする場合はこうしないと反映されない
-                this.Btype2[i] = "***";
-                if(Btype.length == 4){
-                    this.$set(this.Btype2, i, this.buddytype[Btype[2]+Btype[3]]);
-                }
-                // バディレベルをセット
-                this.$refs["b"+i+"lv"].chengeValue(values["b"+i+"lv"]);
-                // SRやRならバディLv操作できないようにする
-                this.$refs["b"+i+"lv"].chengeDisabled(values["b"+i] == -1 ? true : false);
-            }
-		},
-        // 有効バディが変化するときの処理
-        changeBuddy(chnos){
-            // 現在セットしてるキャラクターIDを取得＆保存
-            this.chnos = chnos;
-            // 初期化
-            this.imgflg = {1: "off.png", 2: "off.png", 3: "off.png"};
+        isBuddy(){
             // 計算用変数
-            var flg = {1: false, 2: false, 3: false};
+            let flg = {1: "off.png", 2: "off.png", 3: "off.png"};
             // バディが成立していたらアイコンを点灯する
             for(var i = 0; i < 5; i++){
-            for(var j = 1; j <= 3; j++){
-                if(this.values["b"+j] == chnos[i] && !flg[j]){
-                    this.imgflg[j] = "app.png";
+                for(var j = 1; j <= 3; j++){
+                    if(this.values["b"+j] == this.chnos[i]){
+                        flg[j] = "app.png";
+                    }
                 }
             }
-            }
-        },
-        // バディLvの操作
-        changeBuddyLv(id, value){
-            this.$emit('change', id[4], id[7], value);
+            return flg;
         }
 	},
-	
 }
 // export default { Node.jsじゃないから、これだとダメだった。 }
 </script>
@@ -134,6 +149,8 @@ module.exports = {
 	}
     img{
         background: transparent;
+        width: 35px;
+        height: 35px;
     }
     .img{
         position: relative;
