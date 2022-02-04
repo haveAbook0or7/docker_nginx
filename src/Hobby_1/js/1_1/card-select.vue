@@ -17,8 +17,22 @@
 			<div>
 				<div class="card" v-for="data in cardData" :key="data.id_name">
 					<img :id="data.id_name" :src="'../img/'+data.cardImg" width="70.5" height="74.7" @click="clickOpenModal(data.id_name)">
-					<view-basic ref="hpatk" :id_name="data.id_name" :media="media" @extract="extractHPATK" @change-basic="changeBasicValue"></view-basic>
-					<view-buddy ref="buddy" :id_name="data.id_name" :media="media" @change="changeBuddyLv"></view-buddy>
+					<table>
+						<tr>
+							<td colspan="3">
+								<input type="button" value="MAX" @click="changeMaxStatus('max')">
+								<input type="button" value="無凸MAX" @click="changeMaxStatus('middle')">
+							</td>
+						</tr>
+					</table>
+					<view-basic 
+						ref="hpatk" :media="media"
+						:chnos.sync="chnos" :values.sync="data.values"
+					></view-basic>
+					<view-buddy 
+						ref="buddy" :id_name="data.id_name" :media="media" 
+						@change="changeBuddyLv"
+					></view-buddy>
 					<view-damage ref="damage1" :id_name="data.id_name" :m="'1'" :media="media" @attribute="giveAttribute" @change-lv="changeMasicLv" @calc-damage="changeTotalDamage"></view-damage>
 					<view-damage ref="damage2" :id_name="data.id_name" :m="'2'" :media="media" @attribute="giveAttribute" @change-lv="changeMasicLv" @calc-damage="changeTotalDamage"></view-damage>
 				</div>
@@ -41,7 +55,6 @@ module.exports = {
 	mounted() {
 		// 端末の種類取得
 		this.media = getMedia();
-		console.log(this.media)
 	},
 	props: {
 		loguser: {default: "ゲスト"},
@@ -49,8 +62,6 @@ module.exports = {
 	},
 	computed: {
 		variable() {
-			console.log(this.media.slice(0, -1))
-			console.log(this.media.slice(0, -1))
 			switch(this.media.slice(0, -1)){
 				case "PC":
 					return {
@@ -63,6 +74,9 @@ module.exports = {
 						"--cardW": "140px",
 						"--borderW": "0 0 0 2px",
 						"--imgS": "1",
+						"--buttonW": "50px",
+						"--buttonH": "18px",
+						"--buttonFS": "10px",
 					}
 				case "TabletPC":
 					return {
@@ -75,6 +89,9 @@ module.exports = {
 						"--cardW": "20%",
 						"--borderW": "2px 0 0 0",
 						"--imgS": "1.2",
+						"--buttonW": "80px",
+						"--buttonH": "28px",
+						"--buttonFS": "16px",
 					}
 				case "SmartPhone":
 					return {
@@ -87,6 +104,9 @@ module.exports = {
 						"--cardW": "20%",
 						"--borderW": "2px 0 0 0",
 						"--imgS": "1.2",
+						"--buttonW": "80px",
+						"--buttonH": "28px",
+						"--buttonFS": "16px",
 					}
 			}
 		},
@@ -126,22 +146,14 @@ module.exports = {
 			// 当てはまるカードにデータ全部保存
 			this.cardData[card].values = value;
 			// いま選んでるキャラクターIDを保存
-			this.chnos[card.slice(-1)-1] = value.chno;
+			this.$set(this.chnos, card.slice(-1)-1, value.chno);
 			// データをそれぞれ処理して表示する
 			this.applyData(card);
-			console.log("values:");
-			// console.log(this.chnos);
-			console.log(this.cardData[card].values);
 		},
 		// それぞれの部品にデータを送る
 		applyData(card){
 			// 画像を表示
 			this.cardData[card].cardImg = this.Dormitory[Math.floor(this.cardData[card].values.chno/10)]+'/'+this.cardData[card].values.img;
-			// 基礎ステータス
-			this.$refs.hpatk[card[4]-1].applyHPATK(this.cardData[card].values);
-			for(var i = 0; i < 5; i++){
-				this.$refs.hpatk[i].changeBuddy(this.chnos);
-			}
 			// バディ
 			this.$refs.buddy[card[4]-1].applyBuddy(this.cardData[card].values);
 			for(var i = 0; i < 5; i++){
@@ -166,16 +178,11 @@ module.exports = {
 				this.$refs.damage2[i].calcDamage(this.cardData["card"+(i+1)].values, this.chnos);
 			}
 		},
-		// バディ補正ステータスを追加する用
-		extractHPATK(card, hpbuf, atkbuf){
-			this.cardData[card].values.hpbuf = hpbuf;
-			this.cardData[card].values.atkbuf = atkbuf;
-		},
 		// 基礎ステータスいじった時(MAX,無凸MAX含む)
-		changeBasicValue(card, hp, atk){
-			this.cardData[card].values["hp"] = hp;
-			this.cardData[card].values["atk"] = atk;
-			this.applyData(card);
+		changeMaxStatus(label, card){
+			// this.cardData[card].values["hp"] = hp;
+			// this.cardData[card].values["atk"] = atk;
+			// this.applyData(card);
 		},
 		// バディLvをいじった時
 		changeBuddyLv(cid, bid, value){
@@ -270,12 +277,34 @@ module.exports = {
 		height: calc(74.7px * var(--imgS));
 		margin: 5px;
 	}
+	/* MAX 無凸MAX */
+	table{
+		width: 100%;
+		background: #2e2930;
+	}
+	input[type=button]{
+        width: var(--buttonW);
+        height: var(--buttonH);
+        display: inline-block;
+        text-align: center;
+        background-color: #e6b422;
+        font-size: var(--buttonFS);
+        text-decoration: none;
+        font-weight: bold;
+        padding: 1px 2px;
+        border: 0.5px dashed #ffffff;
+        margin: 3px;
+        box-shadow: #e6b422 0px 0px 0px 3px;
+        z-index: 3;
+    }
+    input[type=button]:hover {
+        background-color: slategray;
+        box-shadow: slategray 0px 0px 0px 3px;
+        z-index: 3;
+    }
 	.view-total{
 		border-style: solid;
 		border-color: #e6b422;
 		border-width: var(--borderW);
-	}
-	table{
-		width: 100%;
 	}
 </style>
